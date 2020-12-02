@@ -1,8 +1,17 @@
 # Utilities
-This is a public library of personal utility classes I have created while working on other projects. A detailed look at its contents can be found below. This library can be used by anyone, as outlined in the [license](https://github.com/utk003/Utilities/blob/main/LICENSE).
+This is a public library of personal utility classes I have created while working on other projects. A brief overview of its contents can be found below. This library can be used by anyone, as outlined in the [license](https://github.com/utk003/Utilities/blob/main/LICENSE).
 
 ## Library Contents
-This library contains utility classes covering a range of different use cases. Detailed descriptions of each class can be found in the Javadoc.
+This library contains utility classes covering a range of different use cases.
+
+The classes contained within this library are (in alphabetical order):
+* [```ClassWrapper<K>```](https://github.com/utk003/Utilities#classwrapperk)
+* [```Pair<A,B>```](https://github.com/utk003/Utilities#pairab)
+* [```ThreadUtil```](https://github.com/utk003/Utilities#threadutil)
+* [```Triplet<A,B,C>```](https://github.com/utk003/Utilities#tripletabc)
+* [```Verifier```](https://github.com/utk003/Utilities#verifier)
+
+Brief overviews of each class follow. Detailed descriptions can be found in the Javadoc.
 
 ### [```ClassWrapper<K>```](https://github.com/utk003/Utilities/blob/main/src/me/utk/util/data/ClassWrapper.java)
 The ```ClassWrapper<K>``` class, which can be found in the ```me.utk.util.data``` package, is a wrapper class for (primarily) immutable objects (such as ```String```s) being stored as final variables. This intermediate class lets users update the value of the specific object while retaining the variable's final status.
