@@ -11,7 +11,7 @@ The classes contained within this library are (in alphabetical order):
 * [```Triplet<A,B,C>```](https://github.com/utk003/Utilities#tripletabc)
 * [```Verifier```](https://github.com/utk003/Utilities#verifier)
 
-Brief overviews of each class follow. Detailed descriptions can be found in the Javadoc.
+Brief overviews of each class follow. Detailed descriptions can be found in the [documentation](https://utk003.github.io/documentation/libs/utilities/overview-summary.html).
 
 ### [```ClassWrapper<K>```](https://github.com/utk003/Utilities/blob/main/src/me/utk/util/data/ClassWrapper.java)
 The ```ClassWrapper<K>``` class, which can be found in the ```me.utk.util.data``` package, is a wrapper class for (primarily) immutable objects (such as ```String```s) being stored as final variables. This intermediate class lets users update the value of the specific object while retaining the variable's final status.
