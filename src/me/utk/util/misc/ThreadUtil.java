@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
  * which also provides some thread-locking-related functionality.
  *
  * @author Utkarsh Priyam
- * @version 12/1/20
+ * @version December 1, 2020
  * @see ThreadLocker
  */
 public abstract class ThreadUtil {
@@ -85,7 +85,7 @@ public abstract class ThreadUtil {
      * </ul>
      *
      * @author Utkarsh Priyam
-     * @version 12/1/20
+     * @version December 1, 2020
      * @see Object#wait()
      * @see Object#notify()
      * @see Object#notifyAll()

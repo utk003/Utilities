@@ -34,7 +34,7 @@ package me.utk.util.data;
  *
  * @param <K> The type of the object to wrap
  * @author Utkarsh Priyam
- * @version 12/1/20
+ * @version December 1, 2020
  */
 public final class ClassWrapper<K> {
     /**

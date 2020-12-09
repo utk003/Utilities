@@ -39,7 +39,7 @@ import java.util.Objects;
  * @param <B> The type of the second object in the triplet
  * @param <C> The type of the third object in the triplet
  * @author Utkarsh Priyam
- * @version 12/1/20
+ * @version December 1, 2020
  * @see ClassWrapper
  */
 public final class Triplet<A, B, C> {

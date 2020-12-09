@@ -41,8 +41,7 @@ import java.util.function.Supplier;
  * </ul>
  *
  * @author Utkarsh Priyam
- * @version 12/1/20
- * @see Object#equals(Object)
+ * @version December 1, 2020
  */
 public abstract class Verifier {
     private Verifier() {
