@@ -38,7 +38,7 @@ import java.util.Objects;
  * @param <A> The type of the first object in the pair
  * @param <B> The type of the second object in the pair
  * @author Utkarsh Priyam
- * @version 12/1/20
+ * @version December 1, 2020
  * @see ClassWrapper
  */
 public final class Pair<A, B> {
