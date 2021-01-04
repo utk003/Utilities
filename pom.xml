@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>me.utk</groupId>
+    <artifactId>utilities-library</artifactId>
+    <name>Utilities</name>
+    <version>1.0.4</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <configuration>
+                    <!-- more info on plugin config @ https://stackoverflow.com/questions/30507476/maven-javadoc-how-to-include-centralized-resources/ -->
+                    <bottom>
+                        <![CDATA[
+                        To return to the main website, click here: <a href="/index.html" target="_top">utk003.github.io</a>.
+                        <br/>To go to this project's website page, click here: <a href="#" target="_top">(work in progress)</a>.
+                        <br/>To access to this project's github repository, click here: <a href="https://github.com/utk003/Utilities" target="_top">github.com/utk003/Utilities</a>.
+                        <br/>Copyright &copy; <span class="year-span"></span> Utkarsh Priyam. All rights reserved.
+                        <script type="text/javascript">
+                            const startYear = 2020;
+                            const yearSpots = document.getElementsByClassName("year-span");
+                            const year = new Date().getFullYear();
+                            for (let i = yearSpots.length - 1; i >= 0; i--)
+                            if (startYear === year)
+                                yearSpots.item(i).innerHTML = year;
+                            else
+                                yearSpots.item(i).innerHTML = startYear + "-" + year;
+                        </script>
+                        ]]>
+                    </bottom>
+                    <additionalparam>--allow-script-in-comments</additionalparam>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadoc</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                        <configuration>
+                            <reportOutputDirectory>${project.build.directory}/classes/</reportOutputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

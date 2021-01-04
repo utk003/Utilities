@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2020 Utkarsh Priyam
+Copyright (c) 2020-2021 Utkarsh Priyam
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,11 +31,31 @@ package me.utk.util.data;
  * with applications where typically immutable objects are stored
  * as final variables. This class provides a simple manner
  * of modifying the values of such objects.
+ * <p>
+ * Additionally, this class can be used similarly to references in
+ * other languages, such as in the following example:
+ * <pre>
+ * method_signature func(ClassWrapper&lt;Type&gt; param) {
+ *     param.value = new_value;
+ * }
+ *
+ * main() {
+ *     ClassWrapper&lt;Type&gt; obj = init_value;
+ *     func(obj);
+ *     System.out.println(obj.value); // new_value
+ * }
+ * </pre>
+ * <p>
+ * The functionality of this class has been replaced in
+ * its entirety by {@link Ref} class.
  *
  * @param <K> The type of the object to wrap
  * @author Utkarsh Priyam
- * @version December 1, 2020
+ * @version January 3, 2020
+ * @see Ref
+ * @deprecated Since 1.0.4
  */
+@Deprecated
 public final class ClassWrapper<K> {
     /**
      * A publicly accessible reference to the object being stored.
