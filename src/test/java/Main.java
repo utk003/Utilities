@@ -1,4 +1,4 @@
-import me.utk.util.function.lambda.*;
+import io.github.utk003.util.function.lambda.*;
 
 public class Main {
     public static void main(String[] args) {
