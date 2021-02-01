@@ -24,6 +24,9 @@ SOFTWARE.
 
 package io.github.utk003.util.misc;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * An abstract utility class for verification functions.
  * <p>
@@ -56,6 +59,7 @@ public abstract class Verify {
      * @throws IllegalArgumentException If the boolean argument is not {@code true}
      * @see #requireTrue(boolean, String)
      */
+    @Contract("false -> fail")
     public static void requireTrue(boolean bool) {
         requireTrue(bool, null);
     }
@@ -69,6 +73,7 @@ public abstract class Verify {
      * @param message The message for the exception
      * @throws IllegalArgumentException If the boolean argument is not {@code true}
      */
+    @Contract("false,_ -> fail")
     public static void requireTrue(boolean bool, String message) {
         if (!bool)
             throw new IllegalArgumentException(message);
@@ -84,6 +89,7 @@ public abstract class Verify {
      * @throws IllegalArgumentException If the boolean argument is not {@code false}
      * @see #requireFalse(boolean, String)
      */
+    @Contract("true -> fail")
     public static void requireFalse(boolean bool) {
         requireFalse(bool, null);
     }
@@ -97,6 +103,7 @@ public abstract class Verify {
      * @param message The message for the exception
      * @throws IllegalArgumentException If the boolean argument is not {@code false}
      */
+    @Contract("true,_ -> fail")
     public static void requireFalse(boolean bool, String message) {
         if (bool)
             throw new IllegalArgumentException(message);
@@ -112,7 +119,8 @@ public abstract class Verify {
      * @throws IllegalArgumentException If the {@code Object} argument is not {@code null}
      * @see #requireNull(Object, String)
      */
-    public static void requireNull(Object obj) {
+    @Contract("!null -> fail")
+    public static void requireNull(@Nullable Object obj) {
         requireNull(obj, null);
     }
     /**
@@ -125,7 +133,8 @@ public abstract class Verify {
      * @param message The message for the exception
      * @throws IllegalArgumentException If the {@code Object} argument is not {@code null}
      */
-    public static void requireNull(Object obj, String message) {
+    @Contract("!null,_ -> fail")
+    public static void requireNull(@Nullable Object obj, String message) {
         if (obj != null)
             throw new IllegalArgumentException(message);
     }
@@ -144,7 +153,8 @@ public abstract class Verify {
      * @see #requireNull(Object, String)
      * @see java.util.Objects#requireNonNull(Object)
      */
-    public static void requireNotNull(Object obj) {
+    @Contract("null -> fail")
+    public static void requireNotNull(@Nullable Object obj) {
         requireNotNull(obj, null);
     }
     /**
@@ -162,7 +172,8 @@ public abstract class Verify {
      * @see #requireNull(Object, String)
      * @see java.util.Objects#requireNonNull(Object, String)
      */
-    public static void requireNotNull(Object obj, String message) {
+    @Contract("null,_ -> fail")
+    public static void requireNotNull(@Nullable Object obj, String message) {
         if (obj == null)
             throw new IllegalArgumentException(message);
     }
