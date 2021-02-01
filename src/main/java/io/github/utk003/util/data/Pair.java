@@ -41,7 +41,6 @@ import java.util.Objects;
  * @version January 13, 2021
  * @see Ref
  */
-// The Ref link (above) is bugged for certain JavaDoc checker tools (ie IntelliJ's built-in tool)
 public final class Pair<A, B> {
     /**
      * Publicly accessible reference to the first object stored in this {@code Pair}.
