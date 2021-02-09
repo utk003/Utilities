@@ -39,6 +39,7 @@ package io.github.utk003.util.function.lambda;
  * @param <T3> The type of parameter 3 for this lambda function
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.3
  */
 @FunctionalInterface
 public interface Lambda3<R, T1, T2, T3> {

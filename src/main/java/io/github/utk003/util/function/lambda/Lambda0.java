@@ -33,6 +33,7 @@ package io.github.utk003.util.function.lambda;
  * @param <R> The return type of this lambda function
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.3
  */
 @FunctionalInterface
 public interface Lambda0<R> {

@@ -41,7 +41,10 @@ import java.util.Objects;
  * @author Utkarsh Priyam
  * @version January 13, 2021
  * @see Ref
+ * @since 1.0.0
+ * @deprecated Since 1.0.6
  */
+@Deprecated
 public final class Triplet<A, B, C> {
     /**
      * Publicly accessible reference to the first object stored in this {@code Triplet}.

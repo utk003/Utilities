@@ -44,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.2
  */
 public abstract class Verify {
     private Verify() {
