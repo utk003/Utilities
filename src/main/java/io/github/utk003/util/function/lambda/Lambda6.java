@@ -42,6 +42,7 @@ package io.github.utk003.util.function.lambda;
  * @param <T6> The type of parameter 6 for this lambda function
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.3
  */
 @FunctionalInterface
 public interface Lambda6<R, T1, T2, T3, T4, T5, T6> {

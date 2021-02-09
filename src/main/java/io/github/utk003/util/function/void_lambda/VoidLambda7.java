@@ -42,6 +42,7 @@ package io.github.utk003.util.function.void_lambda;
  * @param <T7> The type of parameter 7 for this lambda function
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.2
  */
 @FunctionalInterface
 public interface VoidLambda7<T1, T2, T3, T4, T5, T6, T7> {

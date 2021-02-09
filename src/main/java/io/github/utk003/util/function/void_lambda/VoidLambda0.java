@@ -35,6 +35,7 @@ package io.github.utk003.util.function.void_lambda;
  * @author Utkarsh Priyam
  * @version January 13, 2021
  * @see Runnable
+ * @since 1.0.2
  */
 @FunctionalInterface
 public interface VoidLambda0 {

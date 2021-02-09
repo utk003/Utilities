@@ -39,6 +39,7 @@ package io.github.utk003.util.function.void_lambda;
  * @param <T4> The type of parameter 4 for this lambda function
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.2
  */
 @FunctionalInterface
 public interface VoidLambda4<T1, T2, T3, T4> {

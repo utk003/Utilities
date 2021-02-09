@@ -38,6 +38,7 @@ package io.github.utk003.util.function.lambda;
  * @param <T2> The type of parameter 2 for this lambda function
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.3
  */
 @FunctionalInterface
 public interface Lambda2<R, T1, T2> {

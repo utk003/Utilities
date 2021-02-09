@@ -43,6 +43,7 @@ import java.util.concurrent.TimeUnit;
  * @author Utkarsh Priyam
  * @version January 13, 2021
  * @see ThreadLocker
+ * @since 1.0.0
  */
 public abstract class ThreadUtil {
     private ThreadUtil() {
@@ -89,6 +90,7 @@ public abstract class ThreadUtil {
      * @see Object#wait()
      * @see Object#notify()
      * @see Object#notifyAll()
+     * @since 1.0.1
      */
     public static class ThreadLocker {
         private final ScheduledExecutorService WAITER;

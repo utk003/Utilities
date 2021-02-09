@@ -36,6 +36,7 @@ package io.github.utk003.util.function.void_lambda;
  * @param <T> The type of the parameter of this lambda function
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.2
  */
 @FunctionalInterface
 public interface VoidLambda1<T> {

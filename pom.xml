@@ -7,7 +7,7 @@
     <groupId>io.github.utk003</groupId>
     <artifactId>utilities-library</artifactId>
     <name>Utilities</name>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <packaging>jar</packaging>
 
     <properties>

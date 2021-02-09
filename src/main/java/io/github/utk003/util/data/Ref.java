@@ -49,6 +49,7 @@ package io.github.utk003.util.data;
  * @param <K> The type of the object to wrap
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.4
  */
 public final class Ref<K> {
     /**

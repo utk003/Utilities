@@ -45,6 +45,7 @@ package io.github.utk003.util.function.lambda;
  * @param <T9> The type of parameter 9 for this lambda function
  * @author Utkarsh Priyam
  * @version January 13, 2021
+ * @since 1.0.3
  */
 @FunctionalInterface
 public interface Lambda9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9> {
