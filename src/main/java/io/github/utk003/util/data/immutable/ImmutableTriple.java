@@ -41,7 +41,7 @@ import java.util.Objects;
  * @param <A> The type of the first object in the triple
  * @param <B> The type of the second object in the triple
  * @param <C> The type of the third object in the triple
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 8, 2021
  * @see io.github.utk003.util.data.Ref
  * @see io.github.utk003.util.data.mutable.MutableTriple

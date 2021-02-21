@@ -39,7 +39,7 @@ import java.util.Arrays;
  * can be used instead.
  *
  * @param <T> The general type of the objects in the <code>N</code>-tuple
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 8, 2021
  * @see io.github.utk003.util.data.Ref
  * @see io.github.utk003.util.data.mutable.MutableNTuple

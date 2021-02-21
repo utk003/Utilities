@@ -39,7 +39,7 @@ package io.github.utk003.util.function.void_lambda;
  * @param <T4> The type of parameter 4 for this lambda function
  * @param <T5> The type of parameter 5 for this lambda function
  * @param <T6> The type of parameter 6 for this lambda function
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @since 1.0.2
  */

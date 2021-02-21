@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
  *     if and only if the given object expression is {@code null}.
  * </ul>
  *
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @since 1.0.2
  */

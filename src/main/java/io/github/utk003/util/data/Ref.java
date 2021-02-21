@@ -47,7 +47,7 @@ package io.github.utk003.util.data;
  * </pre>
  *
  * @param <K> The type of the object to wrap
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @since 1.0.4
  */

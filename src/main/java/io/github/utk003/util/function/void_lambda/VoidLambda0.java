@@ -32,7 +32,7 @@ package io.github.utk003.util.function.void_lambda;
  * This is a {@link FunctionalInterface} whose functional method is
  * {@link #run()}.
  *
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @see Runnable
  * @since 1.0.2

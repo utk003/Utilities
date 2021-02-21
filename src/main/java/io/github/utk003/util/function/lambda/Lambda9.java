@@ -43,7 +43,7 @@ package io.github.utk003.util.function.lambda;
  * @param <T7> The type of parameter 7 for this lambda function
  * @param <T8> The type of parameter 8 for this lambda function
  * @param <T9> The type of parameter 9 for this lambda function
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @since 1.0.3
  */

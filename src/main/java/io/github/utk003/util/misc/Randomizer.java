@@ -40,7 +40,7 @@ import java.util.List;
  * picking one permutation uniformly at random from all possible permutations. The algorithm has
  * a runtime complexity of {@code O(n)} and memory usage of {@code O(n)} as well.
  *
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 8, 2021
  * @since 1.0.6
  */

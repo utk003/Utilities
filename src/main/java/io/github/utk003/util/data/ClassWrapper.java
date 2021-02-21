@@ -46,7 +46,7 @@ package io.github.utk003.util.data;
  * its entirety by {@link Ref} class.
  *
  * @param <K> The type of the object to wrap
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2020
  * @see Ref
  * @since 1.0.0
