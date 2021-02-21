@@ -9,12 +9,12 @@
     <title>Utilities Library Documentation</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom CSS styles -->
-    <link href="../css/3-col-portfolio.css" rel="stylesheet">
-    <link href="../css/navbar.css" rel="stylesheet">
-    <link href="../css/misc.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="/css/misc.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,13 +23,16 @@
     <!-- Left-aligned (entered left to right) -->
     <a href="/index.html" class="float-left">Home</a>
     <a href="/projects.html" class="float-left">All Projects</a>
-    <a href="index.html" class="float-left">All Projects</a>
+    <a href="index.html" class="float-left">Project Home</a>
     <a href="documentation.html" class="float-left">Documentation</a>
     <a href="releases.html" class="float-left">Releases</a>
 
     <!-- Right-aligned (entered right to left) -->
     <a href="/contact.html" class="float-right">Contact</a>
-    <a href="https://github.com/utk003/Utilities" class="float-right">GitHub</a>
+    <a href="https://github.com/utk003/Utilities" class="float-right">
+        GitHub
+        <img src="/images/link-out.png" alt="(up)" id="proj_dropdown_up" height="16" width="16">
+    </a>
 </div>
 
 <div class="container">
@@ -51,26 +54,17 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <p>Copyright &copy; Utkarsh Priyam <span class="year-span"></span></p>
+                <p>Copyright &copy; Utkarsh Priyam <span class="year-span">2020</span></p>
             </div>
         </div>
     </footer>
 </div><!-- /.container -->
 
 <!-- JavaScript -->
-<script src="../js/jquery-1.10.2.js"></script>
-<script src="../js/bootstrap.js"></script>
-<script type="text/javascript">
-    const startYear = 2021;
-    const yearSpots = document.getElementsByClassName("year-span");
-    const year = new Date().getFullYear();
-    for (let i = yearSpots.length - 1; i >= 0; i--)
-        if (startYear === year)
-            yearSpots.item(i).innerHTML = year;
-        else
-            yearSpots.item(i).innerHTML = startYear + "-" + year;
-</script>
-<script src="../scripts/dropdown.js"></script>
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/scripts/copyright.js"></script>
+<script src="/scripts/dropdown.js"></script>
 </body>
 
 </html>
