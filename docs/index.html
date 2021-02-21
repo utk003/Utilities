@@ -6,232 +6,35 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>utk003 Home Page</title>
+    <title>Utilities Library Main Page</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom CSS styles -->
-    <link href="css/3-col-portfolio.css" rel="stylesheet">
-    <link href="css/navbar.css" rel="stylesheet">
-    <link href="css/misc.css" rel="stylesheet">
+    <link href="../css/3-col-portfolio.css" rel="stylesheet">
+    <link href="../css/navbar.css" rel="stylesheet">
+    <link href="../css/misc.css" rel="stylesheet">
 </head>
 
 <body>
 
 <div class="my-navbar">
-    <a href="../index.html">Home</a>
-    <div class="my-dropdown">
-        <button class="my-dropdown-button" id="proj_dropdown" onclick="openDropdown('proj_dropdown')">
-            Projects
-            <img src="../images/up.png" alt="(up)" class="hide" id="proj_dropdown_up" height="16" width="16">
-            <img src="../images/down.png" alt="(down)" id="proj_dropdown_down" height="16" width="16">
-        </button>
-        <div class="my-dropdown-content" id="proj_dropdown_menu">
-            <a href="#r&amp;d">Research and Development</a>
-            <a href="#libraries">My Libraries</a>
-            <a href="#classes">Course Work</a>
-        </div>
-    </div>
-    <div class="my-dropdown">
-        <button class="my-dropdown-button" id="doc_dropdown" onclick="openDropdown('doc_dropdown')">
-            Documentation
-            <img src="images/up.png" alt="(up)" class="hide" id="doc_dropdown_up" height="16" width="16">
-            <img src="images/down.png" alt="(down)" id="doc_dropdown_down" height="16" width="16">
-        </button>
-        <div class="my-dropdown-content" id="doc_dropdown_menu">
-            <a href="documentation/libs/utilities/overview-summary.html">Utilities Library</a>
-            <a href="documentation/libs/jnl/overview-summary.html">Java Networking Library</a>
-        </div>
-    </div>
-    <a href="#contact">Contact</a>
+    <a href="../index.html" class="float-left">Home</a>
+    <a href="../projects.html" class="float-left">All Projects</a>
+    <a href="documentation.html" class="float-left">Documentation</a>
+    <a href="releases.html" class="float-left">Releases</a>
+    <a href="../contact.html" class="float-right">Contact</a>
 </div>
 
-<!-- Research and Development START -->
-<a id="r&amp;d"></a>
-<br/><br/>
 <div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">Research and (Game/Product) Development <span class="list-size" id="rndsize"></span>
-            </h1>
-        </div>
-    </div>
-
-    <div class="row" id="rnd">
-        <div class="col-md-4 portfolio-item" id="rnd1">
-            <a href="https://github.com/utk003/Chess-AI"><img class="img-responsive"
-                                                              src="images/rnd/chess_ai.png"
-                                                              alt="AI Chess Player (dramatized)"
-                                                              title="Image taken from The New Atlantis (https://www.thenewatlantis.com/publications/can-chess-survive-artificial-intelligence)."></a>
-            <h3><a href="https://github.com/utk003/Chess-AI">Chess AI</a></h3>
-            <p>A chess implementation in C++ with many player AIs, including a neural-network-powered AI not unlike
-                Deepmind's AlphaZero chess engine....</p>
-        </div>
-
-        <div class="col-md-4 portfolio-item" id="rnd2">
-            <a href="https://github.com/utk003/Arcade-Repo"><img class="img-responsive"
-                                                                 src="images/rnd/arcade_repo.gif"
-                                                                 alt="Arcade Loading Screen"
-                                                                 title="GIF assets created by Aditya Singhvi (https://github.com/baboondude)."></a>
-            <h3><a href="https://github.com/utk003/Arcade-Repo">Arcade</a></h3>
-            <p>A 7-game arcade of classics: 2048, Breakout, Flappy Bird, Minesweeper, Pac-Man, Snake, and Tetris....</p>
-        </div>
-
-        <div class="col-md-4 portfolio-item" id="rnd3">
-            <a href="https://github.com/utk003/Hangouts-Chat-Parser"><img class="img-responsive"
-                                                                          src="images/rnd/hangouts_chat_parser.png"
-                                                                          alt="Hangouts Logo &amp; Magnifying Glass"
-                                                                          title="Hangouts Parser graphic created by Utkarsh Priyam (me) (https://github.com/utk003)."></a>
-            <h3><a href="https://github.com/utk003/Hangouts-Chat-Parser">Hangouts Chat Parser</a></h3>
-            <p>A program to go through your Google Hangouts chat logs in case you have a dispute with your friends over
-                something you said....</p>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="row text-center"> <!-- Page selector -->
-        <div class="col-lg-12">
-            <ul class="pagination">
-                <li id="rndl3"><a>&lt;&lt;&lt;</a></li>
-                <li id="rndl2"><a>&lt;&lt;</a></li>
-                <li id="rndl1"><a>&lt;</a></li>
-                <li id="rndshow"><a>Show All</a></li>
-                <li id="rndhide"><a>Collapse</a></li>
-                <li id="rndr1"><a>&gt;</a></li>
-                <li id="rndr2"><a>&gt;&gt;</a></li>
-                <li id="rndr3"><a>&gt;&gt;&gt;</a></li>
-            </ul>
-        </div>
-    </div>
+    <a href="https://github.com/utk003/Utilities"><img class="img-responsive"
+                                                       src="image.png"
+                                                       alt="Steampunk Gear &amp; Utilities Library text"
+                                                       title="Utilities Library graphic created by Utkarsh Priyam (me) (https://github.com/utk003)."></a>
+    <h1><a href="https://github.com/utk003/Utilities">Utilities Library</a></h1>
+    <p><i>TODO Description, etc. here</i></p>
 </div> <!-- /.container -->
-<!-- Research and Development END -->
-
-<!-- Libraries START -->
-<a id="libraries"></a>
-<br/><br/>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">My Libraries <span class="list-size" id="libssize"></span></h1>
-        </div>
-    </div>
-
-    <div class="row" id="libs">
-        <div class="col-md-4 portfolio-item" id="libs1">
-            <a href="https://github.com/utk003/Utilities"><img class="img-responsive"
-                                                               src="images/libs/utilitiesB.png"
-                                                               alt="Steampunk Gear &amp; Utilities Library text"
-                                                               title="Utilities Library graphic created by Utkarsh Priyam (me) (https://github.com/utk003)."></a>
-            <h3><a href="https://github.com/utk003/Utilities">Utilities Library</a></h3>
-            <p>A public library of personal utility classes I have created while working on other projects....</p>
-        </div>
-
-        <div class="col-md-4 portfolio-item" id="libs2">
-            <a href="https://github.com/utk003/Java-Networking-Library"><img class="img-responsive"
-                                                                             src="images/libs/java_networking_library.png"
-                                                                             alt="Computers connected across a network"
-                                                                             title="Image taken Onkar Panchare (Medium) (https://medium.com/@opanchare123/computer-networks-ae6989c2e774)"></a>
-            <h3><a href="https://github.com/utk003/Java-Networking-Library">Java Networking Library</a></h3>
-            <p>A simple and elegant networking API for novice and professional applications alike....</p>
-        </div>
-
-        <div class="col-md-4 portfolio-item" id="libs3">
-            <a href="https://github.com/utk003/JSON-Parser"><img class="img-responsive"
-                                                                 src="http://placehold.it/700x400"
-                                                                 alt="temporary image"></a>
-            <h3><a href="https://github.com/utk003/JSON-Parser">JSON Parsing Library</a></h3>
-            <p>A collection of Java classes for parsing (and searching through) JSON files....</p>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="row text-center"> <!-- Page selector -->
-        <div class="col-lg-12">
-            <ul class="pagination">
-                <li id="libsl3"><a>&lt;&lt;&lt;</a></li>
-                <li id="libsl2"><a>&lt;&lt;</a></li>
-                <li id="libsl1"><a>&lt;</a></li>
-                <li id="libsshow"><a>Show All</a></li>
-                <li id="libshide"><a>Collapse</a></li>
-                <li id="libsr1"><a>&gt;</a></li>
-                <li id="libsr2"><a>&gt;&gt;</a></li>
-                <li id="libsr3"><a>&gt;&gt;&gt;</a></li>
-            </ul>
-        </div>
-    </div>
-</div> <!-- /.container -->
-<!-- Libraries END -->
-
-<!-- Courses START -->
-<a id="classes"></a>
-<br/><br/>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">Course Work/Projects <span class="list-size" id="clsssize"></span></h1>
-        </div>
-    </div>
-
-    <div class="row" id="clss">
-        <div class="col-md-4 portfolio-item" id="clss1">
-            <a href="https://github.com/utk003/Discrete-Math"><img class="img-responsive"
-                                                                   src="http://placehold.it/700x400"
-                                                                   alt="temporary image"></a>
-            <h3><a href="https://github.com/utk003/Discrete-Math">Discrete Mathematics</a></h3>
-            <p>Algorithm implementations for allocation, trees, networks, scheduling, and more....</p>
-        </div>
-
-        <div class="col-md-4 portfolio-item" id="clss2">
-            <a href="https://github.com/utk003/Compilers-and-Interpreters"><img class="img-responsive"
-                                                                                src="http://placehold.it/700x400"
-                                                                                alt="temporary image"></a>
-            <h3><a href="https://github.com/utk003/Compilers-and-Interpreters">Compilers and Interpreters</a>
-            </h3>
-            <p>2 versions of a compiler and an interpreter for a Pascal-esque language. The compiler output is
-                MIPS....</p>
-        </div>
-
-        <div class="col-md-4 portfolio-item" id="clss3">
-            <a href="https://github.com/utk003/Neural-Networks"><img class="img-responsive"
-                                                                     src="http://placehold.it/700x400"
-                                                                     alt="temporary image"></a>
-            <h3><a href="https://github.com/utk003/Neural-Networks">Neural Networks</a></h3>
-            <p>A general-purpose, easily configurable, MLP (multi-layer perceptron) implementing a custom-optimized
-                backpropagation algorithm....</p>
-        </div>
-
-        <div class="col-md-4 portfolio-item" id="clss4">
-            <a href="https://github.com/utk003/APCS-DS"><img class="img-responsive"
-                                                             src="images/clss/APCSDS3.png"
-                                                             alt="AP CS A Logo + Java Logo"
-                                                             title="APCS/Java Logos graphic created by Utkarsh Priyam (me) (https://github.com/utk003)."></a>
-            <h3><a href="https://github.com/utk003/APCS-DS">AP CS with Data Structures</a></h3>
-            <p>A miscellaneous repository for all of the labs I worked on in my AP Computer Science w/ Data Structure
-                class....</p>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="row text-center"> <!-- Page selector -->
-        <div class="col-lg-12">
-            <ul class="pagination">
-                <li id="clssl3"><a>&lt;&lt;&lt;</a></li>
-                <li id="clssl2"><a>&lt;&lt;</a></li>
-                <li id="clssl1"><a>&lt;</a></li>
-                <li id="clssshow"><a>Show All</a></li>
-                <li id="clsshide"><a>Collapse</a></li>
-                <li id="clssr1"><a>&gt;</a></li>
-                <li id="clssr2"><a>&gt;&gt;</a></li>
-                <li id="clssr3"><a>&gt;&gt;&gt;</a></li>
-            </ul>
-        </div>
-    </div>
-</div> <!-- /.container -->
-<!-- Courses END -->
 
 <!-- Footer -->
 <br/><br/>
@@ -247,10 +50,10 @@
 </div><!-- /.container -->
 
 <!-- JavaScript -->
-<script src="js/jquery-1.10.2.js"></script>
-<script src="js/bootstrap.js"></script>
+<script src="../js/jquery-1.10.2.js"></script>
+<script src="../js/bootstrap.js"></script>
 <script type="text/javascript">
-    const startYear = 2020;
+    const startYear = 2021;
     const yearSpots = document.getElementsByClassName("year-span");
     const year = new Date().getFullYear();
     for (let i = yearSpots.length - 1; i >= 0; i--)
@@ -259,8 +62,7 @@
         else
             yearSpots.item(i).innerHTML = startYear + "-" + year;
 </script>
-<script src="scripts/list_elements_util.js"></script>
-<script src="scripts/dropdown.js"></script>
+<script src="../scripts/dropdown.js"></script>
 </body>
 
 </html>
