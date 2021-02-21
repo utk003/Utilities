@@ -1,0 +1,70 @@
+.arrow-up {
+    content: "&#9662;";
+}
+
+.my-navbar {
+    overflow: visible;
+    background-color: #333;
+    font-family: Arial, Helvetica, sans-serif;
+
+    position: fixed; /* Set the navbar to fixed position */
+    top: 0; /* Position the navbar at the top of the page */
+    width: 100%; /* Full width */
+    z-index: 1030;
+}
+
+.my-navbar a {
+    float: left;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.my-dropdown {
+    float: left;
+    overflow: hidden;
+}
+
+.my-dropdown .my-dropdown-button {
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+}
+
+.my-navbar a:hover, .my-dropdown:hover .my-dropdown-button, .my-dropdown-button:focus {
+    background-color: red;
+}
+
+.my-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.my-dropdown-content a {
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.my-dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+.show-item {
+    display: block;
+}
