@@ -34,7 +34,7 @@ package io.github.utk003.util.function.void_lambda;
  * {@link #run(Object)}.
  *
  * @param <T> The type of the parameter of this lambda function
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @since 1.0.2
  */

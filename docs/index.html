@@ -6,33 +6,38 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Utilities Library Main Page</title>
+    <title>Utilities Library</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom CSS styles -->
-    <link href="../css/3-col-portfolio.css" rel="stylesheet">
-    <link href="../css/navbar.css" rel="stylesheet">
-    <link href="../css/misc.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <link href="/css/misc.css" rel="stylesheet">
 </head>
 
 <body>
 
 <div class="my-navbar">
-    <a href="../index.html" class="float-left">Home</a>
-    <a href="../projects.html" class="float-left">All Projects</a>
+    <!-- Left-aligned (entered left to right) -->
+    <a href="/index.html" class="float-left">Home</a>
+    <a href="/projects.html" class="float-left">All Projects</a>
+    <a href="index.html" class="float-left">All Projects</a>
     <a href="documentation.html" class="float-left">Documentation</a>
     <a href="releases.html" class="float-left">Releases</a>
-    <a href="../contact.html" class="float-right">Contact</a>
+
+    <!-- Right-aligned (entered right to left) -->
+    <a href="/contact.html" class="float-right">Contact</a>
+    <a href="https://github.com/utk003/Utilities" class="float-right">GitHub</a>
 </div>
 
 <div class="container">
-    <a href="https://github.com/utk003/Utilities"><img class="img-responsive"
-                                                       src="image.png"
-                                                       alt="Steampunk Gear &amp; Utilities Library text"
-                                                       title="Utilities Library graphic created by Utkarsh Priyam (me) (https://github.com/utk003)."></a>
-    <h1><a href="https://github.com/utk003/Utilities">Utilities Library</a></h1>
+    <img class="img-responsive"
+         src="image.png"
+         alt="Steampunk Gear &amp; Utilities Library text"
+         title="Utilities Library graphic created by Utkarsh Priyam (me) (https://github.com/utk003).">
+    <h1 class="text-center">Utilities Library</h1>
     <p><i>TODO Description, etc. here</i></p>
 </div> <!-- /.container -->
 
@@ -50,10 +55,10 @@
 </div><!-- /.container -->
 
 <!-- JavaScript -->
-<script src="../js/jquery-1.10.2.js"></script>
-<script src="../js/bootstrap.js"></script>
+<script src="/js/jquery-1.10.2.js"></script>
+<script src="/js/bootstrap.js"></script>
 <script type="text/javascript">
-    const startYear = 2021;
+    const startYear = 2020;
     const yearSpots = document.getElementsByClassName("year-span");
     const year = new Date().getFullYear();
     for (let i = yearSpots.length - 1; i >= 0; i--)
@@ -62,7 +67,7 @@
         else
             yearSpots.item(i).innerHTML = startYear + "-" + year;
 </script>
-<script src="../scripts/dropdown.js"></script>
+<script src="/scripts/dropdown.js"></script>
 </body>
 
 </html>

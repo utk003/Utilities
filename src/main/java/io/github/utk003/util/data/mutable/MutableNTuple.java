@@ -38,7 +38,7 @@ import java.util.Arrays;
  * for immutable <code>N</code>-tuples.
  *
  * @param <T> The general type of the objects in the <code>N</code>-tuple
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 8, 2021
  * @see io.github.utk003.util.data.immutable.ImmutableNTuple
  * @since 1.0.6
@@ -103,7 +103,7 @@ public class MutableNTuple<T> {
      * @throws ArrayIndexOutOfBoundsException If the index is less than <code>0</code> or
      *                                        greater than equal to <code>N</code>
      */
-    public void get(int index, T element) {
+    public void set(int index, T element) {
         ELEMENTS[index] = element;
     }
 

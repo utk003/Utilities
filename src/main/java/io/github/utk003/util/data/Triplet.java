@@ -38,7 +38,7 @@ import java.util.Objects;
  * @param <A> The type of the first object in the triplet
  * @param <B> The type of the second object in the triplet
  * @param <C> The type of the third object in the triplet
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @see Ref
  * @since 1.0.0

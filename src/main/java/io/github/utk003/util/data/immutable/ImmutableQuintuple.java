@@ -44,7 +44,7 @@ import java.util.Objects;
  * @param <C> The type of the third object in the quintuple
  * @param <D> The type of the fourth object in the quintuple
  * @param <E> The type of the fifth object in the quintuple
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 8, 2021
  * @see io.github.utk003.util.data.Ref
  * @see io.github.utk003.util.data.mutable.MutableQuintuple

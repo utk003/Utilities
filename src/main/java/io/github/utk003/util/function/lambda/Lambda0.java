@@ -31,7 +31,7 @@ package io.github.utk003.util.function.lambda;
  * This is a {@link FunctionalInterface} whose functional method is {@link #get()}.
  *
  * @param <R> The return type of this lambda function
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @since 1.0.3
  */

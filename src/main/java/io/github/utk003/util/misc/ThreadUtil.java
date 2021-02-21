@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  * Additionally, this class contains a nested class {@code ThreadLocker},
  * which also provides some thread-locking-related functionality.
  *
- * @author Utkarsh Priyam
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @see ThreadLocker
  * @since 1.0.0
@@ -85,7 +85,7 @@ public abstract class ThreadUtil {
      *     calling the {@code wait} and {@code notify} methods directly.
      * </ul>
      *
-     * @author Utkarsh Priyam
+     * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
      * @version January 13, 2021
      * @see Object#wait()
      * @see Object#notify()
