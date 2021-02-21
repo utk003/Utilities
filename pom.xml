@@ -12,6 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.url>https://utk003.github.io/Utilities/javadoc/1.0.6</project.url>
     </properties>
 
     <build>
@@ -66,7 +67,7 @@
                     <bottom>
                         <![CDATA[
                         To return to the main website, click here: <a href="/index.html" target="_top">utk003.github.io</a>.
-                        <br/>To go to this project's website page, click here: <a href="#" target="_top">(work in progress)</a>.
+                        <br/>To go to this project's website page, click here: <a href="/Utilities/index.html" target="_top">utk003.github.io/Utilities</a>.
                         <br/>To access to this project's github repository, click here: <a href="https://github.com/utk003/Utilities" target="_top">github.com/utk003/Utilities</a>.
                         <br/>Copyright &copy; <span class="year-span"></span> Utkarsh Priyam. All rights reserved.
                         <script type="text/javascript">
