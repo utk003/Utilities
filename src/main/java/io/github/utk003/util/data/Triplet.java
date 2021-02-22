@@ -72,11 +72,17 @@ public final class Triplet<A, B, C> {
         this.third = third;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public String toString() {
         return "{" + first.toString() + ", " + second.toString() + ", " + third.toString() + "}";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public boolean equals(Object o) {
         if (this == o)
@@ -88,6 +94,9 @@ public final class Triplet<A, B, C> {
             return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public int hashCode() {
         int a = first == null ? 0 : first.hashCode();

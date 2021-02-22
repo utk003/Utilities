@@ -74,11 +74,17 @@ public final class ImmutableTriple<A, B, C> {
         THIRD = third;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public String toString() {
         return "{" + FIRST + "," + SECOND + "," + THIRD + "}";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public boolean equals(Object o) {
         if (this == o)
@@ -90,6 +96,9 @@ public final class ImmutableTriple<A, B, C> {
             return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public int hashCode() {
         int a = FIRST == null ? 0 : FIRST.hashCode();
