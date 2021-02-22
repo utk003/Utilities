@@ -86,11 +86,17 @@ public final class MutableQuadruple<A, B, C, D> {
         this.fourth = fourth;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public String toString() {
         return "(" + first + "," + second + "," + third + "," + fourth + ")";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public boolean equals(Object o) {
         if (this == o)
@@ -103,6 +109,9 @@ public final class MutableQuadruple<A, B, C, D> {
             return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public int hashCode() {
         int a = first == null ? 0 : first.hashCode();

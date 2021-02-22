@@ -81,6 +81,9 @@ public final class ImmutableNTuple<T> {
         return ELEMENTS[index];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public String toString() {
         if (SIZE == 0)
@@ -92,11 +95,17 @@ public final class ImmutableNTuple<T> {
         return "{" + builder.substring(1) + "}";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public boolean equals(Object o) {
         return this == o || o instanceof ImmutableNTuple && Arrays.equals(ELEMENTS, ((ImmutableNTuple<?>) o).ELEMENTS);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public int hashCode() {
         int hash = 0, pow17 = 1;

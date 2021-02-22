@@ -65,11 +65,17 @@ public final class Pair<A, B> {
         this.second = second;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public String toString() {
         return "{" + first.toString() + ", " + second.toString() + "}";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public boolean equals(Object o) {
         if (this == o)
@@ -81,6 +87,9 @@ public final class Pair<A, B> {
             return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public int hashCode() {
         int a = first == null ? 0 : first.hashCode();

@@ -82,11 +82,17 @@ public final class ImmutableQuadruple<A, B, C, D> {
         FOURTH = fourth;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public String toString() {
         return "{" + FIRST + "," + SECOND + "," + THIRD + "," + FOURTH + "}";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public boolean equals(Object o) {
         if (this == o)
@@ -99,6 +105,9 @@ public final class ImmutableQuadruple<A, B, C, D> {
             return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public int hashCode() {
         int a = FIRST == null ? 0 : FIRST.hashCode();

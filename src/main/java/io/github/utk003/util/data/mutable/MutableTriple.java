@@ -76,11 +76,17 @@ public final class MutableTriple<A, B, C> {
         this.third = third;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public String toString() {
         return "(" + first + "," + second + "," + third + ")";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public boolean equals(Object o) {
         if (this == o)
@@ -92,6 +98,9 @@ public final class MutableTriple<A, B, C> {
             return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public int hashCode() {
         int a = first == null ? 0 : first.hashCode();

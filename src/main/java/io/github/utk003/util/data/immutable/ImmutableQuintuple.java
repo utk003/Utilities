@@ -89,11 +89,17 @@ public final class ImmutableQuintuple<A, B, C, D, E> {
         FIFTH = fifth;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public String toString() {
         return "{" + FIRST + "," + SECOND + "," + THIRD + "," + FOURTH + "," + FIFTH + "}";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public boolean equals(Object o) {
         if (this == o)
@@ -106,6 +112,9 @@ public final class ImmutableQuintuple<A, B, C, D, E> {
             return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override // JavaDoc inherited from super method
     public int hashCode() {
         int a = FIRST == null ? 0 : FIRST.hashCode();
