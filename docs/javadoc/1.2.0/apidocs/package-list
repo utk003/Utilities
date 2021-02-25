@@ -1,0 +1,7 @@
+io.github.utk003.util.data
+io.github.utk003.util.data.immutable
+io.github.utk003.util.data.mutable
+io.github.utk003.util.function.lambda
+io.github.utk003.util.function.void_lambda
+io.github.utk003.util.misc
+io.github.utk003.util.perm

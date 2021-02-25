@@ -43,7 +43,9 @@ import java.util.List;
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 8, 2021
  * @since 1.0.6
+ * @deprecated Since 1.2.0
  */
+@Deprecated
 public abstract class Randomizer {
     private Randomizer() {
     }

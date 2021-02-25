@@ -1,4 +1,4 @@
-package io.github.utk003.util.misc;
+package io.github.utk003.util.perm;
 
 import java.util.Arrays;
 

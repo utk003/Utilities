@@ -46,9 +46,9 @@ import org.jetbrains.annotations.Nullable;
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 21, 2021
  * @since 1.0.2
+ * @deprecated Since 1.2.0
  */
-// TODO The {@code requireMatch} methods, which throw a {@link VerificationException}
-//  if and only if the given objects or primitives do not match.
+@Deprecated
 public abstract class Verify {
     private Verify() {
     }
@@ -186,7 +186,9 @@ public abstract class Verify {
      * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
      * @version February 21, 2021
      * @since 1.1.0
+     * @deprecated Since 1.2.0
      */
+    @Deprecated
     public static class VerificationException extends RuntimeException {
         /**
          * Constructs a new verification exception
