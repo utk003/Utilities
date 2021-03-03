@@ -163,7 +163,7 @@ public class Verifier {
      * @param arg2 The second argument to check
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(int arg1, int arg2) {
+    public static void requireMatch(int arg1, int arg2) {
         if (arg1 != arg2) fail();
     }
     /**
@@ -175,7 +175,7 @@ public class Verifier {
      * @param message The message for the exception
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(int arg1, int arg2, String message) {
+    public static void requireMatch(int arg1, int arg2, String message) {
         if (arg1 != arg2) fail(message);
     }
 
@@ -187,7 +187,7 @@ public class Verifier {
      * @param arg2 The second argument to check
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(long arg1, long arg2) {
+    public static void requireMatch(long arg1, long arg2) {
         if (arg1 != arg2) fail();
     }
     /**
@@ -199,7 +199,7 @@ public class Verifier {
      * @param message The message for the exception
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(long arg1, long arg2, String message) {
+    public static void requireMatch(long arg1, long arg2, String message) {
         if (arg1 != arg2) fail(message);
     }
 
@@ -211,7 +211,7 @@ public class Verifier {
      * @param arg2 The second argument to check
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(double arg1, double arg2) {
+    public static void requireMatch(double arg1, double arg2) {
         if (arg1 != arg2) fail();
     }
     /**
@@ -223,7 +223,7 @@ public class Verifier {
      * @param message The message for the exception
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(double arg1, double arg2, String message) {
+    public static void requireMatch(double arg1, double arg2, String message) {
         if (arg1 != arg2) fail(message);
     }
 
@@ -235,7 +235,7 @@ public class Verifier {
      * @param arg2 The second argument to check
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(float arg1, float arg2) {
+    public static void requireMatch(float arg1, float arg2) {
         if (arg1 != arg2) fail();
     }
     /**
@@ -247,7 +247,7 @@ public class Verifier {
      * @param message The message for the exception
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(float arg1, float arg2, String message) {
+    public static void requireMatch(float arg1, float arg2, String message) {
         if (arg1 != arg2) fail(message);
     }
 
@@ -263,7 +263,7 @@ public class Verifier {
      * @param arg2 The second argument to check
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(Object arg1, Object arg2) {
+    public static void requireMatch(Object arg1, Object arg2) {
         if (Objects.equals(arg1, arg2)) fail();
     }
     /**
@@ -279,7 +279,7 @@ public class Verifier {
      * @param message The message for the exception
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireMatch(Object arg1, Object arg2, String message) {
+    public static void requireMatch(Object arg1, Object arg2, String message) {
         if (Objects.equals(arg1, arg2)) fail(message);
     }
 
@@ -295,7 +295,7 @@ public class Verifier {
      * @param arg2 The second argument to check
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireExactMatch(Object arg1, Object arg2) {
+    public static void requireExactMatch(Object arg1, Object arg2) {
         if (arg1 != arg2) fail();
     }
     /**
@@ -311,7 +311,7 @@ public class Verifier {
      * @param message The message for the exception
      * @throws VerificationException If the two arguments are not equal
      */
-    public void requireExactMatch(Object arg1, Object arg2, String message) {
+    public static void requireExactMatch(Object arg1, Object arg2, String message) {
         if (arg1 != arg2) fail(message);
     }
 
