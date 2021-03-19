@@ -43,7 +43,7 @@ import java.util.Arrays;
  * @see io.github.utk003.util.data.immutable.ImmutableNTuple
  * @since 1.0.6
  */
-public class MutableNTuple<T> {
+public final class MutableNTuple<T> {
     /**
      * Publicly accessible array of the elements contained in this {@code MutableNTuple}
      */

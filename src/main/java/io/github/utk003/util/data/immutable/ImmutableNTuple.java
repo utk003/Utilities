@@ -41,7 +41,7 @@ import java.util.Arrays;
  * @param <T> The general type of the objects in the <code>N</code>-tuple
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 8, 2021
- * @see io.github.utk003.util.data.Ref
+ * @see io.github.utk003.util.data.reference.Ref
  * @see io.github.utk003.util.data.mutable.MutableNTuple
  * @since 1.0.6
  */
