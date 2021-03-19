@@ -43,7 +43,7 @@ import java.util.Objects;
  * @param <C> The type of the third object in the triple
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version February 8, 2021
- * @see io.github.utk003.util.data.Ref
+ * @see io.github.utk003.util.data.reference.Ref
  * @see io.github.utk003.util.data.mutable.MutableTriple
  * @since 1.0.6
  */

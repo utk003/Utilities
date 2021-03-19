@@ -50,7 +50,9 @@ package io.github.utk003.util.data;
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
  * @since 1.0.4
+ * @deprecated Since 1.3.0
  */
+@Deprecated
 public final class Ref<K> {
     /**
      * A publicly accessible reference to the object being stored.
