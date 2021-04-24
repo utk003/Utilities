@@ -1,6 +1,6 @@
 package io.github.utk003.util.perm;
 
-import io.github.utk003.util.function.void_lambda.VoidLambda1;
+import io.github.utk003.util.func.VoidLambda1;
 import io.github.utk003.util.misc.Verifier;
 
 /**
