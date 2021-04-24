@@ -1,6 +1,7 @@
 package io.github.utk003.util.misc;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -19,8 +20,10 @@ import java.util.Objects;
  *     if and only if the given object expression is not {@code null}.
  * <li>The {@code requireNotNull} methods, which throw a {@link VerificationException}
  *     if and only if the given object expression is {@code null}.
- * <li>The {@code requireMatch} methods, which throw a {@link VerificationException}
+ * <li>The {@code requireEqual} methods, which throw a {@link VerificationException}
  *     if and only if the given objects or primitives do not match.
+ * <li>The {@code requireNotEqual} methods, which throw a {@link VerificationException}
+ *     if and only if the given objects or primitives do match.
  * </ul>
  *
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
@@ -127,128 +130,306 @@ public class Verifier {
      * Throws an {@link VerificationException} (with no message) if and only if
      * the given object is not {@code not-null} (or, equivalently, is {@code null}).
      * <p>
-     * For a method with nearly-identical functionality that returns the argument as well,
-     * use {@link java.util.Objects#requireNonNull(Object)} instead.
+     * This method is identical to {@link java.util.Objects#requireNonNull(Object)}.
      *
-     * @param obj The {@code Object} argument to check
+     * @param <T> The type of the object to check
+     * @param obj The type-{@code T} argument to check
+     * @return The argument (guaranteed to be not {@code null})
      * @throws VerificationException If the {@code Object} argument is {@code null}
      * @see java.util.Objects#requireNonNull(Object)
      */
     @Contract("null -> fail")
-    public static void requireNotNull(@Nullable Object obj) {
+    public static <T> @NotNull T requireNotNull(@Nullable T obj) {
         if (obj == null) fail();
+        return obj;
     }
     /**
      * Throws an {@link VerificationException} (with the specified message) if and only if
      * the given object is not {@code not-null} (or, equivalently, is {@code null}).
      * <p>
-     * For a method with nearly-identical functionality that returns the argument as well,
-     * use {@link java.util.Objects#requireNonNull(Object, String)} instead.
+     * This method is identical to {@link java.util.Objects#requireNonNull(Object, String)}.
      *
-     * @param obj     The {@code Object} argument to check
+     * @param <T>     The type of the object to check
+     * @param obj     The type-{@code T} argument to check
      * @param message The message for the exception
+     * @return The argument (guaranteed to be not {@code null})
      * @throws VerificationException If the {@code Object} argument is {@code null}
      * @see java.util.Objects#requireNonNull(Object, String)
      */
     @Contract("null,_ -> fail")
-    public static void requireNotNull(@Nullable Object obj, String message) {
+    public static <T> @NotNull T requireNotNull(@Nullable T obj, String message) {
         if (obj == null) fail(message);
+        return obj;
     }
 
     /**
-     * Throws an {@link VerificationException} (with no message) if and only if
-     * the two {@code int} primitive arguments are not equal.
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code boolean} primitive arguments
+     * are not equal, and returns the common value otherwise.
      *
      * @param arg1 The first argument to check
      * @param arg2 The second argument to check
+     * @return The common value of the two arguments
      * @throws VerificationException If the two arguments are not equal
      */
-    public static void requireMatch(int arg1, int arg2) {
+    public static boolean requireEqual(boolean arg1, boolean arg2) {
         if (arg1 != arg2) fail();
+        return arg1;
     }
     /**
      * Throws an {@link VerificationException} (with the specified message)
-     * if and only if the two {@code int} primitive arguments are not equal.
+     * if and only if the two {@code boolean} primitive arguments are not equal,
+     * and returns the common value otherwise.
      *
      * @param arg1    The first argument to check
      * @param arg2    The second argument to check
      * @param message The message for the exception
+     * @return The common value of the two arguments
      * @throws VerificationException If the two arguments are not equal
      */
-    public static void requireMatch(int arg1, int arg2, String message) {
+    public static boolean requireEqual(boolean arg1, boolean arg2, String message) {
         if (arg1 != arg2) fail(message);
+        return arg1;
     }
 
     /**
-     * Throws an {@link VerificationException} (with no message) if and only if
-     * the two {@code long} primitive arguments are not equal.
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code boolean} primitive arguments are equal.
      *
      * @param arg1 The first argument to check
      * @param arg2 The second argument to check
-     * @throws VerificationException If the two arguments are not equal
+     * @throws VerificationException If the two arguments are equal
      */
-    public static void requireMatch(long arg1, long arg2) {
-        if (arg1 != arg2) fail();
+    public static void requireNotEqual(boolean arg1, boolean arg2) {
+        if (arg1 == arg2) fail();
     }
     /**
      * Throws an {@link VerificationException} (with the specified message)
-     * if and only if the two {@code long} primitive arguments are not equal.
+     * if and only if the two {@code boolean} primitive arguments are equal.
      *
      * @param arg1    The first argument to check
      * @param arg2    The second argument to check
      * @param message The message for the exception
-     * @throws VerificationException If the two arguments are not equal
+     * @throws VerificationException If the two arguments are equal
      */
-    public static void requireMatch(long arg1, long arg2, String message) {
-        if (arg1 != arg2) fail(message);
+    public static void requireNotEqual(boolean arg1, boolean arg2, String message) {
+        if (arg1 == arg2) fail(message);
     }
 
     /**
-     * Throws an {@link VerificationException} (with no message) if and only if
-     * the two {@code double} primitive arguments are not equal.
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code int} primitive arguments
+     * are not equal, and returns the common value otherwise.
      *
      * @param arg1 The first argument to check
      * @param arg2 The second argument to check
+     * @return The common value of the two arguments
      * @throws VerificationException If the two arguments are not equal
      */
-    public static void requireMatch(double arg1, double arg2) {
+    public static int requireEqual(int arg1, int arg2) {
         if (arg1 != arg2) fail();
+        return arg1;
     }
     /**
      * Throws an {@link VerificationException} (with the specified message)
-     * if and only if the two {@code double} primitive arguments are not equal.
+     * if and only if the two {@code int} primitive arguments are not equal,
+     * and returns the common value otherwise.
      *
      * @param arg1    The first argument to check
      * @param arg2    The second argument to check
      * @param message The message for the exception
+     * @return The common value of the two arguments
      * @throws VerificationException If the two arguments are not equal
      */
-    public static void requireMatch(double arg1, double arg2, String message) {
+    public static int requireEqual(int arg1, int arg2, String message) {
         if (arg1 != arg2) fail(message);
+        return arg1;
     }
 
     /**
-     * Throws an {@link VerificationException} (with no message) if and only if
-     * the two {@code float} primitive arguments are not equal.
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code int} primitive arguments are equal.
      *
      * @param arg1 The first argument to check
      * @param arg2 The second argument to check
-     * @throws VerificationException If the two arguments are not equal
+     * @throws VerificationException If the two arguments are equal
      */
-    public static void requireMatch(float arg1, float arg2) {
-        if (arg1 != arg2) fail();
+    public static void requireNotEqual(int arg1, int arg2) {
+        if (arg1 == arg2) fail();
     }
     /**
      * Throws an {@link VerificationException} (with the specified message)
-     * if and only if the two {@code float} primitive arguments are not equal.
+     * if and only if the two {@code int} primitive arguments are equal.
      *
      * @param arg1    The first argument to check
      * @param arg2    The second argument to check
      * @param message The message for the exception
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(int arg1, int arg2, String message) {
+        if (arg1 == arg2) fail(message);
+    }
+
+    /**
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code long} primitive arguments
+     * are not equal, and returns the common value otherwise.
+     *
+     * @param arg1 The first argument to check
+     * @param arg2 The second argument to check
+     * @return The common value of the two arguments
      * @throws VerificationException If the two arguments are not equal
      */
-    public static void requireMatch(float arg1, float arg2, String message) {
+    public static long requireEqual(long arg1, long arg2) {
+        if (arg1 != arg2) fail();
+        return arg1;
+    }
+    /**
+     * Throws an {@link VerificationException} (with the specified message)
+     * if and only if the two {@code long} primitive arguments are not equal,
+     * and returns the common value otherwise.
+     *
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param message The message for the exception
+     * @return The common value of the two arguments
+     * @throws VerificationException If the two arguments are not equal
+     */
+    public static long requireEqual(long arg1, long arg2, String message) {
         if (arg1 != arg2) fail(message);
+        return arg1;
+    }
+
+    /**
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code long} primitive arguments are equal.
+     *
+     * @param arg1 The first argument to check
+     * @param arg2 The second argument to check
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(long arg1, long arg2) {
+        if (arg1 == arg2) fail();
+    }
+    /**
+     * Throws an {@link VerificationException} (with the specified message)
+     * if and only if the two {@code long} primitive arguments are equal.
+     *
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param message The message for the exception
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(long arg1, long arg2, String message) {
+        if (arg1 == arg2) fail(message);
+    }
+
+    /**
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code double} primitive arguments
+     * are not equal, and returns the common value otherwise.
+     *
+     * @param arg1 The first argument to check
+     * @param arg2 The second argument to check
+     * @return The common value of the two arguments
+     * @throws VerificationException If the two arguments are not equal
+     */
+    public static double requireEqual(double arg1, double arg2) {
+        if (arg1 != arg2) fail();
+        return arg1;
+    }
+    /**
+     * Throws an {@link VerificationException} (with the specified message)
+     * if and only if the two {@code double} primitive arguments are not equal,
+     * and returns the common value otherwise.
+     *
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param message The message for the exception
+     * @return The common value of the two arguments
+     * @throws VerificationException If the two arguments are not equal
+     */
+    public static double requireEqual(double arg1, double arg2, String message) {
+        if (arg1 != arg2) fail(message);
+        return arg1;
+    }
+
+    /**
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code double} primitive arguments are equal.
+     *
+     * @param arg1 The first argument to check
+     * @param arg2 The second argument to check
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(double arg1, double arg2) {
+        if (arg1 == arg2) fail();
+    }
+    /**
+     * Throws an {@link VerificationException} (with the specified message)
+     * if and only if the two {@code double} primitive arguments are equal.
+     *
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param message The message for the exception
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(double arg1, double arg2, String message) {
+        if (arg1 == arg2) fail(message);
+    }
+
+    /**
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code float} primitive arguments
+     * are not equal, and returns the common value otherwise.
+     *
+     * @param arg1 The first argument to check
+     * @param arg2 The second argument to check
+     * @return The common value of the two arguments
+     * @throws VerificationException If the two arguments are not equal
+     */
+    public static float requireEqual(float arg1, float arg2) {
+        if (arg1 != arg2) fail();
+        return arg1;
+    }
+    /**
+     * Throws an {@link VerificationException} (with the specified message)
+     * if and only if the two {@code float} primitive arguments are not equal,
+     * and returns the common value otherwise.
+     *
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param message The message for the exception
+     * @return The common value of the two arguments
+     * @throws VerificationException If the two arguments are not equal
+     */
+    public static float requireEqual(float arg1, float arg2, String message) {
+        if (arg1 != arg2) fail(message);
+        return arg1;
+    }
+
+    /**
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two {@code float} primitive arguments are equal.
+     *
+     * @param arg1 The first argument to check
+     * @param arg2 The second argument to check
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(float arg1, float arg2) {
+        if (arg1 == arg2) fail();
+    }
+    /**
+     * Throws an {@link VerificationException} (with the specified message)
+     * if and only if the two {@code float} primitive arguments are equal.
+     *
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param message The message for the exception
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(float arg1, float arg2, String message) {
+        if (arg1 == arg2) fail(message);
     }
 
     /**
@@ -257,14 +438,14 @@ public class Verifier {
      * <p>
      * This verification method uses {@link Objects#equals(Object, Object)}
      * to check for equality. For memory-based equality (using {@code ==}),
-     * use {@link #requireExactMatch(Object, Object)} instead.
+     * use {@link #requireExactlyEqual(Object, Object)} instead.
      *
      * @param arg1 The first argument to check
      * @param arg2 The second argument to check
      * @throws VerificationException If the two arguments are not equal
      */
-    public static void requireMatch(Object arg1, Object arg2) {
-        if (Objects.equals(arg1, arg2)) fail();
+    public static void requireEqual(Object arg1, Object arg2) {
+        if (!Objects.equals(arg1, arg2)) fail();
     }
     /**
      * Throws an {@link VerificationException} (with the specified message)
@@ -272,111 +453,118 @@ public class Verifier {
      * <p>
      * This verification method uses {@link Objects#equals(Object, Object)}
      * to check for equality. For memory-based equality (using {@code ==}),
-     * use {@link #requireExactMatch(Object, Object, String)} instead.
+     * use {@link #requireExactlyEqual(Object, Object, String)} instead.
      *
      * @param arg1    The first argument to check
      * @param arg2    The second argument to check
      * @param message The message for the exception
      * @throws VerificationException If the two arguments are not equal
      */
-    public static void requireMatch(Object arg1, Object arg2, String message) {
+    public static void requireEqual(Object arg1, Object arg2, String message) {
+        if (!Objects.equals(arg1, arg2)) fail(message);
+    }
+    /**
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two object arguments are equal.
+     * <p>
+     * This verification method uses {@link Objects#equals(Object, Object)}
+     * to check for equality. For memory-based equality (using {@code ==}),
+     * use {@link #requireNotExactlyEqual(Object, Object)} instead.
+     *
+     * @param arg1 The first argument to check
+     * @param arg2 The second argument to check
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(Object arg1, Object arg2) {
+        if (Objects.equals(arg1, arg2)) fail();
+    }
+    /**
+     * Throws an {@link VerificationException} (with the specified message)
+     * if and only if the two object arguments are equal.
+     * <p>
+     * This verification method uses {@link Objects#equals(Object, Object)}
+     * to check for equality. For memory-based equality (using {@code ==}),
+     * use {@link #requireNotExactlyEqual(Object, Object, String)} instead.
+     *
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param message The message for the exception
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotEqual(Object arg1, Object arg2, String message) {
         if (Objects.equals(arg1, arg2)) fail(message);
     }
 
     /**
      * Throws an {@link VerificationException} (with no message)
-     * if and only if the two object arguments are not equal.
+     * if and only if the two object arguments are not equal,
+     * and returns the common value otherwise.
      * <p>
      * This verification method uses {@code ==} to check for equality.
      * For object-based equality verification (using {@link Objects#equals(Object, Object)}),
-     * use {@link #requireMatch(Object, Object)} instead.
+     * use {@link #requireEqual(Object, Object)} instead.
      *
+     * @param <T>  The type of the object to check
      * @param arg1 The first argument to check
      * @param arg2 The second argument to check
+     * @return The common value of the two arguments
      * @throws VerificationException If the two arguments are not equal
      */
-    public static void requireExactMatch(Object arg1, Object arg2) {
+    public static <T> T requireExactlyEqual(T arg1, T arg2) {
         if (arg1 != arg2) fail();
+        return arg1;
     }
     /**
      * Throws an {@link VerificationException} (with the specified message)
-     * if and only if the two object arguments are not equal.
+     * if and only if the two object arguments are not equal, and returns
+     * the common value otherwise.
      * <p>
      * This verification method uses {@code ==} to check for equality.
      * For object-based equality verification (using {@link Objects#equals(Object, Object)}),
-     * use {@link #requireMatch(Object, Object, String)} instead.
+     * use {@link #requireEqual(Object, Object, String)} instead.
+     *
+     * @param <T>     The type of the object to check
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param message The message for the exception
+     * @return The common value of the two arguments
+     * @throws VerificationException If the two arguments are not equal
+     */
+    public static <T> T requireExactlyEqual(T arg1, T arg2, String message) {
+        if (arg1 != arg2) fail(message);
+        return arg1;
+    }
+
+    /**
+     * Throws an {@link VerificationException} (with no message)
+     * if and only if the two object arguments are equal.
+     * <p>
+     * This verification method uses {@code ==} to check for equality.
+     * For object-based equality verification (using {@link Objects#equals(Object, Object)}),
+     * use {@link #requireNotEqual(Object, Object)} instead.
+     *
+     * @param arg1 The first argument to check
+     * @param arg2 The second argument to check
+     * @throws VerificationException If the two arguments are equal
+     */
+    public static void requireNotExactlyEqual(Object arg1, Object arg2) {
+        if (arg1 == arg2) fail();
+    }
+    /**
+     * Throws an {@link VerificationException} (with the specified message)
+     * if and only if the two object arguments are equal.
+     * <p>
+     * This verification method uses {@code ==} to check for equality.
+     * For object-based equality verification (using {@link Objects#equals(Object, Object)}),
+     * use {@link #requireNotEqual(Object, Object, String)} instead.
      *
      * @param arg1    The first argument to check
      * @param arg2    The second argument to check
      * @param message The message for the exception
-     * @throws VerificationException If the two arguments are not equal
+     * @throws VerificationException If the two arguments are equal
      */
-    public static void requireExactMatch(Object arg1, Object arg2, String message) {
-        if (arg1 != arg2) fail(message);
+    public static void requireNotExactlyEqual(Object arg1, Object arg2, String message) {
+        if (arg1 == arg2) fail(message);
     }
 
-    /**
-     * A custom runtime exception for use by the
-     * {@link Verifier} class for failed verifications.
-     *
-     * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
-     * @version February 25, 2021
-     * @since 1.2.0
-     */
-    public static class VerificationException extends RuntimeException {
-        /**
-         * Constructs a new verification exception
-         *
-         * @see RuntimeException#RuntimeException()
-         */
-        public VerificationException() {
-            super();
-        }
-
-        /**
-         * Constructs a new runtime exception with the specified detail message
-         *
-         * @param message The detail message
-         * @see RuntimeException#RuntimeException(String)
-         */
-        public VerificationException(String message) {
-            super(message);
-        }
-
-        /**
-         * Constructs a new runtime exception with the specified detail message and cause
-         *
-         * @param message The detail message
-         * @param cause   The cause
-         * @see RuntimeException#RuntimeException(String, Throwable)
-         */
-        public VerificationException(String message, Throwable cause) {
-            super(message, cause);
-        }
-
-        /**
-         * Constructs a new runtime exception with the specified cause
-         *
-         * @param cause The cause
-         * @see RuntimeException#RuntimeException(Throwable)
-         */
-        public VerificationException(Throwable cause) {
-            super(cause);
-        }
-
-        /**
-         * Constructs a new runtime exception with the specified detail
-         * message, cause, suppression enabled or disabled, and writable
-         * stack trace enabled or disabled
-         *
-         * @param message            The detail message
-         * @param cause              The cause
-         * @param enableSuppression  Whether or not suppression is enabled or disabled
-         * @param writableStackTrace Whether or not the stack trace should be writable
-         * @see RuntimeException#RuntimeException(String, Throwable, boolean, boolean)
-         */
-        protected VerificationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-            super(message, cause, enableSuppression, writableStackTrace);
-        }
-    }
 }

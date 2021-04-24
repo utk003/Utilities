@@ -1,0 +1,10 @@
+io.github.utk003.util.data
+io.github.utk003.util.data.collection
+io.github.utk003.util.data.collection.bijection
+io.github.utk003.util.data.reference
+io.github.utk003.util.data.tuple
+io.github.utk003.util.data.tuple.immutable
+io.github.utk003.util.data.tuple.mutable
+io.github.utk003.util.func
+io.github.utk003.util.misc
+io.github.utk003.util.perm

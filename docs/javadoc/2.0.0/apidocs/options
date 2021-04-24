@@ -1,0 +1,25 @@
+-classpath
+'/Users/up/.m2/repository/org/jetbrains/annotations/19.0.0/annotations-19.0.0.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/up/Documents/GitHub/Other/Utilities/src/main/java'
+--allow-script-in-comments
+-author
+-bottom
+'<div class="contentContainer big-links">                         <h3>Quick Links:</h3>                         <a href="/" target="_top">Website Homepage</a><br/>                         <a href="/Utilities" target="_top">Project Homepage</a><br/>                         <a href="https://github.com/utk003/Utilities" target="_top">Project Github</a><br/>                         <br/>                         Copyright &copy; <span class="year-span">2020</span> Utkarsh Priyam. All rights reserved.                         </div>                         <script src="/scripts/copyright.js"></script>                         <link href="/css/misc.css" rel="stylesheet">'
+-charset
+'UTF-8'
+-d
+'/Users/up/Documents/GitHub/Other/Utilities/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'Utilities 2.0.0 API'
+-linkoffline
+'http://docs.oracle.com/javase/8/docs/api' '/Users/up/Documents/GitHub/Other/Utilities/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'Utilities 2.0.0 API'
