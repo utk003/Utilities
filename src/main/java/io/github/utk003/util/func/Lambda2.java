@@ -24,6 +24,8 @@ SOFTWARE.
 
 package io.github.utk003.util.func;
 
+import java.util.function.BiFunction;
+
 /**
  * Represents a lambda function which takes in 2 parameters and returns an object of type {@code R}.
  * <p>
@@ -32,16 +34,21 @@ package io.github.utk003.util.func;
  * <p>
  * This is a {@link FunctionalInterface} whose functional method is
  * {@link #get(Object, Object)}.
+ * <p>
+ * This functional interface also extends Java's {@link BiFunction}, which has a similar
+ * method signature. This allows for {@code Lambda2} objects to be used in other Java
+ * code that uses {@code BiFunction}.
  *
  * @param <R>  The return type of this lambda function
  * @param <T1> The type of parameter 1 for this lambda function
  * @param <T2> The type of parameter 2 for this lambda function
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
+ * @see BiFunction
  * @since 1.0.3
  */
 @FunctionalInterface
-public interface Lambda2<R, T1, T2> {
+public interface Lambda2<R, T1, T2> extends BiFunction<T1, T2, R> {
     /**
      * Applies the lambda function to the given parameters.
      *
@@ -50,4 +57,14 @@ public interface Lambda2<R, T1, T2> {
      * @return The result of this function call
      */
     R get(T1 param1, T2 param2);
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since 2.1.0
+     */
+    @Override
+    default R apply(T1 t1, T2 t2) {
+        return get(t1, t2);
+    }
 }

@@ -28,9 +28,12 @@ package io.github.utk003.util.func;
  * Represents a void lambda function which takes no parameters.
  * <p>
  * A {@code VoidLambda0} behaves just like a {@link Runnable}.
- * <p>
  * This is a {@link FunctionalInterface} whose functional method is
  * {@link #run()}.
+ * <p>
+ * This functional interface also extends {@code Runnable}, which has an identical
+ * method signature. This allows for {@code VoidLambda0} objects to be used with
+ * other Java code that uses {@code Runnable}.
  *
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
@@ -38,7 +41,7 @@ package io.github.utk003.util.func;
  * @since 1.0.2
  */
 @FunctionalInterface
-public interface VoidLambda0 {
+public interface VoidLambda0 extends Runnable {
     /**
      * Runs the given lambda function.
      *

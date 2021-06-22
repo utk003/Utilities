@@ -7,8 +7,8 @@
     <groupId>io.github.utk003</groupId>
     <artifactId>utilities-library</artifactId>
     <name>Utilities</name>
-    <version>2.0.0</version>
-    <url>https://utk003.github.io/Utilities/javadoc/2.0.0</url>
+    <version>2.1.0</version>
+    <url>https://utk003.github.io/Utilities/javadoc/2.1.0</url>
     <packaging>jar</packaging>
 
     <properties>

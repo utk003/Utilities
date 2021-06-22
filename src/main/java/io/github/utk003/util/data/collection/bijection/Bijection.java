@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * A custom {@code Collection} that represents a bijective mapping.
@@ -119,7 +118,7 @@ public interface Bijection<A, B> extends Collection<Bijection.Pairing<A, B>> {
          */
         @Override
         public String toString() {
-            return "{" + FIRST + " <=> " + SECOND + "}";
+            return FIRST + "=" + SECOND;
         }
         /**
          * {@inheritDoc}
@@ -129,10 +128,11 @@ public interface Bijection<A, B> extends Collection<Bijection.Pairing<A, B>> {
             return FIRST.hashCode() ^ SECOND.hashCode();
         }
         /**
-         * This method returns whether or not the two elements of this pair
-         * exactly match (using {@code ==} to check for equality) the elements
-         * of the other pair.
          * {@inheritDoc}
+         * <p>
+         * This method returns whether or not the two elements of this pair
+         * exactly match the elements of the other pair (using {@code ==}
+         * to check for equality).
          */
         @Override
         public boolean equals(Object obj) {

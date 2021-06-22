@@ -24,19 +24,26 @@ SOFTWARE.
 
 package io.github.utk003.util.func;
 
+import java.util.function.Supplier;
+
 /**
  * Represents a lambda function which takes in 0 parameters and
  * returns an object of type {@code R}.
  * <p>
  * This is a {@link FunctionalInterface} whose functional method is {@link #get()}.
+ * <p>
+ * This functional interface also extends Java's {@link Supplier}, which has the same
+ * method signature. This allows for {@code Lambda0} objects to be used in other Java
+ * code that uses {@code Supplier}.
  *
  * @param <R> The return type of this lambda function
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version January 13, 2021
+ * @see Supplier
  * @since 1.0.3
  */
 @FunctionalInterface
-public interface Lambda0<R> {
+public interface Lambda0<R> extends Supplier<R> {
     /**
      * Supplies the output of the given function.
      *
