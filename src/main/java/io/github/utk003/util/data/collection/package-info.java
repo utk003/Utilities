@@ -24,7 +24,8 @@ SOFTWARE.
 
 /**
  * A package for custom collections not provided by Java.
- *
- * @see java.util.Collection
+ * <p>
+ * Note that collections which do not directly conform to {@link java.util.Collection}
+ * but are nonetheless collections of objects can still be included in this package.
  */
 package io.github.utk003.util.data.collection;

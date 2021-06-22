@@ -206,4 +206,39 @@ public abstract class AbstractBijection<A, B> extends AbstractCollection<Bijecti
      */
     @Override
     public abstract boolean removePairing(@NotNull Pairing<A, B> pairing);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        Iterator<Pairing<A, B>> it = iterator();
+        if (!it.hasNext())
+            return "{}";
+
+        StringBuilder builder = new StringBuilder("{").append(it.next());
+        while (it.hasNext())
+            builder.append(", ").append(it.next());
+        return builder + "}";
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        for (Pairing<A, B> pairing : this)
+            hash ^= pairing.hashCode();
+        return hash;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Bijection<?, ?>))
+            return false;
+        Bijection<?, ?> other = (Bijection<?, ?>) o;
+        return size() == other.size() && containsAll(other);
+    }
 }
