@@ -3,9 +3,12 @@ package io.github.utk003.util.math.noise;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 // https://en.wikipedia.org/wiki/Simplex_noise
+// patented until ~ January 8, 2022
 public final class SimplexNoise extends GradientNoise implements Noise {
     public SimplexNoise() {
         super();
@@ -1482,5 +1485,105 @@ public final class SimplexNoise extends GradientNoise implements Noise {
     }
     public static @NotNull SimplexNoise periodic(long seed, long defaultPeriod, @NotNull long... periods) {
         return new SimplexNoise(seed, defaultPeriod, periods);
+    }
+
+    // computed on Mathematica/approximated
+    public static final class SimplexNoiseBounds {
+        private static final double
+                CONTINUOUS_2D_BOUND = 0.010080204702811454,
+                CONTINUOUS_3D_BOUND = 0.009289062925455909,
+                CONTINUOUS_4D_BOUND = 0.009210831906368878;
+
+        private static final @NotNull Map<Integer, Double> CONTINUOUS_BOUNDS_MAP = new HashMap<>();
+        static {
+            CONTINUOUS_BOUNDS_MAP.put(2, CONTINUOUS_2D_BOUND);
+            CONTINUOUS_BOUNDS_MAP.put(3, CONTINUOUS_3D_BOUND);
+            CONTINUOUS_BOUNDS_MAP.put(4, CONTINUOUS_4D_BOUND);
+        }
+
+        private double calculateContinuousBound(int dim) {
+            return calculateBound(dim, CONTINUOUS_BOUNDS_MAP, SimplexInterpolation.CONTINUOUS.DOUBLE_R_SQUARED);
+        }
+
+        private static final double
+                TRADITIONAL_2D_BOUND = 0.028902867534156943,
+                TRADITIONAL_3D_BOUND = 0.025077363499228966,
+                TRADITIONAL_4D_BOUND = 0.02289733608959788;
+
+        private static final @NotNull Map<Integer, Double> TRADITIONAL_BOUNDS_MAP = new HashMap<>();
+        static {
+            TRADITIONAL_BOUNDS_MAP.put(2, TRADITIONAL_2D_BOUND);
+            TRADITIONAL_BOUNDS_MAP.put(3, TRADITIONAL_3D_BOUND);
+            TRADITIONAL_BOUNDS_MAP.put(4, TRADITIONAL_4D_BOUND);
+        }
+
+        private double calculateTraditionalBound(int dim) {
+            return calculateBound(dim, TRADITIONAL_BOUNDS_MAP, SimplexInterpolation.TRADITIONAL.DOUBLE_R_SQUARED);
+        }
+
+        private synchronized double calculateBound(int dim, @NotNull Map<Integer, Double> boundsMap, final double R_SQUARED) {
+            {
+                Double stored = boundsMap.get(dim);
+                if (stored != null)
+                    return stored;
+            }
+
+            // dim >= 5 (1-4 are pre-calculated + cached)
+            /*
+             * Our (derivative approximation) equations:
+             * eq1: (d/(d+1)) * x^2
+             * eq2: (d/(d+1)) * (1-x)^2
+             * eq3: 0.75 (d/(d+1)) + (d/(d+1)) * (0.5-x)^2
+             *
+             * For dim >= 5, 0.75 (d/(d+1)) = 0.75 - 0.75/(d+1) >= 0.75 - 0.75/6 = 0.625 > 0.6 (traditional) > 0.5 (continuous)
+             * Therefore, we can discard eq3
+             *
+             * Eq1/2 split the interval x in [0,1] into 3 segments.... [0,1-a], [1-a,a], and [a,1]
+             *
+             * l1^2 = (d/(d+1)) * x^2     < R^2
+             * l2^2 = (d/(d+1)) * (1-x)^2 < R^2
+             *
+             * Therefore, a = R * √(1 + 1/d)
+             *
+             * Now, we test:
+             * 1) critical points of `eq1` over [0,1-a] & x = 0, 1-a
+             * 2) critical points of `eq1 + eq2` over [1-a,a] & x = 1-a, a
+             * 3) critical points of `eq2` over [a,1] & x = a, 1
+             *
+             * Custom Notation/Variables:
+             * H = √(d/(d+1))
+             */
+
+            // Calculations:
+            /*
+             * Part 1: critical points of `eq1` over [0,1-a] & x = 0, 1-a
+             * l1^2 = (d/(d+1)) * x^2 < R^2
+             * So, n1 = (R^2 - l1^2)^4 * l1
+             *
+             * l1 = H * x
+             * n1(x) = (R^2 - H^2 x^2)^4 * H * x
+             * n1'(x) = (R^2 - H^2 x^2)^4 * H + 4 (R^2 - H^2 x^2)^3 * H * x * (-2 H^2 x)
+             *        = H * (R^2 - H^2 x^2)^3 * [(R^2 - H^2 x^2) + 4 * x * (-2 H^2 x)]
+             *        = H * (R^2 - H^2 x^2)^3 * [R^2 - 9 H^2 x^2]
+             *
+             * critical points: x = R / H = a, x = R / (3H) = a / 3
+             * x = a is too big (and is also a minimum)
+             * x = a/3 works (and is a maximum)
+             * -----------------------------------------------------------------------------
+             * Part 3: critical points of `eq2` over [a,1] & x = a, 1
+             * This case is symmetric to part 1
+             * x = 1-a is too small for the lower bound in [a,1] (and is also a minimum)
+             * x = 1 - a/3 works (and is a maximum)
+             *
+             * Note:
+             * n3(x) = n1(1 - x) --> n3'(x) = -n1'(1-x)
+             *  --> `critical points of n3` = 1 - `critical points of n1`
+             * -----------------------------------------------------------------------------
+             * Part 2: critical points of `eq1 + eq2` over [1-a,a] & x = 1-a, a
+             * n2(x) = n1(x) + n3(x) = n1(x) + n1(1-x)
+             * n2'(x) = n1'(x) +
+             */
+            throw new RuntimeException();
+        }
     }
 }
