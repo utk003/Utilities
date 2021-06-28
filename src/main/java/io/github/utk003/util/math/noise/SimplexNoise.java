@@ -1,11 +1,15 @@
 package io.github.utk003.util.math.noise;
 
+import io.github.utk003.util.math.complex.ComplexDouble;
+import io.github.utk003.util.math.solve.CubicFormula;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import static io.github.utk003.util.math.Constants.*;
 
 // https://en.wikipedia.org/wiki/Simplex_noise
 // patented until ~ January 8, 2022
@@ -25,14 +29,34 @@ public final class SimplexNoise extends GradientNoise implements Noise {
     }
 
     public enum SimplexInterpolation {
-        CONTINUOUS(0.5f),
-        TRADITIONAL(0.6f);
+        CONTINUOUS(
+                0.5f,
+                SimplexNoiseBounds.CONTINUOUS_1D_BOUND,
+                SimplexNoiseBounds.CONTINUOUS_2D_BOUND,
+                SimplexNoiseBounds.CONTINUOUS_3D_BOUND,
+                SimplexNoiseBounds.CONTINUOUS_4D_BOUND
+        ),
+        TRADITIONAL(
+                0.6f,
+                SimplexNoiseBounds.TRADITIONAL_1D_BOUND,
+                SimplexNoiseBounds.TRADITIONAL_2D_BOUND,
+                SimplexNoiseBounds.TRADITIONAL_3D_BOUND,
+                SimplexNoiseBounds.TRADITIONAL_4D_BOUND
+        );
 
         private final float FLOAT_R_SQUARED;
         private final double DOUBLE_R_SQUARED;
-        SimplexInterpolation(float r2) {
+        SimplexInterpolation(float r2, double d1, double d2, double d3, double d4) {
             DOUBLE_R_SQUARED = FLOAT_R_SQUARED = r2;
+
+            FLOAT_1D_NOISE_BOUND = (float) (DOUBLE_1D_NOISE_BOUND = d1);
+            FLOAT_2D_NOISE_BOUND = (float) (DOUBLE_2D_NOISE_BOUND = d2);
+            FLOAT_3D_NOISE_BOUND = (float) (DOUBLE_3D_NOISE_BOUND = d3);
+            FLOAT_4D_NOISE_BOUND = (float) (DOUBLE_4D_NOISE_BOUND = d4);
         }
+
+        private final float FLOAT_1D_NOISE_BOUND, FLOAT_2D_NOISE_BOUND, FLOAT_3D_NOISE_BOUND, FLOAT_4D_NOISE_BOUND;
+        private final double DOUBLE_1D_NOISE_BOUND, DOUBLE_2D_NOISE_BOUND, DOUBLE_3D_NOISE_BOUND, DOUBLE_4D_NOISE_BOUND;
     }
 
     private @NotNull SimplexInterpolation interpolationType = SimplexInterpolation.TRADITIONAL;
@@ -230,15 +254,15 @@ public final class SimplexNoise extends GradientNoise implements Noise {
 
     // √(N) && 1/√(N)
     private static final double
-            DOUBLE_SQRT_2 = 1.414213562373095048801688, DOUBLE_INV_SQRT_2 = 0.707106781186547524400844,
-            DOUBLE_SQRT_3 = 1.732050807568877293527446, DOUBLE_INV_SQRT_3 = 0.577350269189625764509148,
-            DOUBLE_SQRT_4 = 2.0 /* alignment buffer */, DOUBLE_INV_SQRT_4 = 0.5 /* alignment buffer */,
-            DOUBLE_SQRT_5 = 2.236067977499789696409173, DOUBLE_INV_SQRT_5 = 0.447213595499957939281834;
+            DOUBLE_SQRT_2 = SQRT_2, DOUBLE_INV_SQRT_2 = 1 / SQRT_2,
+            DOUBLE_SQRT_3 = SQRT_3, DOUBLE_INV_SQRT_3 = 1 / SQRT_3,
+            DOUBLE_SQRT_4 = 2.0000, DOUBLE_INV_SQRT_4 = 0.5000,
+            DOUBLE_SQRT_5 = SQRT_5, DOUBLE_INV_SQRT_5 = 1 / SQRT_5;
     private static final float
-            FLOAT_SQRT_2 = 1.414213562373095048801688f, FLOAT_INV_SQRT_2 = 0.707106781186547524400844f,
-            FLOAT_SQRT_3 = 1.732050807568877293527446f, FLOAT_INV_SQRT_3 = 0.577350269189625764509148f,
-            FLOAT_SQRT_4 = 2.0f /* alignment buffer */, FLOAT_INV_SQRT_4 = 0.5f /* alignment buffer */,
-            FLOAT_SQRT_5 = 2.236067977499789696409173f, FLOAT_INV_SQRT_5 = 0.447213595499957939281834f;
+            FLOAT_SQRT_2 = (float) DOUBLE_SQRT_2, FLOAT_INV_SQRT_2 = (float) DOUBLE_INV_SQRT_2,
+            FLOAT_SQRT_3 = (float) DOUBLE_SQRT_3, FLOAT_INV_SQRT_3 = (float) DOUBLE_INV_SQRT_3,
+            FLOAT_SQRT_4 = (float) DOUBLE_SQRT_4, FLOAT_INV_SQRT_4 = (float) DOUBLE_INV_SQRT_4,
+            FLOAT_SQRT_5 = (float) DOUBLE_SQRT_5, FLOAT_INV_SQRT_5 = (float) DOUBLE_INV_SQRT_5;
 
     @Override
     public float get(float x) {
@@ -251,8 +275,9 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         // d0x = x - so0x, d1x = x - so1x
 
         int xf = floor(x * FLOAT_SQRT_2), xc = xf + 1;
-        return computeNoiseContribution(x - xf * FLOAT_INV_SQRT_2) +
+        float noise = computeNoiseContribution(x - xf * FLOAT_INV_SQRT_2) +
                 computeNoiseContribution(x - xc * FLOAT_INV_SQRT_2);
+        return noise / interpolationType.FLOAT_1D_NOISE_BOUND;
     }
     @Override
     public double get(double x) {
@@ -267,8 +292,9 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         // n0 = compNoise(d0x), n1 = compNoise(d1x)
 
         long xf = floor(x * DOUBLE_SQRT_2), xc = xf + 1;
-        return computeNoiseContribution(x - xf * DOUBLE_INV_SQRT_2) +
+        double noise = computeNoiseContribution(x - xf * DOUBLE_INV_SQRT_2) +
                 computeNoiseContribution(x - xc * DOUBLE_INV_SQRT_2);
+        return noise / interpolationType.DOUBLE_1D_NOISE_BOUND;
     }
 
     @Override
@@ -345,7 +371,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
                 n2 = computeNoiseContribution(d2x, d2y, g2);
 
         // return cumulative noise
-        return n0 + n1 + n2;
+        return (n0 + n1 + n2) / interpolationType.FLOAT_2D_NOISE_BOUND;
     }
     @Override
     public double get(double x, double y) {
@@ -421,7 +447,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
                 n2 = computeNoiseContribution(d2x, d2y, g2);
 
         // return cumulative noise
-        return n0 + n1 + n2;
+        return (n0 + n1 + n2) / interpolationType.DOUBLE_2D_NOISE_BOUND;
     }
 
     @Override
@@ -552,7 +578,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
                 n3 = computeNoiseContribution(d3x, d3y, d3z, g3);
 
         // return cumulative noise
-        return n0 + n1 + n2 + n3;
+        return (n0 + n1 + n2 + n3) / interpolationType.FLOAT_3D_NOISE_BOUND;
     }
     @Override
     public double get(double x, double y, double z) {
@@ -682,7 +708,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
                 n3 = computeNoiseContribution(d3x, d3y, d3z, g3);
 
         // return cumulative noise
-        return n0 + n1 + n2 + n3;
+        return (n0 + n1 + n2 + n3) / interpolationType.DOUBLE_3D_NOISE_BOUND;
     }
 
     @Override
@@ -961,7 +987,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
                 n4 = computeNoiseContribution(d4x, d4y, d4z, d4w, g4);
 
         // return cumulative noise
-        return n0 + n1 + n2 + n3 + n4;
+        return (n0 + n1 + n2 + n3 + n4) / interpolationType.FLOAT_4D_NOISE_BOUND;
     }
     @Override
     public double get(double x, double y, double z, double w) {
@@ -1239,7 +1265,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
                 n4 = computeNoiseContribution(d4x, d4y, d4z, d4w, g4);
 
         // return cumulative noise
-        return n0 + n1 + n2 + n3 + n4;
+        return (n0 + n1 + n2 + n3 + n4) / interpolationType.DOUBLE_4D_NOISE_BOUND;
     }
 
     private static class ElementTracker implements Iterable<Integer> {
@@ -1384,7 +1410,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         }
 
         // return cumulative noise
-        return noise;
+        return noise / SimplexNoiseBounds.getAsFloat(dim, interpolationType);
     }
     @Override
     public double get(@NotNull double[] pos) {
@@ -1470,7 +1496,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         }
 
         // return cumulative noise
-        return noise;
+        return noise / SimplexNoiseBounds.getAsDouble(dim, interpolationType);
     }
 
     public static @NotNull SimplexNoise aperiodic() {
@@ -1490,38 +1516,59 @@ public final class SimplexNoise extends GradientNoise implements Noise {
     // computed on Mathematica/approximated
     public static final class SimplexNoiseBounds {
         private static final double
+                CONTINUOUS_1D_BOUND = 0.013983312811550396,
                 CONTINUOUS_2D_BOUND = 0.010080204702811454,
                 CONTINUOUS_3D_BOUND = 0.009289062925455909,
                 CONTINUOUS_4D_BOUND = 0.009210831906368878;
 
         private static final @NotNull Map<Integer, Double> CONTINUOUS_BOUNDS_MAP = new HashMap<>();
         static {
+            CONTINUOUS_BOUNDS_MAP.put(1, CONTINUOUS_1D_BOUND);
             CONTINUOUS_BOUNDS_MAP.put(2, CONTINUOUS_2D_BOUND);
             CONTINUOUS_BOUNDS_MAP.put(3, CONTINUOUS_3D_BOUND);
             CONTINUOUS_BOUNDS_MAP.put(4, CONTINUOUS_4D_BOUND);
         }
 
-        private double calculateContinuousBound(int dim) {
-            return calculateBound(dim, CONTINUOUS_BOUNDS_MAP, SimplexInterpolation.CONTINUOUS.DOUBLE_R_SQUARED);
-        }
-
         private static final double
+                TRADITIONAL_1D_BOUND = 0.03599643079336411,
                 TRADITIONAL_2D_BOUND = 0.028902867534156943,
                 TRADITIONAL_3D_BOUND = 0.025077363499228966,
                 TRADITIONAL_4D_BOUND = 0.02289733608959788;
 
         private static final @NotNull Map<Integer, Double> TRADITIONAL_BOUNDS_MAP = new HashMap<>();
         static {
+            TRADITIONAL_BOUNDS_MAP.put(1, TRADITIONAL_1D_BOUND);
             TRADITIONAL_BOUNDS_MAP.put(2, TRADITIONAL_2D_BOUND);
             TRADITIONAL_BOUNDS_MAP.put(3, TRADITIONAL_3D_BOUND);
             TRADITIONAL_BOUNDS_MAP.put(4, TRADITIONAL_4D_BOUND);
         }
 
-        private double calculateTraditionalBound(int dim) {
-            return calculateBound(dim, TRADITIONAL_BOUNDS_MAP, SimplexInterpolation.TRADITIONAL.DOUBLE_R_SQUARED);
+        public static float getAsFloat(int dim, @NotNull SimplexInterpolation interpolationType) {
+            return (float) getAsDouble(dim, interpolationType);
+        }
+        public static double getAsDouble(int dim, @NotNull SimplexInterpolation interpolationType) {
+            switch (interpolationType) {
+                case CONTINUOUS:
+                    return getOrCalculateBound(
+                            dim,
+                            CONTINUOUS_BOUNDS_MAP,
+                            SimplexInterpolation.CONTINUOUS.DOUBLE_R_SQUARED
+                    );
+
+                case TRADITIONAL:
+                    return getOrCalculateBound(
+                            dim,
+                            TRADITIONAL_BOUNDS_MAP,
+                            SimplexInterpolation.TRADITIONAL.DOUBLE_R_SQUARED
+                    );
+
+                default:
+                    return 0.0;
+            }
         }
 
-        private synchronized double calculateBound(int dim, @NotNull Map<Integer, Double> boundsMap, final double R_SQUARED) {
+        @SuppressWarnings("UnnecessaryLocalVariable")
+        private static synchronized double getOrCalculateBound(int dim, @NotNull Map<Integer, Double> boundsMap, final double R_SQUARED) {
             {
                 Double stored = boundsMap.get(dim);
                 if (stored != null)
@@ -1583,7 +1630,44 @@ public final class SimplexNoise extends GradientNoise implements Noise {
              * n2(x) = n1(x) + n3(x) = n1(x) + n1(1-x)
              * n2'(x) = n1'(x) +
              */
-            throw new RuntimeException();
+
+            /*
+             * SKIPPING TO ACTUAL CODE -- explanation/working out can be found in mathematica file
+             */
+            // constants
+            final double H_SQUARED = dim / (1.0 + dim), H = Math.sqrt(H_SQUARED);
+            double h = H, h2 = H_SQUARED, h3 = h * h2, h5 = h2 * h3, h7 = h2 * h5, h9 = h2 * h7;
+            double r2 = R_SQUARED, r4 = r2 * r2, r6 = r2 * r4;
+
+            // Derivative eq (cubic): ax^3 + bx^2 + cx + d
+            double a = 72 * h9;
+            double b = 126 * h9 - 168 * h7 * r2;
+            double c = 63 * h9 / 2 - 140 * h7 * r2 + 120 * h5 * r4;
+            double d = 9 * h9 / 8 - 21 * h7 * r2 / 2 + 30 * h5 * r4 - 24 * h3 * r6;
+
+            CubicFormula.CubicSolution<ComplexDouble> roots = CubicFormula.solveCubic(a, b, c, d);
+            roots.root1.sqrt().round().real += 0.5;
+            roots.root2.sqrt().round().real += 0.5;
+            roots.root3.sqrt().round().real += 0.5;
+
+            double max = applyNoiseMaxFunction(0.5, h, r2);
+            if (roots.root1.imag == 0) max = Math.max(max, applyNoiseMaxFunction(roots.root1.real, h, r2));
+            if (roots.root2.imag == 0) max = Math.max(max, applyNoiseMaxFunction(roots.root2.real, h, r2));
+            if (roots.root3.imag == 0) max = Math.max(max, applyNoiseMaxFunction(roots.root3.real, h, r2));
+
+            boundsMap.put(dim, max);
+            return max;
+        }
+        private static double applyNoiseMaxFunction(double x, final double H, final double R2) {
+            if (x <= 0 || x >= 1) return 0;
+            double hx = H * x;
+            return applyOneSideNoiseMaxFunction(hx, R2) + applyOneSideNoiseMaxFunction(H - hx, R2);
+        }
+        private static double applyOneSideNoiseMaxFunction(final double hx, final double R2) {
+            final double hx2 = hx * hx;
+            if (R2 <= hx2) return 0.0;
+            double diff = R2 - hx2, diff2 = diff * diff, diff4 = diff2 * diff2;
+            return hx * diff4;
         }
     }
 }

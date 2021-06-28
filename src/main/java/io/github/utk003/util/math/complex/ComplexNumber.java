@@ -40,6 +40,13 @@ public interface ComplexNumber<CN extends ComplexNumber<CN>> {
     @Contract("_ -> this")
     @NotNull CN copy(@NotNull CN cn);
 
+    boolean isZero();
+
+    @Contract("-> this")
+    @NotNull CN zero();
+    @Contract("-> this")
+    @NotNull CN identity();
+
     /**
      * Normalizes this complex number.
      * <p>
@@ -97,9 +104,6 @@ public interface ComplexNumber<CN extends ComplexNumber<CN>> {
     @NotNull CN square();
     @Contract("-> this")
     @NotNull CN cube();
-
-    @Contract("-> this")
-    @NotNull CN identity();
 
     @Contract("-> this")
     @NotNull CN unity15();

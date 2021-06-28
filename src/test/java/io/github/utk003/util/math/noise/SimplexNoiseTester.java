@@ -7,6 +7,8 @@ import java.io.File;
 
 public class SimplexNoiseTester {
     public static void main(String[] args) {
+        test2D();
+        test3D();
         test4D();
     }
 

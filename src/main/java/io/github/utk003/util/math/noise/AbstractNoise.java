@@ -61,6 +61,18 @@ public abstract class AbstractNoise implements Noise {
         return (int) (key % maximumHashValue);
     }
 
+    protected long computeHashKey(long i1) {
+        // normalize indices using dimensional periodicity
+        if (PERIOD_D1 > 0) i1 = (i1 % PERIOD_D1 + PERIOD_D1) % PERIOD_D1;
+
+        // convert indices to hash keys
+        long k1 = i1 + SEED;
+        k1 ^= k1 >>> 32;
+        k1 *= HASH_MULTIPLIER;
+
+        // compute final hash key
+        return k1 + SEED;
+    }
     protected long computeHashKey(long i1, long i2) {
         // normalize indices using dimensional periodicity
         if (PERIOD_D1 > 0) i1 = (i1 % PERIOD_D1 + PERIOD_D1) % PERIOD_D1;

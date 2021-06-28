@@ -1,8 +1,8 @@
-package io.github.utk003.util.perm;
+package io.github.utk003.util.math.perm;
 
 import java.util.Arrays;
 
-public class RandomizerTest {
+public class RandomizerTester {
     public static void main(String[] args) {
     }
 
