@@ -28,4 +28,4 @@ SOFTWARE.
  * This package provides functionality for permuting data (in arrays)
  * in various different manners (such as random or all permutations).
  */
-package io.github.utk003.util.perm;
+package io.github.utk003.util.math.perm;

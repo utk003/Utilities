@@ -1,5 +1,6 @@
 package io.github.utk003.util.math.complex;
 
+import io.github.utk003.util.math.FastMath;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,6 +10,10 @@ import static io.github.utk003.util.math.FastMath.shift;
 
 @SuppressWarnings("UnusedReturnValue")
 public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
+    /**
+     * The "zero" {@code ComplexFloat} (ie the {@code ComplexFloat} corresponding to 0).
+     */
+    private static final @NotNull ComplexFloat ZERO = new ComplexFloat(0.0f, 0.0f);
     /**
      * The "identity" {@code ComplexFloat} (ie the {@code ComplexFloat} corresponding to 1).
      */
@@ -206,6 +211,44 @@ public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
         real = cd.real;
         imag = cd.imag;
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isZero() {
+        return lengthSquared == 0.0f;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("-> this")
+    public @NotNull ComplexFloat zero() {
+        return copy(ZERO);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("-> this")
+    public @NotNull ComplexFloat identity() {
+        return copy(IDENTITY);
+    }
+
+    // TODO document ComplexFloat#round()
+    @Contract("-> this")
+    public @NotNull ComplexFloat round() {
+        return round(1e-6f);
+    }
+    // TODO document ComplexFloat#round(float)
+    @Contract("_ -> this")
+    public @NotNull ComplexFloat round(float threshold) {
+        real = FastMath.round(real, threshold);
+        imag = FastMath.round(imag, threshold);
+        return updateMembers();
     }
 
     /**
@@ -442,15 +485,6 @@ public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
     /*
      * Replace self
      */
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Contract("-> this")
-    public @NotNull ComplexFloat identity() {
-        return copy(IDENTITY);
-    }
 
     /**
      * {@inheritDoc}

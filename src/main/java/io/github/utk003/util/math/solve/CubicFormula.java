@@ -41,19 +41,9 @@ public final class CubicFormula {
         return new CubicSolution<>(new ComplexDouble(), new ComplexDouble(), new ComplexDouble());
     }
 
-    private static <CN extends ComplexNumber<CN>> void copyR1AndRotateRoots(@NotNull CubicSolution<CN> roots) {
+    private static void copyR1AndRotateRoots(@NotNull CubicSolution<ComplexDouble> roots) {
         roots.root2.copy(roots.root1).ccw120();
         roots.root3.copy(roots.root1).cw120();
-    }
-
-    private static void processCubicEdgeCase(@NotNull ComplexFloat root, float scale) {
-        if (scale == 0.0f) return;
-
-        float real = root.real, imag = root.imag;
-        root.invert().scale(scale);
-        root.real += real;
-        root.imag += imag;
-        root.updateMembers();
     }
     private static void processCubicEdgeCase(@NotNull ComplexDouble root, double scale) {
         if (scale == 0.0) return;
@@ -63,74 +53,6 @@ public final class CubicFormula {
         root.real += real;
         root.imag += imag;
         root.updateMembers();
-    }
-
-    private static @NotNull CubicSolution<ComplexFloat> solveInto(@NotNull CubicSolution<ComplexFloat> roots,
-                                                                  float a, float d) {
-        // ax^3 + d = 0 --> x^3 = -d/a
-        roots.root1.set((float) Math.cbrt(-d / a), 0.0f);
-        copyR1AndRotateRoots(roots);
-        return roots;
-    }
-    private static @NotNull CubicSolution<ComplexFloat> solveInto(@NotNull CubicSolution<ComplexFloat> roots,
-                                                                  float a, float c, float d) {
-        // Cardano's formula for depressed cubics (https://en.wikipedia.org/wiki/Cubic_equation#Cardano's_formula)
-        float p = c / a;
-        float q = d / a;
-
-        // x^3 + px + q = 0
-        float discr = p * p * p / 27 + q * q / 4;
-        if (discr > 0.0f) {
-            // simplest case -- 2 roots are imaginary
-            float sub = (float) Math.sqrt(discr),
-                    real = (float) (Math.cbrt(-q / 2 + sub) + Math.cbrt(-q / 2 - sub));
-            roots.root1.set(real, 0.0f);
-            copyR1AndRotateRoots(roots);
-        } else {
-            // all 3 roots are real
-            roots.root1.set(-q / 2, (float) Math.sqrt(-discr)).cbrt();
-            copyR1AndRotateRoots(roots);
-
-            float p3 = -p / 3;
-            processCubicEdgeCase(roots.root1, p3);
-            processCubicEdgeCase(roots.root2, p3);
-            processCubicEdgeCase(roots.root3, p3);
-        }
-        return roots;
-    }
-    private static @NotNull CubicSolution<ComplexFloat> solveInto(@NotNull CubicSolution<ComplexFloat> roots,
-                                                                  float a, float b, float c, float d) {
-        // ax^3 + bx^2 + cx + d (https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula)
-        float bb = b * b, ac = a * c;
-        float d0 = bb - 3 * ac;
-        float d1 = 2 * bb * b - 9 * ac * b + 27 * a * a * d;
-
-        float discr = d1 * d1 - 4 * d0 * d0 * d0;
-        if (discr > 0.0f) {
-            float real;
-            if (d0 == 0.0f)
-                real = d1;
-            else
-                real = (d1 + (float) Math.sqrt(discr)) / 2;
-            roots.root1.set((float) Math.cbrt(real), 0.0f);
-        } else
-            roots.root1.set(d1 / 2, (float) Math.sqrt(-discr) / 2).cbrt();
-        copyR1AndRotateRoots(roots);
-
-        processCubicEdgeCase(roots.root1, d0);
-        processCubicEdgeCase(roots.root2, d0);
-        processCubicEdgeCase(roots.root3, d0);
-
-        roots.root1.real += b;
-        roots.root2.real += b;
-        roots.root3.real += b;
-
-        float scale = -1 / (3 * a);
-        roots.root1.updateMembers().scale(scale);
-        roots.root2.updateMembers().scale(scale);
-        roots.root3.updateMembers().scale(scale);
-
-        return roots;
     }
 
     private static @NotNull CubicSolution<ComplexDouble> solveInto(@NotNull CubicSolution<ComplexDouble> roots,
@@ -203,14 +125,25 @@ public final class CubicFormula {
     private final @NotNull CubicSolution<ComplexFloat> FLOAT_ROOTS = newFloatSolution();
     private final @NotNull CubicSolution<ComplexDouble> DOUBLE_ROOTS = newDoubleSolution();
 
+    private static @NotNull CubicSolution<ComplexFloat> copy(@NotNull CubicSolution<ComplexDouble> from,
+                                                             @NotNull CubicSolution<ComplexFloat> into) {
+        into.root1.set((float) from.root1.real, (float) from.root1.imag);
+        into.root2.set((float) from.root2.real, (float) from.root2.imag);
+        into.root3.set((float) from.root3.real, (float) from.root3.imag);
+        return into;
+    }
+
     public @NotNull CubicSolution<ComplexFloat> solve(float a, float d) {
-        return solveInto(FLOAT_ROOTS, a, d);
+        solveInto(DOUBLE_ROOTS, a, d);
+        return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
     public @NotNull CubicSolution<ComplexFloat> solve(float a, float c, float d) {
-        return solveInto(FLOAT_ROOTS, a, c, d);
+        solveInto(DOUBLE_ROOTS, a, c, d);
+        return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
     public @NotNull CubicSolution<ComplexFloat> solve(float a, float b, float c, float d) {
-        return solveInto(FLOAT_ROOTS, a, b, c, d);
+        solveInto(DOUBLE_ROOTS, a, b, c, d);
+        return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
 
     public @NotNull CubicSolution<ComplexDouble> solve(double a, double d) {
@@ -224,13 +157,16 @@ public final class CubicFormula {
     }
 
     public static @NotNull CubicSolution<ComplexFloat> solveCubic(float a, float d) {
-        return solveInto(newFloatSolution(), a, d);
+        CubicSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, d);
+        return copy(roots, newFloatSolution());
     }
     public static @NotNull CubicSolution<ComplexFloat> solveCubic(float a, float c, float d) {
-        return solveInto(newFloatSolution(), a, c, d);
+        CubicSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, c, d);
+        return copy(roots, newFloatSolution());
     }
     public static @NotNull CubicSolution<ComplexFloat> solveCubic(float a, float b, float c, float d) {
-        return solveInto(newFloatSolution(), a, b, c, d);
+        CubicSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, b, c, d);
+        return copy(roots, newFloatSolution());
     }
 
     public static @NotNull CubicSolution<ComplexDouble> solveCubic(double a, double d) {

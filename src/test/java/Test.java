@@ -1,14 +1,15 @@
-import io.github.utk003.util.math.noise.GradientNoise;
-import io.github.utk003.util.math.noise.SimplexNoise;
-import io.github.utk003.util.perm.PermutationIterator;
-import io.github.utk003.util.perm.Randomizer;
-
 import java.io.*;
 import java.net.URL;
-import java.util.Arrays;
 
 public class Test {
     public static void main(String[] args) {
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                for (int k = 0; k < 3; k++) {
+                    for (int l = 0; l < 3; l++)
+                        System.out.println("d" + i + j + k + l + " = dx" + i + " + dy" + j + " + dz" + k + " + dw" + l + ";");
+                    System.out.println();
+                }
     }
 
     private static void docs() throws Exception {

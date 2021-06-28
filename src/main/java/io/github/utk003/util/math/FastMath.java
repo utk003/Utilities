@@ -14,6 +14,22 @@ public abstract class FastMath {
         return l > d ? l - 1 : l;
     }
 
+    public static int round(float f) {
+        return floor(f + 0.5f);
+    }
+    public static long round(double d) {
+        return floor(d + 0.5);
+    }
+
+    public static float round(float val, float threshold) {
+        int round = round(val);
+        return Math.abs(val - round) < threshold ? round : val;
+    }
+    public static double round(double val, double threshold) {
+        long round = round(val);
+        return Math.abs(val - round) < threshold ? round : val;
+    }
+
     public static int ciel(float f) {
         int i = (int) f;
         return i < f ? i + 1 : i;

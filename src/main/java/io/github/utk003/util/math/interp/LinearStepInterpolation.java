@@ -13,9 +13,9 @@ public abstract class LinearStepInterpolation {
     }
 
     public static double interpolate(double e0, double e1, double weight) {
-        if (weight <= 0.0f)
+        if (weight <= 0.0)
             return e0;
-        if (weight >= 1.0f)
+        if (weight >= 1.0)
             return e1;
         return (e1 - e0) * weight + e0;
     }

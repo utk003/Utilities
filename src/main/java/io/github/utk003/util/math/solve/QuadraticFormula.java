@@ -40,46 +40,6 @@ public final class QuadraticFormula {
         return new QuadraticSolution<>(new ComplexDouble(), new ComplexDouble());
     }
 
-    private static @NotNull QuadraticSolution<ComplexFloat> solveInto(@NotNull QuadraticSolution<ComplexFloat> roots,
-                                                                      float a, float c) {
-        // ax^2 + c = 0 --> x^2 = -c/a --> x = ±√(-c/a)
-        float sqrd = -c / a;
-        if (sqrd < 0.0f) {
-            // imaginary solutions
-            float imag = (float) Math.sqrt(-sqrd);
-
-            roots.root1.set(0.0f, imag);
-            roots.root2.set(0.0f, -imag);
-        } else {
-            // real solutions
-            float real = (float) Math.sqrt(sqrd);
-
-            roots.root1.set(real, 0.0f);
-            roots.root2.set(-real, 0.0f);
-        }
-        return roots;
-    }
-    private static @NotNull QuadraticSolution<ComplexFloat> solveInto(@NotNull QuadraticSolution<ComplexFloat> roots,
-                                                                      float a, float b, float c) {
-        // ax^2 + bx + c = 0--> x = [-b ± √(b^2 - 4ac)] / (2a)
-        float discr = b * b - 4 * a * c; // discriminant
-        float a2 = 2 * a, real = -b / a2;
-        if (discr < 0.0f) {
-            // imaginary solution
-            float imag = (float) Math.sqrt(-discr) / a2;
-
-            roots.root1.set(real, imag);
-            roots.root2.set(real, -imag);
-        } else {
-            // real solutions
-            float real2 = (float) Math.sqrt(discr) / a2;
-
-            roots.root1.set(real + real2, 0.0f);
-            roots.root2.set(real - real2, 0.0f);
-        }
-        return roots;
-    }
-
     private static @NotNull QuadraticSolution<ComplexDouble> solveInto(@NotNull QuadraticSolution<ComplexDouble> roots,
                                                                        double a, double c) {
         // ax^2 + c = 0 --> x^2 = -c/a --> x = ±√(-c/a)
@@ -123,11 +83,20 @@ public final class QuadraticFormula {
     private final @NotNull QuadraticSolution<ComplexFloat> FLOAT_ROOTS = newFloatSolution();
     private final @NotNull QuadraticSolution<ComplexDouble> DOUBLE_ROOTS = newDoubleSolution();
 
+    private static @NotNull QuadraticSolution<ComplexFloat> copy(@NotNull QuadraticSolution<ComplexDouble> from,
+                                                                 @NotNull QuadraticSolution<ComplexFloat> into) {
+        into.root1.set((float) from.root1.real, (float) from.root1.imag);
+        into.root2.set((float) from.root2.real, (float) from.root2.imag);
+        return into;
+    }
+
     public @NotNull QuadraticSolution<ComplexFloat> solve(float a, float c) {
-        return solveInto(FLOAT_ROOTS, a, c);
+        solveInto(DOUBLE_ROOTS, a, c);
+        return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
     public @NotNull QuadraticSolution<ComplexFloat> solve(float a, float b, float c) {
-        return solveInto(FLOAT_ROOTS, a, b, c);
+        solveInto(DOUBLE_ROOTS, a, b, c);
+        return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
     public @NotNull QuadraticSolution<ComplexDouble> solve(double a, double c) {
         return solveInto(DOUBLE_ROOTS, a, c);
@@ -137,10 +106,12 @@ public final class QuadraticFormula {
     }
 
     public static @NotNull QuadraticSolution<ComplexFloat> solveQuadratic(float a, float c) {
-        return solveInto(newFloatSolution(), a, c);
+        QuadraticSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, c);
+        return copy(roots, newFloatSolution());
     }
     public static @NotNull QuadraticSolution<ComplexFloat> solveQuadratic(float a, float b, float c) {
-        return solveInto(newFloatSolution(), a, b, c);
+        QuadraticSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, b, c);
+        return copy(roots, newFloatSolution());
     }
 
     public static @NotNull QuadraticSolution<ComplexDouble> solveQuadratic(double a, double c) {

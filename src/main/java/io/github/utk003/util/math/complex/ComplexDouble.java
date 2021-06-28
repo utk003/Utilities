@@ -1,5 +1,6 @@
 package io.github.utk003.util.math.complex;
 
+import io.github.utk003.util.math.FastMath;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,6 +10,10 @@ import static io.github.utk003.util.math.FastMath.shift;
 
 @SuppressWarnings("UnusedReturnValue")
 public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
+    /**
+     * The "zero" {@code ComplexDouble} (ie the {@code ComplexDouble} corresponding to 0).
+     */
+    private static final @NotNull ComplexDouble ZERO = new ComplexDouble(0.0, 0.0);
     /**
      * The "identity" {@code ComplexDouble} (ie the {@code ComplexDouble} corresponding to 1).
      */
@@ -206,6 +211,44 @@ public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
         real = cd.real;
         imag = cd.imag;
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isZero() {
+        return lengthSquared == 0.0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("-> this")
+    public @NotNull ComplexDouble zero() {
+        return copy(ZERO);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("-> this")
+    public @NotNull ComplexDouble identity() {
+        return copy(IDENTITY);
+    }
+
+    // TODO document ComplexDouble#round()
+    @Contract("-> this")
+    public @NotNull ComplexDouble round() {
+        return round(1e-10);
+    }
+    // TODO document ComplexDouble#round(float)
+    @Contract("_ -> this")
+    public @NotNull ComplexDouble round(double threshold) {
+        real = FastMath.round(real, threshold);
+        imag = FastMath.round(imag, threshold);
+        return updateMembers();
     }
 
     /**
@@ -442,15 +485,6 @@ public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
     /*
      * Replace self
      */
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @Contract("-> this")
-    public @NotNull ComplexDouble identity() {
-        return copy(IDENTITY);
-    }
 
     /**
      * {@inheritDoc}

@@ -5,6 +5,10 @@ import io.github.utk003.util.math.interp.SmoothStepInterpolation;
 import io.github.utk003.util.math.interp.SmootherStepInterpolation;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 // https://en.wikipedia.org/wiki/Perlin_noise
 public final class PerlinNoise extends GradientNoise implements Noise {
     public PerlinNoise() {
@@ -88,7 +92,7 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         float wx = x - x0;
 
         // interpolate/return result
-        return interpolate(dx0, dx1, wx);
+        return interpolate(dx0, dx1, wx) / PerlinNoiseBounds.FLOAT_BOUND_1D;
     }
     @Override
     public double get(double x) {
@@ -106,7 +110,7 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         double wx = x - x0;
 
         // interpolate/return result
-        return interpolate(dx0, dx1, wx);
+        return interpolate(dx0, dx1, wx) / PerlinNoiseBounds.DOUBLE_BOUND_1D;
     }
 
     @Override
@@ -144,8 +148,10 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         float ix0 = interpolate(dp00, dp10, wx), // y = 0 fixed, x varies
                 ix1 = interpolate(dp01, dp11, wx); // y = 1 fixed, x varies
 
+        float ixy = interpolate(ix0, ix1, wy); // x = wx fixed, y varies
+
         // return result
-        return interpolate(ix0, ix1, wy); // x = wx fixed, y varies
+        return ixy / PerlinNoiseBounds.FLOAT_BOUND_2D;
     }
     @Override
     public double get(double x, double y) {
@@ -182,8 +188,10 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         double ix0 = interpolate(dp00, dp10, wx), // y = 0 fixed, x varies
                 ix1 = interpolate(dp01, dp11, wx); // y = 1 fixed, x varies
 
+        double ixy = interpolate(ix0, ix1, wy); // x = wx fixed, y varies
+
         // return result
-        return interpolate(ix0, ix1, wy); // x = wx fixed, y varies
+        return ixy / PerlinNoiseBounds.DOUBLE_BOUND_2D;
     }
 
     @Override
@@ -240,8 +248,10 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         float ixy0 = interpolate(ix00, ix10, wy), // x = wx & z = 0 fixed, y varies
                 ixy1 = interpolate(ix01, ix11, wy); // x = wx & z = 1 fixed, y varies
 
+        float ixyz = interpolate(ixy0, ixy1, wz); // x = wx & y = wy fixed, z varies
+
         // return result
-        return interpolate(ixy0, ixy1, wz); // x = wx & y = wy fixed, z varies
+        return ixyz / PerlinNoiseBounds.FLOAT_BOUND_3D;
     }
     @Override
     public double get(double x, double y, double z) {
@@ -297,8 +307,10 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         double ixy0 = interpolate(ix00, ix10, wy), // x = wx & z = 0 fixed, y varies
                 ixy1 = interpolate(ix01, ix11, wy); // x = wx & z = 1 fixed, y varies
 
+        double ixyz = interpolate(ixy0, ixy1, wz); // x = wx & y = wy fixed, z varies
+
         // return result
-        return interpolate(ixy0, ixy1, wz); // x = wx & y = wy fixed, z varies
+        return ixyz / PerlinNoiseBounds.DOUBLE_BOUND_3D;
     }
 
     @Override
@@ -307,7 +319,7 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         int x0 = floor(x), x1 = x0 + 1;
         int y0 = floor(y), y1 = y0 + 1;
         int z0 = floor(z), z1 = z0 + 1;
-        int w0 = floor(z), w1 = w0 + 1;
+        int w0 = floor(w), w1 = w0 + 1;
 
         // compute distances
         float dx0 = x - x0, dx1 = x - x1,
@@ -390,8 +402,10 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         float ixyz0 = interpolate(ixy00, ixy10, wz), // x = wx & y = wy & w = 0 fixed, z varies
                 ixyz1 = interpolate(ixy01, ixy11, wz); // x = wx & y = wy & w = 1 fixed, z varies
 
+        float ixyzw = interpolate(ixyz0, ixyz1, ww); // x = wx & y = wy & z = wz fixed, w varies
+
         // return result
-        return interpolate(ixyz0, ixyz1, ww); // x = wx & y = wy & z = wz fixed, w varies
+        return ixyzw / PerlinNoiseBounds.FLOAT_BOUND_4D;
     }
     @Override
     public double get(double x, double y, double z, double w) {
@@ -399,7 +413,7 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         long x0 = floor(x), x1 = x0 + 1;
         long y0 = floor(y), y1 = y0 + 1;
         long z0 = floor(z), z1 = z0 + 1;
-        long w0 = floor(z), w1 = w0 + 1;
+        long w0 = floor(w), w1 = w0 + 1;
 
         // compute distances
         double dx0 = x - x0, dx1 = x - x1,
@@ -482,8 +496,10 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         double ixyz0 = interpolate(ixy00, ixy10, wz), // x = wx & y = wy & w = 0 fixed, z varies
                 ixyz1 = interpolate(ixy01, ixy11, wz); // x = wx & y = wy & w = 1 fixed, z varies
 
+        double ixyzw = interpolate(ixyz0, ixyz1, ww); // x = wx & y = wy & z = wz fixed, w varies
+
         // return result
-        return interpolate(ixyz0, ixyz1, ww); // x = wx & y = wy & z = wz fixed, w varies
+        return ixyzw / PerlinNoiseBounds.DOUBLE_BOUND_4D;
     }
 
     @Override
@@ -541,7 +557,7 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         }
 
         // return result
-        return dp[0];
+        return dp[0] / PerlinNoiseBounds.getAsFloat(dim);
     }
     @Override
     public double get(@NotNull double[] pos) {
@@ -598,9 +614,8 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         }
 
         // return result
-        return dp[0];
+        return dp[0] / PerlinNoiseBounds.getAsDouble(dim);
     }
-
 
     public static @NotNull PerlinNoise aperiodic() {
         return new PerlinNoise();
@@ -614,5 +629,35 @@ public final class PerlinNoise extends GradientNoise implements Noise {
     }
     public static @NotNull PerlinNoise periodic(long seed, long defaultPeriod, @NotNull long... periods) {
         return new PerlinNoise(seed, defaultPeriod, periods);
+    }
+
+    // √(N)/2
+    public static final class PerlinNoiseBounds {
+        private static final double
+                DOUBLE_BOUND_1D = 0.5,
+                DOUBLE_BOUND_2D = 0.707106781186547524400844,
+                DOUBLE_BOUND_3D = 0.866025403784438646763723,
+                DOUBLE_BOUND_4D = 1.0;
+        private static final float
+                FLOAT_BOUND_1D = (float) DOUBLE_BOUND_1D,
+                FLOAT_BOUND_2D = (float) DOUBLE_BOUND_2D,
+                FLOAT_BOUND_3D = (float) DOUBLE_BOUND_3D,
+                FLOAT_BOUND_4D = (float) DOUBLE_BOUND_4D;
+
+        private static final @NotNull Map<Integer, Double> BOUNDS_MAP = new HashMap<>();
+        private static final @NotNull Function<Integer, Double> FUNC = (dim) -> Math.sqrt(dim) / 2;
+        static {
+            BOUNDS_MAP.put(1, DOUBLE_BOUND_1D);
+            BOUNDS_MAP.put(2, DOUBLE_BOUND_2D);
+            BOUNDS_MAP.put(3, DOUBLE_BOUND_3D);
+            BOUNDS_MAP.put(4, DOUBLE_BOUND_4D);
+        }
+
+        public static synchronized float getAsFloat(int dim) {
+            return (float) (double) BOUNDS_MAP.computeIfAbsent(dim, FUNC);
+        }
+        public static synchronized double getAsDouble(int dim) {
+            return BOUNDS_MAP.computeIfAbsent(dim, FUNC);
+        }
     }
 }
