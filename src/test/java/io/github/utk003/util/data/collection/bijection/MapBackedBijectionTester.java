@@ -6,10 +6,10 @@ public class MapBackedBijectionTester {
     private enum Enum1 {
         V0, V1, V2, V3, V4, V5, V6, V7, V8, V9
     }
+
     private enum Enum2 {
         V0, V1, V2, V3, V4, V5, V6, V7, V8, V9
     }
-
 
     public static void main(String[] args) {
         /*
@@ -22,7 +22,7 @@ public class MapBackedBijectionTester {
          * {}
          */
 
-        MapBackedBijection<Enum1, Enum2> bijection = new MapBackedBijection<>(new EnumMap<>(Enum1.class), new EnumMap<>(Enum2.class));
+        MapBackedBijection<Enum1, Enum2> bijection = MapBackedBijection.createEnumEnumBijection(Enum1.class, Enum2.class);
 
         // start with an empty bijection
         System.out.println(bijection);
@@ -31,26 +31,26 @@ public class MapBackedBijectionTester {
         // because all other pairs fail due to conflicts with existing mappings
         for (Enum1 e1 : Enum1.values())
             for (Enum2 e2 : Enum2.values())
-                bijection.addPairing(e1, e2);
+                bijection.add(e1, e2);
         System.out.println(bijection);
 
         // add everything again --> no change to bijection
         for (Enum1 e1 : Enum1.values())
             for (Enum2 e2 : Enum2.values())
-                bijection.addPairing(e1, e2);
+                bijection.add(e1, e2);
         System.out.println(bijection);
 
         // remove all pairings except the ones that are in the bijection --> should not change
         for (Enum1 e1 : Enum1.values())
             for (Enum2 e2 : Enum2.values())
-                if (!bijection.containsPairing(e1, e2))
-                    bijection.removePairing(e1, e2);
+                if (!bijection.contains(e1, e2))
+                    bijection.remove(e1, e2);
         System.out.println(bijection);
 
         // remove everything --> bijection should be empty
         for (Enum1 e1 : Enum1.values())
             for (Enum2 e2 : Enum2.values())
-                bijection.removePairing(e1, e2);
+                bijection.remove(e1, e2);
         System.out.println(bijection);
     }
 }
