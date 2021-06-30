@@ -25,9 +25,12 @@ SOFTWARE.
 package io.github.utk003.util.data.collection.bijection;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * A wrapper class for {@link Bijection}s that makes them unmodifiable.
@@ -37,7 +40,7 @@ import java.util.Iterator;
  * @param <A> The type of objects in the first set of this bijection
  * @param <B> The type of objects in the second set of this bijection
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
- * @version April 23, 2021
+ * @version June 29, 2021
  * @see Bijection
  * @since 2.0.0
  */
@@ -55,6 +58,122 @@ final class UnmodifiableBijection<A, B> extends AbstractBijection<A, B> implemen
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int size() {
+        return BACKING_BIJECTION.size();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @Nullable Pairing<A, B> getByFirst(@NotNull A obj1) {
+        return BACKING_BIJECTION.getByFirst(obj1);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @Nullable Pairing<A, B> getBySecond(@NotNull B obj2) {
+        return BACKING_BIJECTION.getBySecond(obj2);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method always throws a {@link UnsupportedOperationException}.
+     *
+     * @throws UnsupportedOperationException Always
+     */
+    @Override
+    public boolean add(@NotNull Pairing<A, B> pairing) {
+        throw new UnsupportedOperationException("Unmodifiable bijections cannot add new pairings");
+    }
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method always throws a {@link UnsupportedOperationException}.
+     *
+     * @throws UnsupportedOperationException Always
+     */
+    @Override
+    public boolean remove(@NotNull A obj1, @NotNull B obj2) {
+        throw new UnsupportedOperationException("Unmodifiable bijections cannot remove pairings");
+    }
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method always throws a {@link UnsupportedOperationException}.
+     *
+     * @throws UnsupportedOperationException Always
+     */
+    @Override
+    public @Nullable Pairing<A, B> removeByFirst(@NotNull A obj1) {
+        throw new UnsupportedOperationException("Unmodifiable bijections cannot remove pairings");
+    }
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This method always throws a {@link UnsupportedOperationException}.
+     *
+     * @throws UnsupportedOperationException Always
+     */
+    @Override
+    public @Nullable Pairing<A, B> removeBySecond(@NotNull B obj2) {
+        throw new UnsupportedOperationException("Unmodifiable bijections cannot remove pairings");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Iterator<Pairing<A, B>> iterator() {
+        return new UnmodifiableIterator<>(BACKING_BIJECTION.iterator());
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Iterator<A> iteratorOverFirsts() {
+        return new UnmodifiableIterator<>(BACKING_BIJECTION.iteratorOverFirsts());
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Iterator<B> iteratorOverSeconds() {
+        return new UnmodifiableIterator<>(BACKING_BIJECTION.iteratorOverSeconds());
+    }
+
+    private @Nullable Set<Pairing<A, B>> pairingSet = null;
+    private @Nullable Set<A> setOfFirsts = null;
+    private @Nullable Set<B> setOfSeconds = null;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<Pairing<A, B>> pairingSet() {
+        return pairingSet == null ? pairingSet = Collections.unmodifiableSet(BACKING_BIJECTION.pairingSet()) : pairingSet;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<A> setOfFirsts() {
+        return setOfFirsts == null ? setOfFirsts = Collections.unmodifiableSet(BACKING_BIJECTION.setOfFirsts()) : setOfFirsts;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Set<B> setOfSeconds() {
+        return setOfSeconds == null ? setOfSeconds = Collections.unmodifiableSet(BACKING_BIJECTION.setOfSeconds()) : setOfSeconds;
+    }
+
+    /**
      * An iterator for {@link UnmodifiableBijection}s that prevents modifying operations.
      * <p>
      * This class is used by the {@link UnmodifiableBijection#iterator()} method.
@@ -65,8 +184,11 @@ final class UnmodifiableBijection<A, B> extends AbstractBijection<A, B> implemen
      * @see Iterator
      * @since 2.0.0
      */
-    private class UnmodifiableIterator implements Iterator<Pairing<A, B>> {
-        private final @NotNull Iterator<Pairing<A, B>> BACKING_ITERATOR = BACKING_BIJECTION.iterator();
+    private static class UnmodifiableIterator<E> implements Iterator<E> {
+        private final @NotNull Iterator<E> BACKING_ITERATOR;
+        public UnmodifiableIterator(@NotNull Iterator<E> backingIterator) {
+            BACKING_ITERATOR = backingIterator;
+        }
 
         /**
          * {@inheritDoc}
@@ -79,53 +201,8 @@ final class UnmodifiableBijection<A, B> extends AbstractBijection<A, B> implemen
          * {@inheritDoc}
          */
         @Override
-        public Pairing<A, B> next() {
+        public E next() {
             return BACKING_ITERATOR.next();
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int size() {
-        return BACKING_BIJECTION.size();
-    }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull Iterator<Pairing<A, B>> iterator() {
-        return new UnmodifiableIterator();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean containsPairing(@NotNull Pairing<A, B> pairing) {
-        return BACKING_BIJECTION.containsPairing(pairing);
-    }
-    /**
-     * {@inheritDoc}
-     * <p>
-     * This method always throws a {@link UnsupportedOperationException}.
-     *
-     * @throws UnsupportedOperationException Always
-     */
-    @Override
-    public boolean addPairing(@NotNull Pairing<A, B> pairing) {
-        throw new UnsupportedOperationException("Unmodifiable bijections cannot add new pairings");
-    }
-    /**
-     * {@inheritDoc}
-     * <p>
-     * This method always throws a {@link UnsupportedOperationException}.
-     *
-     * @throws UnsupportedOperationException Always
-     */
-    @Override
-    public boolean removePairing(@NotNull Pairing<A, B> pairing) {
-        throw new UnsupportedOperationException("Unmodifiable bijections cannot remove pairings");
     }
 }

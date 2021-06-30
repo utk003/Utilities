@@ -26,104 +26,184 @@ package io.github.utk003.util.data.collection.bijection;
 
 import io.github.utk003.util.data.tuple.immutable.ImmutablePair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.AbstractCollection;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * A skeletal implementation of the {@link Bijection} interface, provided
  * to minimize the effort required to implement the interface.
  * <p>
- * Any classes that extend {@code AbstractBijection} must implement the
- * {@link Bijection#size()}, {@link Bijection#iterator()}, {@link Bijection#containsPairing(Pairing)},
- * {@link Bijection#addPairing(Pairing)}, and {@link Bijection#removePairing(Pairing)} methods.
- * Additionally, other methods may (and probably should) be re-implemented if the underlying
- * nature of the subclass makes a more efficient implementation possible.
+ * Any classes that extend {@code AbstractBijection} will have to implement
+ * at least the {@link Bijection#size()}, {@link Bijection#getByFirst(Object)},
+ * {@link Bijection#getBySecond(Object)}, {@link Bijection#add(Pairing)},
+ * {@link Bijection#remove(Object, Object)}, {@link Bijection#removeByFirst(Object)},
+ * {@link Bijection#removeBySecond(Object)}, {@link Bijection#pairingSet()},
+ * {@link Bijection#setOfFirsts()}, and {@link Bijection#setOfSeconds()} methods.
+ * Additionally, other methods can be re-implemented if the extending class can
+ * provide more efficient implementations of those methods.
  *
  * @param <A> The type of objects in the first set of this bijection
  * @param <B> The type of objects in the second set of this bijection
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
- * @version April 23, 2021
+ * @version June 29, 2021
  * @see Bijection
  * @since 2.0.0
  */
-public abstract class AbstractBijection<A, B> extends AbstractCollection<Bijection.Pairing<A, B>> implements Bijection<A, B> {
-    /**
-     * A utility error message for any errors involving loss of bijectivity.
-     */
-    protected static final @NotNull String LOSS_OF_BIJECTIVITY_ERROR_MESSAGE = "Internal Error in Bijection: Critical loss of bijectivity";
-
-    /*
-     * io.github.utk003.util.data.collection.bijection.Bijection methods that will be overridden by subclasses
-     * -------------------------------------------------------------------------------------------------------
-     * int size();
-     * @NotNull Iterator<Pairing<A, B>> iterator();
-     *
-     * boolean containsPairing(@NotNull Pairing<A, B> pairing);
-     * boolean addPairing(@NotNull Pairing<A, B> pairing);
-     * boolean removePairing(@NotNull Pairing<A, B> pairing);
-     */
-
-    /*
-     * java.util.Collection methods overridden by java.util.AbstractCollection
-     * -----------------------------------------------------------------------
-     * boolean containsAll(Collection<?> c);
-     * boolean addAll(Collection<? extends Pairing<A, B>> c);
-     * boolean removeAll(Collection<?> c);
-     * boolean retainAll(Collection<?> c);
-     *
-     * void clear();
-     */
-
+public abstract class AbstractBijection<A, B> implements Bijection<A, B> {
     /**
      * {@inheritDoc}
      */
     @Override
     public abstract int size();
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public abstract @NotNull Iterator<Pairing<A, B>> iterator();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean contains(Object o) {
-        // force use of Bijection default instead of AbstractCollections definition
-        return ((Bijection<A, B>) this).contains(o);
+    public boolean contains(@NotNull A obj1, @NotNull B obj2) {
+        Pairing<A, B> p1 = getByFirst(obj1), p2 = getBySecond(obj2);
+        if (p1 == null && p2 == null)
+            return false;
+
+        boolean m1 = p1 != null && obj1.equals(p1.FIRST) && obj2.equals(p1.SECOND),
+                m2 = p2 != null && obj1.equals(p2.FIRST) && obj2.equals(p2.SECOND);
+        if (m1 != m2)
+            throw IllegalBijectiveStateException.lossOfBijectivity();
+        return true;
     }
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean containsPairing(@NotNull A obj1, @NotNull B obj2) {
-        return containsPairing(new Pairing<>(obj1, obj2));
+    public boolean contains(@NotNull Pairing<A, B> pairing) {
+        return contains(pairing.FIRST, pairing.SECOND);
     }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public abstract boolean containsPairing(@NotNull Pairing<A, B> pairing);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Pairing<A, B>[] toPairingArray() {
+    public abstract @Nullable Pairing<A, B> getByFirst(@NotNull A obj1);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract @Nullable Pairing<A, B> getBySecond(@NotNull B obj2);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean add(@NotNull A obj1, @NotNull B obj2) {
+        return add(new Pairing<>(obj1, obj2));
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract boolean add(@NotNull Pairing<A, B> pairing);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean addOrFail(@NotNull A obj1, @NotNull B obj2) {
+        return addOrFail(new Pairing<>(obj1, obj2));
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean addOrFail(@NotNull Pairing<A, B> pairing) {
+        if (contains(pairing))
+            return false;
+        if (add(pairing))
+            return true;
+        throw IllegalBijectiveStateException.failedPairingAddition(pairing);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract boolean remove(@NotNull A obj1, @NotNull B obj2);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean remove(@NotNull Pairing<A, B> pairing) {
+        return remove(pairing.FIRST, pairing.SECOND);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract @Nullable Pairing<A, B> removeByFirst(@NotNull A obj1);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract @Nullable Pairing<A, B> removeBySecond(@NotNull B obj2);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract @NotNull Set<Pairing<A, B>> pairingSet();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Iterator<Pairing<A, B>> iterator() {
+        return pairingSet().iterator();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract @NotNull Set<A> setOfFirsts();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract @NotNull Set<B> setOfSeconds();
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Iterator<A> iteratorOverFirsts() {
+        return setOfFirsts().iterator();
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Iterator<B> iteratorOverSeconds() {
+        return setOfSeconds().iterator();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull Pairing<A, B>[] toArray() {
         //noinspection unchecked
-        Pairing<A, B>[] arrForm = (Pairing<A, B>[]) new Pairing[size()];
+        Pairing<A, B>[] arr = (Pairing<A, B>[]) new Pairing[size()];
         int ind = 0;
         for (Pairing<A, B> pair : this)
-            arrForm[ind++] = pair;
-        return arrForm;
+            arr[ind++] = pair;
+        return arr;
     }
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NotNull ImmutablePair<A[], B[]> toPairedArray() {
+    public @NotNull ImmutablePair<A[], B[]> toArrayPair() {
         //noinspection unchecked
         A[] arrA = (A[]) new Object[size()];
         //noinspection unchecked
@@ -141,7 +221,7 @@ public abstract class AbstractBijection<A, B> extends AbstractCollection<Bijecti
      * {@inheritDoc}
      */
     @Override
-    public @NotNull Object[][] toPairedArray(boolean makeRowsPairwise) {
+    public @NotNull Object[][] to2DArray(boolean makeRowsPairwise) {
         if (makeRowsPairwise) {
             Object[][] arrForm = new Object[size()][];
             int ind = 0;
@@ -149,63 +229,10 @@ public abstract class AbstractBijection<A, B> extends AbstractCollection<Bijecti
                 arrForm[ind++] = new Object[]{pair.FIRST, pair.SECOND};
             return arrForm;
         } else {
-            ImmutablePair<A[], B[]> pair = toPairedArray();
+            ImmutablePair<A[], B[]> pair = toArrayPair();
             return new Object[][]{pair.FIRST, pair.SECOND};
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean add(Pairing<A, B> pairing) {
-        // force use of Bijection default instead of AbstractCollections definition
-        return ((Bijection<A, B>) this).add(pairing);
-    }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean addPairing(@NotNull A obj1, @NotNull B obj2) {
-        return addPairing(new Pairing<>(obj1, obj2));
-    }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public abstract boolean addPairing(@NotNull Pairing<A, B> pairing);
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean addPairingOrFail(@NotNull Pairing<A, B> pairing) {
-        if (containsPairing(pairing))
-            return false;
-        if (addPairing(pairing))
-            return true;
-        throw new IllegalStateException("Failure to add pair due to pre-existing pairings");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean remove(Object o) {
-        // force use of Bijection default instead of AbstractCollections definition
-        return ((Bijection<A, B>) this).remove(o);
-    }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean removePairing(@NotNull A obj1, @NotNull B obj2) {
-        return removePairing(new Pairing<>(obj1, obj2));
-    }
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public abstract boolean removePairing(@NotNull Pairing<A, B> pairing);
 
     /**
      * {@inheritDoc}
@@ -236,9 +263,6 @@ public abstract class AbstractBijection<A, B> extends AbstractCollection<Bijecti
      */
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Bijection<?, ?>))
-            return false;
-        Bijection<?, ?> other = (Bijection<?, ?>) o;
-        return size() == other.size() && containsAll(other);
+        return o instanceof Bijection<?, ?> && pairingSet().equals(((Bijection<?, ?>) o).pairingSet());
     }
 }

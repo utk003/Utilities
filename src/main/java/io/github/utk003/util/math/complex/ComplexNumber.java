@@ -40,6 +40,7 @@ public interface ComplexNumber<CN extends ComplexNumber<CN>> {
     @Contract("_ -> this")
     @NotNull CN copy(@NotNull CN cn);
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean isZero();
 
     @Contract("-> this")
