@@ -7,7 +7,7 @@
     <groupId>io.github.utk003</groupId>
     <artifactId>utilities-library</artifactId>
     <name>Utilities</name>
-    <version>3.0.0</version>
+    <version>3.0.0-SNAPSHOT</version>
     <url>https://utk003.github.io/Utilities/javadoc/3.0.0</url>
     <packaging>jar</packaging>
 
@@ -68,8 +68,9 @@
                         <![CDATA[
                         <div class="contentContainer big-links">
                         <h3>Quick Links:</h3>
-                        <a href="/" target="_top">Website Homepage</a><br/>
+                        <a href="/Utilities/javadoc/latest.html" target="_top">Latest Documentation</a><br/>
                         <a href="/Utilities" target="_top">Project Homepage</a><br/>
+                        <a href="/" target="_top">Website Homepage</a><br/>
                         <a href="https://github.com/utk003/Utilities" target="_top">Project Github</a><br/>
                         <br/>
                         Copyright &copy; <span class="year-span">2020</span> Utkarsh Priyam. All rights reserved.
@@ -80,6 +81,9 @@
                     </bottom>
                     <additionalparam>--allow-script-in-comments</additionalparam>
                     <detectLinks>true</detectLinks>
+                    <links>
+                        <link>https://javadoc.io/doc/org.jetbrains/annotations/19.0.0/</link>
+                    </links>
                 </configuration>
                 <executions>
                     <execution>
