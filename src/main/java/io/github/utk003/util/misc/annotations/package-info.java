@@ -23,12 +23,11 @@ SOFTWARE.
  */
 
 /**
- * A package for permutation-related utility classes.
+ * A package for custom annotations.
  * <p>
- * This package provides functionality for permuting data (in arrays)
- * in various different manners (such as random or all permutations).
+ * These annotations are meant to augment those provided by
+ * JetBrains in the {@link org.jetbrains.annotations} package,
+ * particularly from the {@link org.jetbrains.annotations.ApiStatus} class.
  */
 @ScheduledForRelease(inVersion = "v3.0.0")
-package io.github.utk003.util.math.perm;
-
-import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+package io.github.utk003.util.misc.annotations;

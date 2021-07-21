@@ -23,12 +23,16 @@ SOFTWARE.
  */
 
 /**
- * A package for permutation-related utility classes.
+ * A package for solving math equations.
  * <p>
- * This package provides functionality for permuting data (in arrays)
- * in various different manners (such as random or all permutations).
+ * This package is only for equations with real coefficients.
  */
 @ScheduledForRelease(inVersion = "v3.0.0")
-package io.github.utk003.util.math.perm;
+@PlannedFeature(
+        value = "io.github.utk003.util.math.complex.solve",
+        description = "An analogous package for solving complex equations (rather than simply real equations with complex roots)"
+)
+package io.github.utk003.util.math.solve;
 
+import io.github.utk003.util.misc.annotations.PlannedFeature;
 import io.github.utk003.util.misc.annotations.ScheduledForRelease;

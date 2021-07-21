@@ -1,6 +1,5 @@
 package io.github.utk003.util.math.solve;
 
-import io.github.utk003.util.math.complex.ComplexDouble;
 import io.github.utk003.util.math.complex.ComplexFloat;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +31,7 @@ public class QuarticFormulaTester {
 //        if (p != 0)
 //            System.out.print((p > 0 ? " + " + p : " - " + (-p)));
 //        System.out.println();
-        QuarticFormula.QuarticSolution<ComplexFloat> sol = qf.solve(1.0f, s, sp, spp, p);
+        QuarticSolution<ComplexFloat> sol = qf.solve(1.0f, s, sp, spp, p);
         sol.root1.round();
         sol.root2.round();
         sol.root3.round();

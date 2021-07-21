@@ -1,47 +1,42 @@
+/*
+MIT License
+
+Copyright (c) 2021 Utkarsh Priyam
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+
 package io.github.utk003.util.math.solve;
 
 import io.github.utk003.util.math.complex.ComplexDouble;
 import io.github.utk003.util.math.complex.ComplexFloat;
-import io.github.utk003.util.math.complex.ComplexNumber;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 
+import static io.github.utk003.util.math.solve.QuarticSolution.newDoubleSolution;
+import static io.github.utk003.util.math.solve.QuarticSolution.newFloatSolution;
+
+// <a href="https://mathworld.wolfram.com/QuarticEquation.html" target="_top">quartic equation</a>
+@ScheduledForRelease(inVersion = "v3.0.0")
+@RequiresDocumentation
 public final class QuarticFormula {
-    public static class QuarticSolution<CN extends ComplexNumber<CN>> {
-        public final @NotNull CN root1, root2, root3, root4;
-        private QuarticSolution(@NotNull CN cn1, @NotNull CN cn2, @NotNull CN cn3, @NotNull CN cn4) {
-            root1 = cn1;
-            root2 = cn2;
-            root3 = cn3;
-            root4 = cn4;
-        }
-
-        @Override
-        public @NotNull String toString() {
-            return "{" + root1 + ", " + root2 + ", " + root3 + ", " + root4 + "}";
-        }
-
-        @Override
-        public int hashCode() {
-            return root1.hashCode() ^ root2.hashCode() ^ root3.hashCode() ^ root4.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (!(o instanceof QuarticSolution))
-                return false;
-
-            QuarticSolution<?> qs = (QuarticSolution<?>) o;
-            return root1.equals(qs.root1) && root2.equals(qs.root2) && root3.equals(qs.root3) && root4.equals(qs.root4);
-        }
-    }
-
-    private static @NotNull QuarticSolution<ComplexFloat> newFloatSolution() {
-        return new QuarticSolution<>(new ComplexFloat(), new ComplexFloat(), new ComplexFloat(), new ComplexFloat());
-    }
-    private static @NotNull QuarticSolution<ComplexDouble> newDoubleSolution() {
-        return new QuarticSolution<>(new ComplexDouble(), new ComplexDouble(), new ComplexDouble(), new ComplexDouble());
-    }
-
     private static void calculateGeneralSolutionS(@NotNull ComplexDouble cd, double d0, double a, double p) {
         if (d0 != 0.0) {
             double real = cd.real, imag = cd.imag;
