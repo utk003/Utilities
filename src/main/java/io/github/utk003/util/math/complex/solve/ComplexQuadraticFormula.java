@@ -22,11 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package io.github.utk003.util.math.solve;
+package io.github.utk003.util.math.complex.solve;
 
 import io.github.utk003.util.math.complex.ComplexDouble;
 import io.github.utk003.util.math.complex.ComplexFloat;
-import io.github.utk003.util.math.complex.solve.ComplexQuadraticFormula;
+import io.github.utk003.util.math.solve.QuadraticSolution;
 import io.github.utk003.util.misc.annotations.ScheduledForRelease;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -44,17 +44,17 @@ import static io.github.utk003.util.math.solve.QuadraticSolution.newFloatSolutio
  * The instance methods use cached {@link QuadraticSolution} instances to hold and return
  * solutions to cubic equations while the class methods create new instances each time.
  * <p>
- * This class is only for equations whose coefficients are all real. For a similar solver
- * that works with complex coefficients, use {@link ComplexQuadraticFormula}.
+ * This class is for equations whose coefficients are complex. For a specialized solver
+ * that only works with real coefficients, use {@link io.github.utk003.util.math.solve.QuadraticFormula}.
  *
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
- * @version July 20, 2021
+ * @version July 21, 2021
  * @see QuadraticSolution
- * @see ComplexQuadraticFormula
+ * @see io.github.utk003.util.math.solve.QuadraticFormula
  * @since 3.0.0
  */
 @ScheduledForRelease(inVersion = "v3.0.0")
-public final class QuadraticFormula {
+public final class ComplexQuadraticFormula {
     /**
      * Solves the quadratic equation {@code ax}<sup>{@code 2}</sup> {@code + c = 0}.
      *
@@ -64,22 +64,10 @@ public final class QuadraticFormula {
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + c = 0}, stored in a {@code QuadraticSolution}
      */
     private static @NotNull QuadraticSolution<ComplexDouble> solveInto(@NotNull QuadraticSolution<ComplexDouble> roots,
-                                                                       double a, double c) {
+                                                                       @NotNull ComplexDouble a, @NotNull ComplexDouble c) {
         // ax^2 + c = 0 --> x^2 = -c/a --> x = ±√(-c/a)
-        double sqrd = -c / a;
-        if (sqrd < 0.0) {
-            // imaginary solutions
-            double imag = Math.sqrt(-sqrd);
-
-            roots.root1.set(0.0, imag);
-            roots.root2.set(0.0, -imag);
-        } else {
-            // real solutions
-            double real = Math.sqrt(sqrd);
-
-            roots.root1.set(real, 0.0);
-            roots.root2.set(-real, 0.0);
-        }
+        roots.root1.copy(c).negate().divide(a).sqrt();
+        roots.root2.copy(roots.root1).negate();
         return roots;
     }
     /**
@@ -92,23 +80,27 @@ public final class QuadraticFormula {
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + bx + c = 0}, stored in a {@code QuadraticSolution}
      */
     private static @NotNull QuadraticSolution<ComplexDouble> solveInto(@NotNull QuadraticSolution<ComplexDouble> roots,
-                                                                       double a, double b, double c) {
+                                                                       @NotNull ComplexDouble a, @NotNull ComplexDouble b,
+                                                                       @NotNull ComplexDouble c) {
         // ax^2 + bx + c = 0--> x = [-b ± √(b^2 - 4ac)] / (2a)
-        double discr = b * b - 4 * a * c; // discriminant
-        double a2 = 2 * a, real = -b / a2;
-        if (discr < 0.0) {
-            // imaginary solution
-            double imag = Math.sqrt(-discr) / a2;
 
-            roots.root1.set(real, imag);
-            roots.root2.set(real, -imag);
-        } else {
-            // real solutions
-            double real2 = Math.sqrt(discr) / a2;
+        // r1 = b^2
+        roots.root1.copy(b).square();
 
-            roots.root1.set(real + real2, 0.0);
-            roots.root2.set(real - real2, 0.0);
-        }
+        // r2 = 4ac
+        roots.root2.copy(a).multiply(c).multiply(4);
+
+        // r1 = √(b^2 - 4ac) / a
+        roots.root1.subtract(roots.root2).sqrt().divide(a);
+
+        // r2 = -b / a
+        roots.root2.copy(b).negate().divide(a);
+
+        // r1 = [-b + √(b^2 - 4ac)] / (2a)
+        roots.root1.add(roots.root2).divide(2);
+
+        // r2 = [-b - √(b^2 - 4ac)] / (2a)
+        roots.root2.subtract(roots.root1);
         return roots;
     }
 
@@ -120,10 +112,14 @@ public final class QuadraticFormula {
      * A cached instance of a {@link QuadraticSolution} of {@link ComplexDouble}s.
      */
     private final @NotNull QuadraticSolution<ComplexDouble> DOUBLE_ROOTS = newDoubleSolution();
+    /**
+     * Cached instances of {@link ComplexDouble}s to hold coefficients.
+     */
+    private final @NotNull ComplexDouble A = new ComplexDouble(), B = new ComplexDouble(), C = new ComplexDouble();
 
     /**
      * Copies the values from a {@link QuadraticSolution} of
-     * {@link ComplexDouble}s into a  {@code QuadraticSolution} of {@link ComplexFloat}s.
+     * {@link ComplexDouble}s into a {@code QuadraticSolution} of {@link ComplexFloat}s.
      *
      * @param from The {@code QuadraticSolution&lt;ComplexDouble&gt;} to copy the complex numbers from
      * @param into The {@code QuadraticSolution&lt;ComplexFloat&gt;} to save the complex numbers into
@@ -136,6 +132,17 @@ public final class QuadraticFormula {
         into.root2.set((float) from.root2.real, (float) from.root2.imag);
         return into;
     }
+    /**
+     * Copies the complex number from a {@link ComplexFloat} to a {@link ComplexDouble}.
+     *
+     * @param from The {@code ComplexFloat} to copy the complex number from
+     * @param into The {@code ComplexDouble} to save the complex number into
+     * @return The {@code ComplexDouble} holding the complex number
+     */
+    @Contract("_, _ -> param2")
+    private static @NotNull ComplexDouble copy(@NotNull ComplexFloat from, @NotNull ComplexDouble into) {
+        return into.set(from.real, from.imag);
+    }
 
     /**
      * Solves the quadratic equation {@code ax}<sup>{@code 2}</sup> {@code + c = 0}.
@@ -144,8 +151,8 @@ public final class QuadraticFormula {
      * @param c The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + c = 0}, stored in a {@link QuadraticSolution}
      */
-    public @NotNull QuadraticSolution<ComplexFloat> solve(float a, float c) {
-        solveInto(DOUBLE_ROOTS, a, c);
+    public @NotNull QuadraticSolution<ComplexFloat> solve(@NotNull ComplexFloat a, @NotNull ComplexFloat c) {
+        solveInto(DOUBLE_ROOTS, copy(a, A), copy(c, C));
         return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
     /**
@@ -156,8 +163,8 @@ public final class QuadraticFormula {
      * @param c The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + bx + c = 0}, stored in a {@link QuadraticSolution}
      */
-    public @NotNull QuadraticSolution<ComplexFloat> solve(float a, float b, float c) {
-        solveInto(DOUBLE_ROOTS, a, b, c);
+    public @NotNull QuadraticSolution<ComplexFloat> solve(@NotNull ComplexFloat a, @NotNull ComplexFloat b, @NotNull ComplexFloat c) {
+        solveInto(DOUBLE_ROOTS, copy(a, A), copy(b, B), copy(c, C));
         return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
     /**
@@ -167,7 +174,7 @@ public final class QuadraticFormula {
      * @param c The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + c = 0}, stored in a {@link QuadraticSolution}
      */
-    public @NotNull QuadraticSolution<ComplexDouble> solve(double a, double c) {
+    public @NotNull QuadraticSolution<ComplexDouble> solve(@NotNull ComplexDouble a, @NotNull ComplexDouble c) {
         return solveInto(DOUBLE_ROOTS, a, c);
     }
     /**
@@ -178,7 +185,7 @@ public final class QuadraticFormula {
      * @param c The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + bx + c = 0}, stored in a {@link QuadraticSolution}
      */
-    public @NotNull QuadraticSolution<ComplexDouble> solve(double a, double b, double c) {
+    public @NotNull QuadraticSolution<ComplexDouble> solve(@NotNull ComplexDouble a, @NotNull ComplexDouble b, @NotNull ComplexDouble c) {
         return solveInto(DOUBLE_ROOTS, a, b, c);
     }
 
@@ -189,8 +196,12 @@ public final class QuadraticFormula {
      * @param c The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + c = 0}, stored in a {@link QuadraticSolution}
      */
-    public static @NotNull QuadraticSolution<ComplexFloat> solveQuadratic(float a, float c) {
-        QuadraticSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, c);
+    public static @NotNull QuadraticSolution<ComplexFloat> solveQuadratic(@NotNull ComplexFloat a, @NotNull ComplexFloat c) {
+        QuadraticSolution<ComplexDouble> roots = solveInto(
+                newDoubleSolution(),
+                copy(a, new ComplexDouble()),
+                copy(c, new ComplexDouble())
+        );
         return copy(roots, newFloatSolution());
     }
     /**
@@ -201,8 +212,13 @@ public final class QuadraticFormula {
      * @param c The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + bx + c = 0}, stored in a {@link QuadraticSolution}
      */
-    public static @NotNull QuadraticSolution<ComplexFloat> solveQuadratic(float a, float b, float c) {
-        QuadraticSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, b, c);
+    public static @NotNull QuadraticSolution<ComplexFloat> solveQuadratic(@NotNull ComplexFloat a, @NotNull ComplexFloat b, @NotNull ComplexFloat c) {
+        QuadraticSolution<ComplexDouble> roots = solveInto(
+                newDoubleSolution(),
+                copy(a, new ComplexDouble()),
+                copy(b, new ComplexDouble()),
+                copy(c, new ComplexDouble())
+        );
         return copy(roots, newFloatSolution());
     }
     /**
@@ -212,7 +228,7 @@ public final class QuadraticFormula {
      * @param c The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + c = 0}, stored in a {@link QuadraticSolution}
      */
-    public static @NotNull QuadraticSolution<ComplexDouble> solveQuadratic(double a, double c) {
+    public static @NotNull QuadraticSolution<ComplexDouble> solveQuadratic(@NotNull ComplexDouble a, @NotNull ComplexDouble c) {
         return solveInto(newDoubleSolution(), a, c);
     }
     /**
@@ -223,7 +239,7 @@ public final class QuadraticFormula {
      * @param c The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 2}</sup> {@code + bx + c = 0}, stored in a {@link QuadraticSolution}
      */
-    public static @NotNull QuadraticSolution<ComplexDouble> solveQuadratic(double a, double b, double c) {
+    public static @NotNull QuadraticSolution<ComplexDouble> solveQuadratic(@NotNull ComplexDouble a, @NotNull ComplexDouble b, @NotNull ComplexDouble c) {
         return solveInto(newDoubleSolution(), a, b, c);
     }
 }

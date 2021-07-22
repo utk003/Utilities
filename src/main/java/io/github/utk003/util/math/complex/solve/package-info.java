@@ -25,11 +25,13 @@ SOFTWARE.
 /**
  * A package for solving math equations.
  * <p>
- * This package is only for equations with real coefficients.
+ * This package is for equations with complex coefficients.
+ * For specialized solvers of equations with real coefficients,
+ * use the {@link io.github.utk003.util.math.solve} package instead.
  *
- * @see io.github.utk003.util.math.complex.solve
+ * @see io.github.utk003.util.math.solve
  */
 @ScheduledForRelease(inVersion = "v3.0.0")
-package io.github.utk003.util.math.solve;
+package io.github.utk003.util.math.complex.solve;
 
 import io.github.utk003.util.misc.annotations.ScheduledForRelease;

@@ -1,32 +1,8 @@
-/*
-MIT License
-
-Copyright (c) 2021 Utkarsh Priyam
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
- */
-
-package io.github.utk003.util.math.solve;
+package io.github.utk003.util.math.complex.solve;
 
 import io.github.utk003.util.math.complex.ComplexDouble;
 import io.github.utk003.util.math.complex.ComplexFloat;
-import io.github.utk003.util.math.complex.solve.ComplexCubicFormula;
+import io.github.utk003.util.math.solve.CubicSolution;
 import io.github.utk003.util.misc.annotations.ScheduledForRelease;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -44,17 +20,17 @@ import static io.github.utk003.util.math.solve.CubicSolution.newFloatSolution;
  * The instance methods use cached {@link CubicSolution} instances to hold and return
  * solutions to cubic equations while the class methods create new instances each time.
  * <p>
- * This class is only for equations whose coefficients are all real. For a similar solver
- * that works with complex coefficients, use {@link ComplexCubicFormula}.
+ * This class is for equations whose coefficients are complex. For a specialized solver
+ * that only works with real coefficients, use {@link io.github.utk003.util.math.solve.CubicFormula}.
  *
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
- * @version July 20, 2021
+ * @version July 21, 2021
  * @see CubicSolution
- * @see ComplexCubicFormula
+ * @see io.github.utk003.util.math.solve.CubicFormula
  * @since 3.0.0
  */
 @ScheduledForRelease(inVersion = "v3.0.0")
-public final class CubicFormula {
+public final class ComplexCubicFormula {
     /**
      * Converts the second and third roots of the given {@link CubicSolution} into
      * 120 degree rotations of the first. In other words, the latter two roots
@@ -71,18 +47,18 @@ public final class CubicFormula {
      * Computes the sum of a complex number and its reciprocal.
      * <p>
      * This method is needed as a part of the cubic formula.
+     * <p>
+     * NOTE: This method modifies {@code scale}.
      *
      * @param root  The root to manipulate
-     * @param scale A constant multiplier to scale the reciprocal by
+     * @param scale A constant multiplier to scale the reciprocal of the root by
      */
-    private static void processCubicEdgeCase(@NotNull ComplexDouble root, double scale) {
-        if (scale == 0.0) return;
+    private static void processCubicEdgeCase(@NotNull ComplexDouble root, @NotNull ComplexDouble scale) {
+        if (scale.isZero()) return;
 
-        double real = root.real, imag = root.imag;
-        root.invert().scale(scale);
-        root.real += real;
-        root.imag += imag;
-        root.updateMembers();
+        // WWW = r + s / r
+        scale.divide(root); // s / r
+        root.add(scale); // r + s / r
     }
 
     /**
@@ -94,44 +70,10 @@ public final class CubicFormula {
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + d = 0}, stored in a {@code CubicSolution}
      */
     private static @NotNull CubicSolution<ComplexDouble> solveInto(@NotNull CubicSolution<ComplexDouble> roots,
-                                                                   double a, double d) {
+                                                                   @NotNull ComplexDouble a, @NotNull ComplexDouble d) {
         // ax^3 + d = 0 --> x^3 = -d/a
-        roots.root1.set(Math.cbrt(-d / a), 0.0);
+        roots.root1.copy(d).negate().divide(a).cbrt();
         copyR1AndRotateRoots(roots);
-        return roots;
-    }
-    /**
-     * Solves the depressed cubic equation {@code ax}<sup>{@code 3}</sup> {@code + cx + d = 0}.
-     *
-     * @param roots The {@link CubicSolution} of {@link ComplexDouble}s to store the roots into
-     * @param a     The coefficient of {@code x}<sup>{@code 3}</sup>
-     * @param c     The coefficient of {@code x}
-     * @param d     The coefficient of {@code 1}
-     * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + cx + d = 0}, stored in a {@code CubicSolution}
-     */
-    private static @NotNull CubicSolution<ComplexDouble> solveInto(@NotNull CubicSolution<ComplexDouble> roots,
-                                                                   double a, double c, double d) {
-        // Cardano's formula for depressed cubics (https://en.wikipedia.org/wiki/Cubic_equation#Cardano's_formula)
-        double p = c / a;
-        double q = d / a;
-
-        // x^3 + px + q = 0
-        double discr = p * p * p / 27 + q * q / 4;
-        if (discr > 0.0) {
-            // simplest case -- 2 roots are imaginary
-            double sub = Math.sqrt(discr), real = Math.cbrt(-q / 2 + sub) + Math.cbrt(-q / 2 - sub);
-            roots.root1.set(real, 0.0);
-            copyR1AndRotateRoots(roots);
-        } else {
-            // all 3 roots are real
-            roots.root1.set(-q / 2, Math.sqrt(-discr)).cbrt();
-            copyR1AndRotateRoots(roots);
-
-            double p3 = -p / 3;
-            processCubicEdgeCase(roots.root1, p3);
-            processCubicEdgeCase(roots.root2, p3);
-            processCubicEdgeCase(roots.root3, p3);
-        }
         return roots;
     }
     /**
@@ -142,43 +84,53 @@ public final class CubicFormula {
      * @param b     The coefficient of {@code x}<sup>{@code 2}</sup>
      * @param c     The coefficient of {@code x}
      * @param d     The coefficient of {@code 1}
+     * @param w1    Cached working {@code ComplexDouble} instance #1
+     * @param w2    Cached working {@code ComplexDouble} instance #2
+     * @param w3    Cached working {@code ComplexDouble} instance #3
+     * @param w4    Cached working {@code ComplexDouble} instance #4
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + bx}<sup>{@code 2}</sup> {@code + cx + d = 0},
      * stored in a {@code CubicSolution}
      */
     private static @NotNull CubicSolution<ComplexDouble> solveInto(@NotNull CubicSolution<ComplexDouble> roots,
-                                                                   double a, double b, double c, double d) {
+                                                                   @NotNull ComplexDouble a, @NotNull ComplexDouble b,
+                                                                   @NotNull ComplexDouble c, @NotNull ComplexDouble d,
+                                                                   @NotNull ComplexDouble w1, @NotNull ComplexDouble w2,
+                                                                   @NotNull ComplexDouble w3, @NotNull ComplexDouble w4) {
         // ax^3 + bx^2 + cx + d (https://en.wikipedia.org/wiki/Cubic_equation#General_cubic_formula)
-        double bb = b * b, ac = a * c;
-        double d0 = bb - 3 * ac;
-        double d1 = 2 * bb * b - 9 * ac * b + 27 * a * a * d;
+        ComplexDouble d0, d1;
+        {
+            ComplexDouble bb = w1.copy(b).square(), // bb
+                    ac3 = w2.copy(a).multiply(c).multiply(3); // 3ac
+            d0 = w3.copy(bb).subtract(ac3); // b^2 - 3ac
 
-        double discr = d1 * d1 - 4 * d0 * d0 * d0;
-        if (discr > 0.0) {
-            double real;
-            if (d0 == 0.0)
-                real = d1;
-            else
-                real = (d1 + Math.sqrt(discr)) / 2;
-            roots.root1.set(Math.cbrt(real), 0.0f);
-        } else
-            roots.root1.set(d1 / 2, Math.sqrt(-discr) / 2).cbrt();
+            ComplexDouble bbb2 = bb.multiply(b).multiply(2), // 2bbb
+                    abc9 = ac3.multiply(b).multiply(3), // 9abc
+                    aad27 = w4.copy(a).square().multiply(d).multiply(27); // 27aad
+            d1 = aad27.add(bbb2).subtract(abc9); // 2bbb - 9abc + 27aad
+        }
+        // d0 = w3, d1 = w4
+
+        if (d0.isZero())
+            roots.root1.copy(d1).cbrt();
+        else {
+            w2.copy(d0).cube().multiply(4); // 4 * d0 * d0 * d0
+            ComplexDouble discr = w1.copy(d1).square().subtract(w2); // d1 * d1 - 4 * d0 * d0 * d0
+            roots.root1.copy(discr).sqrt().add(d1).divide(2).cbrt();
+        }
         copyR1AndRotateRoots(roots);
 
-        processCubicEdgeCase(roots.root1, d0);
-        processCubicEdgeCase(roots.root2, d0);
-        processCubicEdgeCase(roots.root3, d0);
+        // w2 is currently unused -- can be modified
+        processCubicEdgeCase(roots.root1, w2.copy(d0));
+        processCubicEdgeCase(roots.root2, w2.copy(d0));
+        processCubicEdgeCase(roots.root3, w2.copy(d0));
 
-        roots.root1.real += b;
-        roots.root2.real += b;
-        roots.root3.real += b;
-
-        double scale = -1 / (3 * a);
-        roots.root1.updateMembers().scale(scale);
-        roots.root2.updateMembers().scale(scale);
-        roots.root3.updateMembers().scale(scale);
+        roots.root1.add(b).divide(a).divide(-3);
+        roots.root2.add(b).divide(a).divide(-3);
+        roots.root3.add(b).divide(a).divide(-3);
 
         return roots;
     }
+
 
     /**
      * A cached instance of a {@link CubicSolution} of {@link ComplexFloat}s.
@@ -188,6 +140,21 @@ public final class CubicFormula {
      * A cached instance of a {@link CubicSolution} of {@link ComplexDouble}s.
      */
     private final @NotNull CubicSolution<ComplexDouble> DOUBLE_ROOTS = newDoubleSolution();
+    /**
+     * Cached instances of {@link ComplexDouble}s to hold coefficients.
+     */
+    private final @NotNull ComplexDouble A = new ComplexDouble(), B = new ComplexDouble(),
+            C = new ComplexDouble(), D = new ComplexDouble();
+    /**
+     * Cached working instances of {@link ComplexDouble}s.
+     * These are used to hold intermediate values.
+     */
+    private final @NotNull ComplexDouble W1 = new ComplexDouble(), W2 = new ComplexDouble(),
+            W3 = new ComplexDouble(), W4 = new ComplexDouble();
+    /**
+     * Cached "zero" instance of {@link ComplexDouble}.
+     */
+    private static final @NotNull ComplexDouble ZERO = new ComplexDouble().zero();
 
     /**
      * Copies the values from a {@link CubicSolution} of
@@ -205,6 +172,17 @@ public final class CubicFormula {
         into.root3.set((float) from.root3.real, (float) from.root3.imag);
         return into;
     }
+    /**
+     * Copies the complex number from a {@link ComplexFloat} to a {@link ComplexDouble}.
+     *
+     * @param from The {@code ComplexFloat} to copy the complex number from
+     * @param into The {@code ComplexDouble} to save the complex number into
+     * @return The {@code ComplexDouble} holding the complex number
+     */
+    @Contract("_, _ -> param2")
+    private static @NotNull ComplexDouble copy(@NotNull ComplexFloat from, @NotNull ComplexDouble into) {
+        return into.set(from.real, from.imag);
+    }
 
     /**
      * Solves the cubic equation {@code ax}<sup>{@code 3}</sup> {@code + d = 0}.
@@ -213,8 +191,8 @@ public final class CubicFormula {
      * @param d The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + d = 0}, stored in a {@link CubicSolution}
      */
-    public @NotNull CubicSolution<ComplexFloat> solve(float a, float d) {
-        solveInto(DOUBLE_ROOTS, a, d);
+    public @NotNull CubicSolution<ComplexFloat> solve(@NotNull ComplexFloat a, @NotNull ComplexFloat d) {
+        solveInto(DOUBLE_ROOTS, copy(a, A), copy(d, D));
         return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
     /**
@@ -225,8 +203,8 @@ public final class CubicFormula {
      * @param d The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + cx + d = 0}, stored in a {@link CubicSolution}
      */
-    public @NotNull CubicSolution<ComplexFloat> solve(float a, float c, float d) {
-        solveInto(DOUBLE_ROOTS, a, c, d);
+    public @NotNull CubicSolution<ComplexFloat> solve(@NotNull ComplexFloat a, @NotNull ComplexFloat c, @NotNull ComplexFloat d) {
+        solveInto(DOUBLE_ROOTS, copy(a, A), ZERO, copy(c, C), copy(d, D), W1, W2, W3, W4);
         return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
     /**
@@ -239,8 +217,8 @@ public final class CubicFormula {
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + bx}<sup>{@code 2}</sup> {@code + cx + d = 0},
      * stored in a {@link CubicSolution}
      */
-    public @NotNull CubicSolution<ComplexFloat> solve(float a, float b, float c, float d) {
-        solveInto(DOUBLE_ROOTS, a, b, c, d);
+    public @NotNull CubicSolution<ComplexFloat> solve(@NotNull ComplexFloat a, @NotNull ComplexFloat b, @NotNull ComplexFloat c, @NotNull ComplexFloat d) {
+        solveInto(DOUBLE_ROOTS, copy(a, A), copy(b, B), copy(c, C), copy(d, D), W1, W2, W3, W4);
         return copy(DOUBLE_ROOTS, FLOAT_ROOTS);
     }
 
@@ -251,7 +229,7 @@ public final class CubicFormula {
      * @param d The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + d = 0}, stored in a {@link CubicSolution}
      */
-    public @NotNull CubicSolution<ComplexDouble> solve(double a, double d) {
+    public @NotNull CubicSolution<ComplexDouble> solve(@NotNull ComplexDouble a, @NotNull ComplexDouble d) {
         return solveInto(DOUBLE_ROOTS, a, d);
     }
     /**
@@ -262,8 +240,8 @@ public final class CubicFormula {
      * @param d The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + cx + d = 0}, stored in a {@link CubicSolution}
      */
-    public @NotNull CubicSolution<ComplexDouble> solve(double a, double c, double d) {
-        return solveInto(DOUBLE_ROOTS, a, c, d);
+    public @NotNull CubicSolution<ComplexDouble> solve(@NotNull ComplexDouble a, @NotNull ComplexDouble c, @NotNull ComplexDouble d) {
+        return solveInto(DOUBLE_ROOTS, a, ZERO, c, d, W1, W2, W3, W4);
     }
     /**
      * Solves the cubic equation {@code ax}<sup>{@code 3}</sup> {@code + bx}<sup>{@code 2}</sup> {@code + cx + d = 0}.
@@ -275,8 +253,8 @@ public final class CubicFormula {
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + bx}<sup>{@code 2}</sup> {@code + cx + d = 0},
      * stored in a {@link CubicSolution}
      */
-    public @NotNull CubicSolution<ComplexDouble> solve(double a, double b, double c, double d) {
-        return solveInto(DOUBLE_ROOTS, a, b, c, d);
+    public @NotNull CubicSolution<ComplexDouble> solve(@NotNull ComplexDouble a, @NotNull ComplexDouble b, @NotNull ComplexDouble c, @NotNull ComplexDouble d) {
+        return solveInto(DOUBLE_ROOTS, a, b, c, d, W1, W2, W3, W4);
     }
 
     /**
@@ -286,8 +264,12 @@ public final class CubicFormula {
      * @param d The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + d = 0}, stored in a {@link CubicSolution}
      */
-    public static @NotNull CubicSolution<ComplexFloat> solveCubic(float a, float d) {
-        CubicSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, d);
+    public static @NotNull CubicSolution<ComplexFloat> solveCubic(@NotNull ComplexFloat a, @NotNull ComplexFloat d) {
+        CubicSolution<ComplexDouble> roots = solveInto(
+                newDoubleSolution(),
+                copy(a, new ComplexDouble()),
+                copy(d, new ComplexDouble())
+        );
         return copy(roots, newFloatSolution());
     }
     /**
@@ -298,8 +280,12 @@ public final class CubicFormula {
      * @param d The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + cx + d = 0}, stored in a {@link CubicSolution}
      */
-    public static @NotNull CubicSolution<ComplexFloat> solveCubic(float a, float c, float d) {
-        CubicSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, c, d);
+    public static @NotNull CubicSolution<ComplexFloat> solveCubic(@NotNull ComplexFloat a, @NotNull ComplexFloat c, @NotNull ComplexFloat d) {
+        CubicSolution<ComplexDouble> roots = solveInto(
+                newDoubleSolution(),
+                copy(a, new ComplexDouble()), ZERO, copy(c, new ComplexDouble()), copy(d, new ComplexDouble()),
+                new ComplexDouble(), new ComplexDouble(), new ComplexDouble(), new ComplexDouble()
+        );
         return copy(roots, newFloatSolution());
     }
     /**
@@ -312,8 +298,12 @@ public final class CubicFormula {
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + bx}<sup>{@code 2}</sup> {@code + cx + d = 0},
      * stored in a {@link CubicSolution}
      */
-    public static @NotNull CubicSolution<ComplexFloat> solveCubic(float a, float b, float c, float d) {
-        CubicSolution<ComplexDouble> roots = solveInto(newDoubleSolution(), a, b, c, d);
+    public static @NotNull CubicSolution<ComplexFloat> solveCubic(@NotNull ComplexFloat a, @NotNull ComplexFloat b, @NotNull ComplexFloat c, @NotNull ComplexFloat d) {
+        CubicSolution<ComplexDouble> roots = solveInto(
+                newDoubleSolution(),
+                copy(a, new ComplexDouble()), copy(b, new ComplexDouble()), copy(c, new ComplexDouble()), copy(d, new ComplexDouble()),
+                new ComplexDouble(), new ComplexDouble(), new ComplexDouble(), new ComplexDouble()
+        );
         return copy(roots, newFloatSolution());
     }
 
@@ -324,7 +314,7 @@ public final class CubicFormula {
      * @param d The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + d = 0}, stored in a {@link CubicSolution}
      */
-    public static @NotNull CubicSolution<ComplexDouble> solveCubic(double a, double d) {
+    public static @NotNull CubicSolution<ComplexDouble> solveCubic(@NotNull ComplexDouble a, @NotNull ComplexDouble d) {
         return solveInto(newDoubleSolution(), a, d);
     }
     /**
@@ -335,8 +325,12 @@ public final class CubicFormula {
      * @param d The coefficient of {@code 1}
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + cx + d = 0}, stored in a {@link CubicSolution}
      */
-    public static @NotNull CubicSolution<ComplexDouble> solveCubic(double a, double c, double d) {
-        return solveInto(newDoubleSolution(), a, c, d);
+    public static @NotNull CubicSolution<ComplexDouble> solveCubic(@NotNull ComplexDouble a, @NotNull ComplexDouble c, @NotNull ComplexDouble d) {
+        return solveInto(
+                newDoubleSolution(),
+                a, ZERO, c, d,
+                new ComplexDouble(), new ComplexDouble(), new ComplexDouble(), new ComplexDouble()
+        );
     }
     /**
      * Solves the cubic equation {@code ax}<sup>{@code 3}</sup> {@code + bx}<sup>{@code 2}</sup> {@code + cx + d = 0}.
@@ -348,7 +342,11 @@ public final class CubicFormula {
      * @return The roots of {@code ax}<sup>{@code 3}</sup> {@code + bx}<sup>{@code 2}</sup> {@code + cx + d = 0},
      * stored in a {@link CubicSolution}
      */
-    public static @NotNull CubicSolution<ComplexDouble> solveCubic(double a, double b, double c, double d) {
-        return solveInto(newDoubleSolution(), a, b, c, d);
+    public static @NotNull CubicSolution<ComplexDouble> solveCubic(@NotNull ComplexDouble a, @NotNull ComplexDouble b, @NotNull ComplexDouble c, @NotNull ComplexDouble d) {
+        return solveInto(
+                newDoubleSolution(),
+                a, b, c, d,
+                new ComplexDouble(), new ComplexDouble(), new ComplexDouble(), new ComplexDouble()
+        );
     }
 }
