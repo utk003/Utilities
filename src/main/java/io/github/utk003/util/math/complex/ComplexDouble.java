@@ -1,14 +1,47 @@
+/*
+MIT License
+
+Copyright (c) 2021 Utkarsh Priyam
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+
 package io.github.utk003.util.math.complex;
 
 import io.github.utk003.util.math.FastMath;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import static io.github.utk003.util.math.Constants.PI;
 import static io.github.utk003.util.math.Constants.TAU;
-import static io.github.utk003.util.math.FastMath.shift;
 
+/**
+ * A {@code double}-based implementation of {@link ComplexNumber}.
+ *
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
+ * @version July 22, 2021
+ * @see ComplexFloat
+ * @since 3.0.0
+ */
 @SuppressWarnings("UnusedReturnValue")
+@ScheduledForRelease(inVersion = "v3.0.0")
 public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
     /**
      * The "zero" {@code ComplexDouble} (ie the {@code ComplexDouble} corresponding to 0).
@@ -134,12 +167,13 @@ public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
      * @return The shifted angle
      */
     private static double adjustAngle(double arg) {
-        return shift(arg, TAU);
+        return FastMath.shift(arg, TAU);
     }
 
     /**
      * Sets this {@code ComplexDouble}'s real component to the specified value.
      *
+     * @param real The complex number's new real part
      * @return This {@code ComplexDouble}, after the value change
      */
     @Contract("_ -> this")
@@ -150,6 +184,7 @@ public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
     /**
      * Sets this {@code ComplexDouble}'s imaginary component to the specified value.
      *
+     * @param imag The complex number's new imaginary part
      * @return This {@code ComplexDouble}, after the value change
      */
     @Contract("_ -> this")
@@ -162,9 +197,11 @@ public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
      * Sets this {@code ComplexDouble}'s real and imaginary
      * components to the specified values.
      *
+     * @param real The complex number's new real part
+     * @param imag The complex number's new imaginary part
      * @return This {@code ComplexDouble}, after the value changes
      */
-    @Contract("_, _ -> this")
+    @Contract("_,_ -> this")
     public @NotNull ComplexDouble set(double real, double imag) {
         this.real = real;
         this.imag = imag;
@@ -220,6 +257,20 @@ public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
     public boolean isZero() {
         return lengthSquared == 0.0;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isReal() {
+        return imag == 0.0;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isImaginary() {
+        return real == 0.0;
+    }
 
     /**
      * {@inheritDoc}
@@ -238,12 +289,96 @@ public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
         return copy(IDENTITY);
     }
 
-    // TODO document ComplexDouble#round()
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_ -> this")
+    public @NotNull ComplexDouble multiply(int n) {
+        return n == 1 ? this : scale(n);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_ -> this")
+    public @NotNull ComplexDouble multiply(long n) {
+        return n == 1 ? this : scale(n);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_ -> this")
+    public @NotNull ComplexDouble divide(int n) {
+        if (n == 0)
+            throw new ArithmeticException("Division by 0");
+        return n == 1 ? this : scale(1.0 / n);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_ -> this")
+    public @NotNull ComplexDouble divide(long n) {
+        if (n == 0)
+            throw new ArithmeticException("Division by 0");
+        return n == 1 ? this : scale(1.0 / n);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_,_ -> this")
+    public @NotNull ComplexDouble multiply(int p, int q) {
+        if (q == 0) {
+            if (p != 0)
+                throw new ArithmeticException("Division by 0");
+            // 0 / 0 = 1
+            return this;
+        }
+        return p == q ? this : scale((double) p / q);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_,_ -> this")
+    public @NotNull ComplexDouble multiply(long p, long q) {
+        if (q == 0) {
+            if (p != 0)
+                throw new ArithmeticException("Division by 0");
+            // 0 / 0 = 1
+            return this;
+        }
+        return p == q ? this : scale((double) p / q);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This implementation rounds with a threshold of
+     * {@code 10}<sup>{@code -10}</sup>.
+     *
+     * @see #round(double)
+     */
+    @Override
     @Contract("-> this")
     public @NotNull ComplexDouble round() {
         return round(1e-10);
     }
-    // TODO document ComplexDouble#round(float)
+    /**
+     * Independently rounds the real and imaginary components of this {@code ComplexDouble}
+     * if each is within a specified threshold of an integer.
+     * <p>
+     * The method {@link #round()} is equivalent to {@code round(1e-10)}.
+     *
+     * @param threshold The rounding threshold
+     * @return This {@code ComplexDouble}, after rounding
+     * @see #round()
+     */
     @Contract("_ -> this")
     public @NotNull ComplexDouble round(double threshold) {
         real = FastMath.round(real, threshold);
@@ -983,6 +1118,12 @@ public final class ComplexDouble implements ComplexNumber<ComplexDouble> {
      */
     @Override
     public @NotNull String toString() {
+        if (isReal())
+            return real + "";
+        if (isImaginary())
+            return imag + "I";
+        if (imag < 0.0)
+            return real + " - " + (-imag) + "I";
         return real + " + " + imag + "I";
     }
     /**

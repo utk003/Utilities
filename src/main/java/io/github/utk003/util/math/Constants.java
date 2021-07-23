@@ -43,13 +43,13 @@ public abstract class Constants {
     }
 
     /**
-     * The value of <a href="https://mathworld.wolfram.com/Pi.html" target="_top">{@code &pi;}</a>.
+     * The value of <a href="https://mathworld.wolfram.com/Pi.html" target="_top">{@code π}</a>.
      *
      * @see Math#PI
      */
     public static final double PI = 3.141592653589793238462643;
     /**
-     * The value of {@code &tau; = 2 * &pi;}.
+     * The value of {@code τ = 2 * π}.
      *
      * @see #PI
      */
@@ -70,21 +70,21 @@ public abstract class Constants {
     public static final double E_SQUARED = 7.389056098930650227230427;
 
     /**
-     * The value of {@code &#8730;2} (also
+     * The value of {@code √2} (also
      * <a href="https://mathworld.wolfram.com/PythagorassConstant.html" target="_top"><em>Pythagoras's Constant</em></a>).
      */
     public static final double SQRT_2 = 1.414213562373095048801689;
     /**
-     * The value of {@code &#8730;3} (also
+     * The value of {@code √3} (also
      * <a href="https://mathworld.wolfram.com/TheodorussConstant.html" target="_top"><em>Theodorus's Constant</em></a>).
      */
     public static final double SQRT_3 = 1.732050807568877293527446;
     /**
-     * The value of {@code &#8730;5}.
+     * The value of {@code √5}.
      */
     public static final double SQRT_5 = 2.236067977499789696409174;
     /**
-     * The value of {@code &#8730;7}.
+     * The value of {@code √7}.
      */
     public static final double SQRT_7 = 2.645751311064590590501616;
 
@@ -127,25 +127,25 @@ public abstract class Constants {
     public static final double LN_7 = 1.945910149055313305105353;
 
     /**
-     * The value of {@code log}<sub>{@code 10}</sub>{@code 2}.
+     * The value of {@code log2 = log}<sub>{@code 10}</sub>{@code 2}.
      *
      * @see <a href="https://mathworld.wolfram.com/CommonLogarithm.html" target="_top">Common Logarithm</a>
      */
     public static final double LOG10_2 = 0.301029995663981195213739;
     /**
-     * The value of {@code log}<sub>{@code 10}</sub>{@code 3}.
+     * The value of {@code log3 = log}<sub>{@code 10}</sub>{@code 3}.
      *
      * @see <a href="https://mathworld.wolfram.com/CommonLogarithm.html" target="_top">Common Logarithm</a>
      */
     public static final double LOG10_3 = 0.477121254719662437295028;
     /**
-     * The value of {@code log}<sub>{@code 10}</sub>{@code 5}.
+     * The value of {@code log5 = log}<sub>{@code 10}</sub>{@code 5}.
      *
      * @see <a href="https://mathworld.wolfram.com/CommonLogarithm.html" target="_top">Common Logarithm</a>
      */
     public static final double LOG10_5 = 0.698970004336018804786261;
     /**
-     * The value of {@code log}<sub>{@code 10}</sub>{@code 7}.
+     * The value of {@code log7 = log}<sub>{@code 10}</sub>{@code 7}.
      *
      * @see <a href="https://mathworld.wolfram.com/CommonLogarithm.html" target="_top">Common Logarithm</a>
      */

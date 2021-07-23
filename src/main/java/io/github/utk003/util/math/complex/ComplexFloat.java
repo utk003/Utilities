@@ -1,14 +1,47 @@
+/*
+MIT License
+
+Copyright (c) 2021 Utkarsh Priyam
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+
 package io.github.utk003.util.math.complex;
 
 import io.github.utk003.util.math.FastMath;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import static io.github.utk003.util.math.Constants.PI;
 import static io.github.utk003.util.math.Constants.TAU;
-import static io.github.utk003.util.math.FastMath.shift;
 
+/**
+ * A {@code float}-based implementation of {@link ComplexNumber}.
+ *
+ * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
+ * @version July 22, 2021
+ * @see ComplexDouble
+ * @since 3.0.0
+ */
 @SuppressWarnings("UnusedReturnValue")
+@ScheduledForRelease(inVersion = "v3.0.0")
 public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
     /**
      * The "zero" {@code ComplexFloat} (ie the {@code ComplexFloat} corresponding to 0).
@@ -134,12 +167,13 @@ public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
      * @return The shifted angle
      */
     private static float adjustAngle(float arg) {
-        return shift(arg, (float) TAU);
+        return FastMath.shift(arg, (float) TAU);
     }
 
     /**
      * Sets this {@code ComplexFloat}'s real component to the specified value.
      *
+     * @param real The complex number's new real part
      * @return This {@code ComplexFloat}, after the value change
      */
     @Contract("_ -> this")
@@ -150,6 +184,7 @@ public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
     /**
      * Sets this {@code ComplexFloat}'s imaginary component to the specified value.
      *
+     * @param imag The complex number's new imaginary part
      * @return This {@code ComplexFloat}, after the value change
      */
     @Contract("_ -> this")
@@ -162,9 +197,11 @@ public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
      * Sets this {@code ComplexFloat}'s real and imaginary
      * components to the specified values.
      *
+     * @param real The complex number's new real part
+     * @param imag The complex number's new imaginary part
      * @return This {@code ComplexFloat}, after the value changes
      */
-    @Contract("_, _ -> this")
+    @Contract("_,_ -> this")
     public @NotNull ComplexFloat set(float real, float imag) {
         this.real = real;
         this.imag = imag;
@@ -220,6 +257,20 @@ public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
     public boolean isZero() {
         return lengthSquared == 0.0f;
     }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isReal() {
+        return imag == 0.0f;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isImaginary() {
+        return real == 0.0f;
+    }
 
     /**
      * {@inheritDoc}
@@ -238,12 +289,96 @@ public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
         return copy(IDENTITY);
     }
 
-    // TODO document ComplexFloat#round()
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_ -> this")
+    public @NotNull ComplexFloat multiply(int n) {
+        return n == 1 ? this : scale(n);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_ -> this")
+    public @NotNull ComplexFloat multiply(long n) {
+        return n == 1 ? this : scale(n);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_ -> this")
+    public @NotNull ComplexFloat divide(int n) {
+        if (n == 0)
+            throw new ArithmeticException("Division by 0");
+        return n == 1 ? this : scale(1.0f / n);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_ -> this")
+    public @NotNull ComplexFloat divide(long n) {
+        if (n == 0)
+            throw new ArithmeticException("Division by 0");
+        return n == 1 ? this : scale(1.0f / n);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_,_ -> this")
+    public @NotNull ComplexFloat multiply(int p, int q) {
+        if (q == 0) {
+            if (p != 0)
+                throw new ArithmeticException("Division by 0");
+            // 0 / 0 = 1
+            return this;
+        }
+        return p == q ? this : scale((float) p / q);
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @Contract("_,_ -> this")
+    public @NotNull ComplexFloat multiply(long p, long q) {
+        if (q == 0) {
+            if (p != 0)
+                throw new ArithmeticException("Division by 0");
+            // 0 / 0 = 1
+            return this;
+        }
+        return p == q ? this : scale((float) p / q);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This implementation rounds with a threshold of
+     * {@code 10}<sup>{@code -6}</sup>.
+     *
+     * @see #round(float)
+     */
+    @Override
     @Contract("-> this")
     public @NotNull ComplexFloat round() {
         return round(1e-6f);
     }
-    // TODO document ComplexFloat#round(float)
+    /**
+     * Independently rounds the real and imaginary components of this {@code ComplexDouble}
+     * if each is within a specified threshold of an integer.
+     * <p>
+     * The method {@link #round()} is equivalent to {@code round(1e-6f)}.
+     *
+     * @param threshold The rounding threshold
+     * @return This {@code ComplexDouble}, after rounding
+     * @see #round()
+     */
     @Contract("_ -> this")
     public @NotNull ComplexFloat round(float threshold) {
         real = FastMath.round(real, threshold);
@@ -983,6 +1118,12 @@ public final class ComplexFloat implements ComplexNumber<ComplexFloat> {
      */
     @Override
     public @NotNull String toString() {
+        if (isReal())
+            return real + "";
+        if (isImaginary())
+            return imag + "I";
+        if (imag < 0.0f)
+            return real + " - " + (-imag) + "I";
         return real + " + " + imag + "I";
     }
     /**
