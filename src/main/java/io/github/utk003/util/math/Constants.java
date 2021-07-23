@@ -49,7 +49,7 @@ public abstract class Constants {
      */
     public static final double PI = 3.141592653589793238462643;
     /**
-     * The value of {@code τ = 2 * π}.
+     * The value of {@code τ = 2π}.
      *
      * @see #PI
      */

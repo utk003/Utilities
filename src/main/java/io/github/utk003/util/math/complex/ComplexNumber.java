@@ -159,7 +159,7 @@ public interface ComplexNumber<CN extends ComplexNumber<CN>> {
      * @param p The numerator of the rational number to multiply by
      * @param q The denominator of the rational number to multiply by
      * @return This {@code ComplexNumber}, after the multiplication
-     * @throws ArithmeticException If {@code q = 0} and {@code p &ne; 0}
+     * @throws ArithmeticException If {@code q = 0} and {@code p ≠ 0}
      * @see #multiply(long)
      * @see #divide(long)
      */
@@ -174,7 +174,7 @@ public interface ComplexNumber<CN extends ComplexNumber<CN>> {
      * @param p The numerator of the rational number to multiply by
      * @param q The denominator of the rational number to multiply by
      * @return This {@code ComplexNumber}, after the multiplication
-     * @throws ArithmeticException If {@code q = 0} and {@code p &ne; 0}
+     * @throws ArithmeticException If {@code q = 0} and {@code p ≠ 0}
      * @see #multiply(long)
      * @see #divide(long)
      */
