@@ -1,0 +1,51 @@
+<project>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.9</version>
+    </skin>
+
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <topBarContainerStyle>width: 90%;</topBarContainerStyle>
+            <sideBarEnabled>false</sideBarEnabled>
+
+            <breadcrumbDivider>»</breadcrumbDivider>
+            <googleSearch/>
+
+            <skipGenerationDate>true</skipGenerationDate>
+            <sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+        </fluidoSkin>
+    </custom>
+
+    <publishDate position="right"/>
+    <version position="right"/>
+
+    <poweredBy>
+        <logo name="Maven" href="https://maven.apache.org/"
+              img="https://maven.apache.org/images/logos/maven-feather.png"/>
+    </poweredBy>
+
+    <body>
+        <links>
+            <item name="Project GitHub" href="https://github.com/utk003/Utilities/" target="_blank"/>
+        </links>
+
+        <breadcrumbs>
+            <item name="utk003" href="/index.html"/>
+            <item name="Utilities" href="./index.html"/>
+        </breadcrumbs>
+
+        <menu ref="parent"/>
+        <menu ref="modules"/>
+        <menu ref="reports"/>
+
+        <footer>
+            <![CDATA[
+                <span class="copyright-msg" lead="Copyright" year="2020" author="Utkarsh Priyam">All rights reserved.</span>
+                <script src="./scripts/copyright.js"></script>
+            ]]>
+        </footer>
+    </body>
+</project>

@@ -1,5 +1,10 @@
 package io.github.utk003.util.math.interp;
 
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
+
+@ScheduledForRelease(inVersion = "v3.0.0")
+@RequiresDocumentation
 public abstract class SmoothStepInterpolation {
     private SmoothStepInterpolation() {
     }

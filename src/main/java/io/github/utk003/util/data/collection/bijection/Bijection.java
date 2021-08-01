@@ -45,9 +45,10 @@ import java.util.*;
  */
 public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
     /**
-     * Returns the number of pairings in this {@code Bijection}.
+     * Returns the number of {@link Pairing}s in this {@code Bijection}.
      *
-     * @return The number of mappings in this {@code Bijection}
+     * @return The number of pairings in this {@code Bijection}
+     * @see Pairing
      */
     int size();
 
@@ -65,7 +66,7 @@ public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
      */
     boolean contains(@NotNull A obj1, @NotNull B obj2);
     /**
-     * Returns whether or not this {@code Bijection} contains the specified mapping.
+     * Returns whether or not this {@code Bijection} contains the specified {@link Pairing}.
      * <p>
      * This method is equivalent to running <pre>contains(pairing.getFirst(), pairing.getSecond())</pre>
      * As a result, only one of these two methods should be explicitly defined. If both are overridden,
@@ -74,6 +75,7 @@ public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
      * @param pairing The pairing to check
      * @return Whether or not this pairing is present in the bijection
      * @see #contains(Object, Object)
+     * @see Pairing
      */
     boolean contains(@NotNull Pairing<A, B> pairing);
 
@@ -145,7 +147,7 @@ public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
      * @return Whether or not this {@code Bijection} was modified by this method
      * @throws IllegalBijectiveStateException If the addition failed due to conflicts with pre-existing pairings
      * @see #add(Pairing)
-     * @see IllegalBijectiveStateException#failedPairingAddition(Pairing)
+     * @see IllegalBijectiveStateException#failedPairingAddition
      */
     boolean addOrFail(@NotNull A obj1, @NotNull B obj2);
     /**
@@ -160,7 +162,7 @@ public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
      * @return Whether or not this {@code Bijection} was modified by this method
      * @throws IllegalBijectiveStateException If the addition failed due to conflicts with pre-existing pairings
      * @see #add(Pairing)
-     * @see IllegalBijectiveStateException#failedPairingAddition(Pairing)
+     * @see IllegalBijectiveStateException#failedPairingAddition
      */
     boolean addOrFail(@NotNull Pairing<A, B> pairing);
 
@@ -325,8 +327,8 @@ public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
      * <p>
      * This class plays a very similar role to what {@link java.util.Map.Entry} does for {@link java.util.Map}.
      *
-     * @param <A> The type of the first element in this mapping
-     * @param <B> The type of the second element in this mapping
+     * @param <A> The type of the first element in this bijective mapping
+     * @param <B> The type of the second element in this bijective mapping
      * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
      * @version April 23, 2021
      * @see java.util.Map.Entry
@@ -334,19 +336,19 @@ public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
      */
     final class Pairing<A, B> {
         /**
-         * A public reference to the first object in this mapping.
+         * A public reference to the first object in this {@code Pairing}.
          */
         final @NotNull A FIRST;
         /**
-         * A public reference to the second object in this mapping.
+         * A public reference to the second object in this {@code Pairing}.
          */
         final @NotNull B SECOND;
 
         /**
-         * Creates a new bijection pairing between the specified elements
+         * Creates a new bijection mapping between the specified elements
          *
-         * @param first  The first element of the pairing
-         * @param second The second element of the pairing
+         * @param first  The first element of the {@code Pairing}
+         * @param second The second element of the {@code Pairing}
          */
         public Pairing(@NotNull A first, @NotNull B second) {
             FIRST = first;
@@ -354,7 +356,7 @@ public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
         }
 
         /**
-         * Returns the first element of this pairing
+         * Returns the first element of this {@code Pairing}.
          *
          * @return The first element of this pairing
          * @see #FIRST
@@ -363,13 +365,34 @@ public interface Bijection<A, B> extends Iterable<Bijection.Pairing<A, B>> {
             return FIRST;
         }
         /**
-         * Returns the second element of this pairing
+         * Returns the second element of this {@code Pairing}.
          *
          * @return The second element of this pairing
          * @see #SECOND
          */
         public @NotNull B getSecond() {
             return SECOND;
+        }
+
+        /**
+         * Returns the first element of the given bijective mapping.
+         *
+         * @param <T>     The type of the first element in the {@code Pairing}
+         * @param pairing The {@code Pairing} whose first element should be retrieved
+         * @return The first element of the pairing, if the pairing exists; otherwise, {@code null}
+         */
+        public static <T> @Nullable T getFirst(@Nullable Pairing<T, ?> pairing) {
+            return pairing != null ? pairing.FIRST : null;
+        }
+        /**
+         * Returns the second element of the given bijective mapping.
+         *
+         * @param <T>     The type of the second element in the {@code Pairing}
+         * @param pairing The {@code Pairing} whose second element should be retrieved
+         * @return The second element of the pairing, if the pairing exists; otherwise, {@code null}
+         */
+        public static <T> @Nullable T getSecond(@Nullable Pairing<?, T> pairing) {
+            return pairing != null ? pairing.SECOND : null;
         }
 
         /**

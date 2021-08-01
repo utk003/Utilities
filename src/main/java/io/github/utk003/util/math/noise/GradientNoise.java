@@ -1,7 +1,12 @@
 package io.github.utk003.util.math.noise;
 
+import io.github.utk003.util.math.noise.AbstractNoise.SeedHasher.Interator;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 
+@ScheduledForRelease(inVersion = "v3.0.0")
+@RequiresDocumentation
 public abstract class GradientNoise extends AbstractNoise implements Noise {
     public GradientNoise() {
         super();
@@ -32,9 +37,9 @@ public abstract class GradientNoise extends AbstractNoise implements Noise {
         }
     }
 
-    protected static final int LOG_GRADIENT_2D_ARRAY_SIZE = 8, GRADIENT_2D_ARRAY_SIZE = 1 << LOG_GRADIENT_2D_ARRAY_SIZE;
-    protected static final @NotNull FloatGradient2D[] FLOAT_GRADIENTS_2D = new FloatGradient2D[GRADIENT_2D_ARRAY_SIZE];
-    protected static final @NotNull DoubleGradient2D[] DOUBLE_GRADIENTS_2D = new DoubleGradient2D[GRADIENT_2D_ARRAY_SIZE];
+    private static final int LOG_GRADIENT_2D_ARRAY_SIZE = 8, GRADIENT_2D_ARRAY_SIZE = 1 << LOG_GRADIENT_2D_ARRAY_SIZE;
+    private static final @NotNull FloatGradient2D[] FLOAT_GRADIENTS_2D = new FloatGradient2D[GRADIENT_2D_ARRAY_SIZE];
+    private static final @NotNull DoubleGradient2D[] DOUBLE_GRADIENTS_2D = new DoubleGradient2D[GRADIENT_2D_ARRAY_SIZE];
     static {
         for (int i = 0; i < 256; i++) {
             double t = Math.PI / 256, a1 = t * (2 * i + 1);
@@ -43,6 +48,17 @@ public abstract class GradientNoise extends AbstractNoise implements Noise {
             FLOAT_GRADIENTS_2D[i] = new FloatGradient2D((float) x, (float) y);
             DOUBLE_GRADIENTS_2D[i] = new DoubleGradient2D(x, y);
         }
+    }
+    private static final int GRADIENT_2D_HASH_SHIFT = 64 - LOG_GRADIENT_2D_ARRAY_SIZE;
+    private int computeGradientIndex(long i1, long i2) {
+        long key = computeHashKey(i1, i2);
+        return hashComputedKey(key, GRADIENT_2D_HASH_SHIFT, GRADIENT_2D_ARRAY_SIZE);
+    }
+    protected @NotNull FloatGradient2D getFloatGradient(int i1, int i2) {
+        return FLOAT_GRADIENTS_2D[computeGradientIndex(i1, i2)];
+    }
+    protected @NotNull DoubleGradient2D getDoubleGradient(long i1, long i2) {
+        return DOUBLE_GRADIENTS_2D[computeGradientIndex(i1, i2)];
     }
 
     protected static final class FloatGradient3D {
@@ -63,9 +79,9 @@ public abstract class GradientNoise extends AbstractNoise implements Noise {
         }
     }
 
-    protected static final int LOG_GRADIENT_3D_ARRAY_SIZE = 11, GRADIENT_3D_ARRAY_SIZE = 1 << LOG_GRADIENT_3D_ARRAY_SIZE;
-    protected static final @NotNull FloatGradient3D[] FLOAT_GRADIENTS_3D = new FloatGradient3D[GRADIENT_3D_ARRAY_SIZE];
-    protected static final @NotNull DoubleGradient3D[] DOUBLE_GRADIENTS_3D = new DoubleGradient3D[GRADIENT_3D_ARRAY_SIZE];
+    private static final int LOG_GRADIENT_3D_ARRAY_SIZE = 11, GRADIENT_3D_ARRAY_SIZE = 1 << LOG_GRADIENT_3D_ARRAY_SIZE;
+    private static final @NotNull FloatGradient3D[] FLOAT_GRADIENTS_3D = new FloatGradient3D[GRADIENT_3D_ARRAY_SIZE];
+    private static final @NotNull DoubleGradient3D[] DOUBLE_GRADIENTS_3D = new DoubleGradient3D[GRADIENT_3D_ARRAY_SIZE];
     static {
         int ind = 0;
         // i bounds angle to between 0 and pi radians
@@ -80,6 +96,17 @@ public abstract class GradientNoise extends AbstractNoise implements Noise {
 
                 ind++;
             }
+    }
+    private static final int GRADIENT_3D_HASH_SHIFT = 64 - LOG_GRADIENT_3D_ARRAY_SIZE;
+    private int computeGradientIndex(long i1, long i2, long i3) {
+        long key = computeHashKey(i1, i2, i3);
+        return hashComputedKey(key, GRADIENT_3D_HASH_SHIFT, GRADIENT_3D_ARRAY_SIZE);
+    }
+    protected @NotNull FloatGradient3D getFloatGradient(int i1, int i2, int i3) {
+        return FLOAT_GRADIENTS_3D[computeGradientIndex(i1, i2, i3)];
+    }
+    protected @NotNull DoubleGradient3D getDoubleGradient(long i1, long i2, long i3) {
+        return DOUBLE_GRADIENTS_3D[computeGradientIndex(i1, i2, i3)];
     }
 
     protected static final class FloatGradient4D {
@@ -102,9 +129,9 @@ public abstract class GradientNoise extends AbstractNoise implements Noise {
         }
     }
 
-    protected static final int LOG_GRADIENT_4D_ARRAY_SIZE = 16, GRADIENT_4D_ARRAY_SIZE = 1 << LOG_GRADIENT_4D_ARRAY_SIZE;
-    protected static final @NotNull FloatGradient4D[] FLOAT_GRADIENTS_4D = new FloatGradient4D[GRADIENT_4D_ARRAY_SIZE];
-    protected static final @NotNull DoubleGradient4D[] DOUBLE_GRADIENTS_4D = new DoubleGradient4D[GRADIENT_4D_ARRAY_SIZE];
+    private static final int LOG_GRADIENT_4D_ARRAY_SIZE = 16, GRADIENT_4D_ARRAY_SIZE = 1 << LOG_GRADIENT_4D_ARRAY_SIZE;
+    private static final @NotNull FloatGradient4D[] FLOAT_GRADIENTS_4D = new FloatGradient4D[GRADIENT_4D_ARRAY_SIZE];
+    private static final @NotNull DoubleGradient4D[] DOUBLE_GRADIENTS_4D = new DoubleGradient4D[GRADIENT_4D_ARRAY_SIZE];
     static {
         int ind = 0;
         // i, j bound angles to between 0 and pi radians
@@ -122,27 +149,20 @@ public abstract class GradientNoise extends AbstractNoise implements Noise {
                     ind++;
                 }
     }
-
-    private static final int
-            GRADIENT_2D_HASH_SHIFT = 64 - LOG_GRADIENT_2D_ARRAY_SIZE,
-            GRADIENT_3D_HASH_SHIFT = 64 - LOG_GRADIENT_3D_ARRAY_SIZE,
-            GRADIENT_4D_HASH_SHIFT = 64 - LOG_GRADIENT_4D_ARRAY_SIZE;
-
-    protected int computeGradientIndex(long i1, long i2) {
-        long key = computeHashKey(i1, i2);
-        return hashKey(key, GRADIENT_2D_HASH_SHIFT, GRADIENT_2D_ARRAY_SIZE);
-    }
-    protected int computeGradientIndex(long i1, long i2, long i3) {
-        long key = computeHashKey(i1, i2, i3);
-        return hashKey(key, GRADIENT_3D_HASH_SHIFT, GRADIENT_3D_ARRAY_SIZE);
-    }
-    protected int computeGradientIndex(long i1, long i2, long i3, long i4) {
+    private static final int GRADIENT_4D_HASH_SHIFT = 64 - LOG_GRADIENT_4D_ARRAY_SIZE;
+    private int computeGradientIndex(long i1, long i2, long i3, long i4) {
         long key = computeHashKey(i1, i2, i3, i4);
-        return hashKey(key, GRADIENT_4D_HASH_SHIFT, GRADIENT_4D_ARRAY_SIZE);
+        return hashComputedKey(key, GRADIENT_4D_HASH_SHIFT, GRADIENT_4D_ARRAY_SIZE);
+    }
+    protected @NotNull FloatGradient4D getFloatGradient(int i1, int i2, int i3, int i4) {
+        return FLOAT_GRADIENTS_4D[computeGradientIndex(i1, i2, i3, i4)];
+    }
+    protected @NotNull DoubleGradient4D getDoubleGradient(long i1, long i2, long i3, long i4) {
+        return DOUBLE_GRADIENTS_4D[computeGradientIndex(i1, i2, i3, i4)];
     }
 
-    protected void computeGradient(int dim, @NotNull long[] indices, @NotNull float[] grad, @NotNull SeedHasher.Interator it) {
-        // hash corners for indices
+    protected void computeGradient(int dim, @NotNull long[] indices, @NotNull float[] grad, @NotNull Interator it) {
+        // hash corners to get indices/hash keys
         computeHashKeys(indices);
 
         // compute random gradient's angles + gradient elements
@@ -165,7 +185,7 @@ public abstract class GradientNoise extends AbstractNoise implements Noise {
             grad[j] = (float) Math.cos(randAngle);
         }
     }
-    protected void computeGradient(int dim, @NotNull long[] indices, @NotNull double[] grad, @NotNull SeedHasher.Interator it) {
+    protected void computeGradient(int dim, @NotNull long[] indices, @NotNull double[] grad, @NotNull Interator it) {
         // hash corners for indices
         computeHashKeys(indices);
 

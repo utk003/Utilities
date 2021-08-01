@@ -24,11 +24,12 @@ SOFTWARE.
 
 package io.github.utk003.util.data.collection.multi.set;
 
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-// TODO finish MultiSet javadoc -- utk003 @ 6/11/21
+@RequiresDocumentation
 public interface MultiSet<E> extends Collection<E> {
     int count(E obj);
     int countObj(Object obj);

@@ -1,7 +1,11 @@
 package io.github.utk003.util.math.noise;
 
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 
+@ScheduledForRelease(inVersion = "v3.0.0")
+@RequiresDocumentation
 public interface Noise {
     float get(float x);
     double get(double x);

@@ -24,8 +24,12 @@ SOFTWARE.
 
 package io.github.utk003.util.data.collection.bitset;
 
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+@ApiStatus.Experimental
+@RequiresDocumentation
 public abstract class AbstractBitSet<E extends Enum<E>> implements BitSet<E> {
     /**
      * {@inheritDoc}

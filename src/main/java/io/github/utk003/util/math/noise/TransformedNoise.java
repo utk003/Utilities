@@ -1,5 +1,7 @@
 package io.github.utk003.util.math.noise;
 
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -7,11 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@ApiStatus.Experimental
+@RequiresDocumentation
 public final class TransformedNoise implements Noise {
     private final @NotNull Map<Noise, NoiseTransformationModule> MODULES = new HashMap<>();
     private final @NotNull Function<Noise, NoiseTransformationModule> FUNC = (n) -> new NoiseTransformationModule();
 
-    public @NotNull NoiseTransformationModule getTransformation(@NotNull Noise noise) {
+    public @NotNull NoiseTransformationModule getOrAddTransformation(@NotNull Noise noise) {
         return MODULES.computeIfAbsent(noise, FUNC);
     }
     public void removeTransformation(@NotNull Noise noise) {
@@ -27,96 +31,89 @@ public final class TransformedNoise implements Noise {
             transformationModule.compose(wrapper);
     }
     public void scaleAll(double scaleFactor) {
-        for (NoiseTransformationModule transformationModule : MODULES.values()) {
+        for (NoiseTransformationModule transformationModule : MODULES.values())
             transformationModule.amplitudeModulationStrength *= scaleFactor;
-            transformationModule.amplitudeShift *= scaleFactor;
-        }
-    }
-    public void shiftAll(double shiftDistance) {
-        for (NoiseTransformationModule transformationModule : MODULES.values()) {
-            transformationModule.amplitudeShift += shiftDistance;
-        }
     }
 
     @Override
     public float get(float x) {
-        float sum = 0.0f;
+        float noise = 0.0f;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet())
-            sum += entry.getValue().get(entry.getKey(), x);
-        return sum;
+            noise += entry.getValue().get(entry.getKey(), x);
+        return noise;
     }
     @Override
     public double get(double x) {
-        double sum = 0.0;
+        double noise = 0.0;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet())
-            sum += entry.getValue().get(entry.getKey(), x);
-        return sum;
+            noise += entry.getValue().get(entry.getKey(), x);
+        return noise;
     }
 
     @Override
     public float get(float x, float y) {
-        float sum = 0.0f;
+        float noise = 0.0f;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet())
-            sum += entry.getValue().get(entry.getKey(), x, y);
-        return sum;
+            noise += entry.getValue().get(entry.getKey(), x, y);
+        return noise;
     }
     @Override
     public double get(double x, double y) {
-        double sum = 0.0;
+        double noise = 0.0;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet())
-            sum += entry.getValue().get(entry.getKey(), x, y);
-        return sum;
+            noise += entry.getValue().get(entry.getKey(), x, y);
+        return noise;
     }
 
     @Override
     public float get(float x, float y, float z) {
-        float sum = 0.0f;
+        float noise = 0.0f;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet())
-            sum += entry.getValue().get(entry.getKey(), x, y, z);
-        return sum;
+            noise += entry.getValue().get(entry.getKey(), x, y, z);
+        return noise;
     }
     @Override
     public double get(double x, double y, double z) {
-        double sum = 0.0;
+        double noise = 0.0;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet())
-            sum += entry.getValue().get(entry.getKey(), x, y, z);
-        return sum;
+            noise += entry.getValue().get(entry.getKey(), x, y, z);
+        return noise;
     }
 
     @Override
     public float get(float x, float y, float z, float w) {
-        float sum = 0.0f;
+        float noise = 0.0f;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet())
-            sum += entry.getValue().get(entry.getKey(), x, y, z, w);
-        return sum;
+            noise += entry.getValue().get(entry.getKey(), x, y, z, w);
+        return noise;
     }
     @Override
     public double get(double x, double y, double z, double w) {
-        double sum = 0.0;
+        double noise = 0.0;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet())
-            sum += entry.getValue().get(entry.getKey(), x, y, z, w);
-        return sum;
+            noise += entry.getValue().get(entry.getKey(), x, y, z, w);
+        return noise;
     }
 
     @Override
     public float get(@NotNull float[] pos) {
         float[] newPos = new float[pos.length];
-        float sum = 0.0f;
+        float noise = 0.0f;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet()) {
             System.arraycopy(pos, 0, newPos, 0, pos.length);
-            sum += entry.getValue().get(entry.getKey(), newPos);
+            noise += entry.getValue().get(entry.getKey(), newPos);
         }
-        return sum;
+        return noise;
     }
     @Override
     public double get(@NotNull double[] pos) {
         double[] newPos = new double[pos.length];
-        double sum = 0.0;
+        double noise = 0.0;
         for (Map.Entry<Noise, NoiseTransformationModule> entry : MODULES.entrySet()) {
             System.arraycopy(pos, 0, newPos, 0, pos.length);
-            sum += entry.getValue().get(entry.getKey(), newPos);
+            noise += entry.getValue().get(entry.getKey(), newPos);
         }
-        return sum;
+        return noise;
     }
 
     // AM * Noise[FM1 (x1 - S1), FM2 (x2 - S2), ..., FMn (xn - Sn)] + AS
@@ -154,7 +151,7 @@ public final class TransformedNoise implements Noise {
             }
         }
 
-        public double amplitudeModulationStrength, amplitudeShift;
+        public double amplitudeModulationStrength;
         private @NotNull DimensionalModulator defaultDimensionalModulator;
         private @Nullable DimensionalModulator[] dimensionalModulators;
 
@@ -171,9 +168,9 @@ public final class TransformedNoise implements Noise {
         }
 
         public NoiseTransformationModule() {
-            this(1.0, 0.0, new DimensionalModulator(), DimensionalModulator.EMPTY_ARRAY);
+            this(1.0, new DimensionalModulator(), DimensionalModulator.EMPTY_ARRAY);
         }
-        public NoiseTransformationModule(double amplitudeModulation, double amplitudeShift,
+        public NoiseTransformationModule(double amplitudeModulation,
                                          @NotNull DimensionalModulator defaultDimensionalModulator,
                                          @Nullable DimensionalModulator[] allDimensionalModulators) {
             this.defaultDimensionalModulator = defaultDimensionalModulator;
@@ -185,7 +182,6 @@ public final class TransformedNoise implements Noise {
             this.d4Modulator = getEffectiveDimensionalModulator(3);
 
             amplitudeModulationStrength = amplitudeModulation;
-            this.amplitudeShift = amplitudeShift;
         }
 
         public void setDimensionalModulator(int dimension, @Nullable DimensionalModulator modulator) {
@@ -250,7 +246,6 @@ public final class TransformedNoise implements Noise {
 
         private @NotNull NoiseTransformationModule compose(@NotNull NoiseTransformationModule wrapper) {
             this.amplitudeModulationStrength *= wrapper.amplitudeModulationStrength;
-            this.amplitudeShift = this.amplitudeShift * wrapper.amplitudeModulationStrength + wrapper.amplitudeShift;
 
             DimensionalModulator[] dimensionalModulators =
                     this.dimensionalModulators.length >= wrapper.dimensionalModulators.length ?
@@ -280,23 +275,23 @@ public final class TransformedNoise implements Noise {
         }
 
         private float get(@NotNull Noise noise, float x) {
-            return (float) amplitudeModulationStrength * noise.get(d1Modulator.apply(x)) + (float) amplitudeShift;
+            return (float) amplitudeModulationStrength * noise.get(d1Modulator.apply(x));
         }
         private double get(@NotNull Noise noise, double x) {
-            return amplitudeModulationStrength * noise.get(d1Modulator.apply(x)) + amplitudeShift;
+            return amplitudeModulationStrength * noise.get(d1Modulator.apply(x));
         }
 
         private float get(@NotNull Noise noise, float x, float y) {
             return (float) amplitudeModulationStrength * noise.get(
                     d1Modulator.apply(x),
                     d2Modulator.apply(y)
-            ) + (float) amplitudeShift;
+            );
         }
         private double get(@NotNull Noise noise, double x, double y) {
             return amplitudeModulationStrength * noise.get(
                     d1Modulator.apply(x),
                     d2Modulator.apply(y)
-            ) + amplitudeShift;
+            );
         }
 
         private float get(@NotNull Noise noise, float x, float y, float z) {
@@ -304,14 +299,14 @@ public final class TransformedNoise implements Noise {
                     d1Modulator.apply(x),
                     d2Modulator.apply(y),
                     d3Modulator.apply(z)
-            ) + (float) amplitudeShift;
+            );
         }
         private double get(@NotNull Noise noise, double x, double y, double z) {
             return amplitudeModulationStrength * noise.get(
                     d1Modulator.apply(x),
                     d2Modulator.apply(y),
                     d3Modulator.apply(z)
-            ) + amplitudeShift;
+            );
         }
 
         private float get(@NotNull Noise noise, float x, float y, float z, float w) {
@@ -320,7 +315,7 @@ public final class TransformedNoise implements Noise {
                     d2Modulator.apply(y),
                     d3Modulator.apply(z),
                     d4Modulator.apply(w)
-            ) + (float) amplitudeShift;
+            );
         }
         private double get(@NotNull Noise noise, double x, double y, double z, double w) {
             return amplitudeModulationStrength * noise.get(
@@ -328,18 +323,18 @@ public final class TransformedNoise implements Noise {
                     d2Modulator.apply(y),
                     d3Modulator.apply(z),
                     d4Modulator.apply(w)
-            ) + amplitudeShift;
+            );
         }
 
         private float get(@NotNull Noise noise, @NotNull float[] pos) {
             for (int i = 0; i < pos.length; i++)
                 pos[i] = getEffectiveDimensionalModulator(i).apply(pos[i]);
-            return (float) amplitudeModulationStrength * noise.get(pos) + (float) amplitudeShift;
+            return (float) amplitudeModulationStrength * noise.get(pos);
         }
         private double get(@NotNull Noise noise, @NotNull double[] pos) {
             for (int i = 0; i < pos.length; i++)
                 pos[i] = getEffectiveDimensionalModulator(i).apply(pos[i]);
-            return amplitudeModulationStrength * noise.get(pos) + amplitudeShift;
+            return amplitudeModulationStrength * noise.get(pos);
         }
     }
 }

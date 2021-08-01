@@ -1,6 +1,8 @@
 package io.github.utk003.util.data.collection.multi.map;
 
 import io.github.utk003.util.data.collection.multi.set.MultiSet;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,6 +12,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@ScheduledForRelease(inVersion = "v2.2.0")
+@RequiresDocumentation
 public interface MultiMap<K, V> extends Iterable<Map.Entry<K, V>> {
     int numMappings();
     boolean isEmpty();

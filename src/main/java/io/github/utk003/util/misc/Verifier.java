@@ -50,12 +50,19 @@ import java.util.Objects;
  * <p>
  * Any call to this class's verification method(s) can specify any combination of
  * a {@code String} error message and an {@code Exception} subclass as the mode
- * of failure for that single verification. Alternatively, the call can simply
- * provide an {@code Exception} instance for the method to throw in case of failure.
+ * of failure for that single verification. Optionally, the {@code String} error
+ * message can be replaced by an array of {@code Object}s to specify a specific
+ * constructor for a custom exception. Lastly, the call can simply provide an
+ * {@code Exception} instance for the method to throw in case of failure.
+ * <p>
+ * If a verification method is called with a custom exception type that is not
+ * constructable, then a {@link VerifierFailedInstantiationException} will be thrown
+ * in lieu of the intended exception.
  *
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
- * @version July 22, 2021
+ * @version July 26, 2021
  * @see VerificationException
+ * @see VerifierFailedInstantiationException
  * @since 1.2.0
  */
 @ScheduledForRelease(inVersion = "v3.0.0")
@@ -137,6 +144,35 @@ public abstract class Verifier {
         if (instance != null) throw instance;
         throw new VerifierFailedInstantiationException(clazz, message);
     }
+    /**
+     * Throws an exception of type {@code E} with the specified instantiating arguments.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E Always
+     */
+    @Contract("_,_ -> fail")
+    public static <E extends Exception> void fail(@NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        E instance = null;
+        try {
+            Class<?>[] classTypes = new Class[args.length];
+            for (int i = 0; i < args.length; i++)
+                classTypes[i] = args[i].getClass();
+            Constructor<E> constructor = clazz.getDeclaredConstructor(classTypes);
+            if (constructor.isAccessible())
+                instance = constructor.newInstance(args);
+            else {
+                constructor.setAccessible(true);
+                instance = constructor.newInstance(args);
+                constructor.setAccessible(false);
+            }
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException ignored) {
+        }
+
+        if (instance != null) throw instance;
+        throw new VerifierFailedInstantiationException(clazz, args);
+    }
 
     /**
      * Throws a {@link VerificationException} (with no message)
@@ -200,6 +236,20 @@ public abstract class Verifier {
     @Contract("false,_,_ -> fail")
     public static <E extends Exception> void requireTrue(boolean bool, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (!bool) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the given boolean is not {@code true}.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param bool  The boolean to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the boolean is not {@code true}
+     */
+    @Contract("false,_,_ -> fail")
+    public static <E extends Exception> void requireTrue(boolean bool, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (!bool) fail(clazz, args);
     }
 
     /**
@@ -265,6 +315,20 @@ public abstract class Verifier {
     public static <E extends Exception> void requireFalse(boolean bool, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (bool) fail(clazz, message);
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the given boolean is not {@code false}.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param bool  The boolean to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the boolean is not {@code false}
+     */
+    @Contract("true,_,_ -> fail")
+    public static <E extends Exception> void requireFalse(boolean bool, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (bool) fail(clazz, args);
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -328,6 +392,20 @@ public abstract class Verifier {
     @Contract("!null,_,_ -> fail")
     public static <E extends Exception> void requireNull(@Nullable Object obj, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (obj != null) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the given object is not {@code null}.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param obj   The object to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the object is not {@code null}
+     */
+    @Contract("!null,_,_ -> fail")
+    public static <E extends Exception> void requireNull(@Nullable Object obj, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (obj != null) fail(clazz, args);
     }
 
     /**
@@ -414,6 +492,23 @@ public abstract class Verifier {
         if (obj == null) fail(clazz, message);
         return obj;
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments) if and only if
+     * the given object is not {@code not-null} (or, equivalently, is {@code null}).
+     *
+     * @param <T>   The type of the object to check
+     * @param <E>   The type of the exception to throw
+     * @param obj   The type-{@code T} argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @return The argument (guaranteed to be not {@code null})
+     * @throws E If the {@code Object} argument is {@code null}
+     */
+    @Contract("null,_,_ -> fail")
+    public static <T, E extends Exception> @NotNull T requireNotNull(@Nullable T obj, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (obj == null) fail(clazz, args);
+        return obj;
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -493,6 +588,23 @@ public abstract class Verifier {
         if (arg1 != arg2) fail(clazz, message);
         return arg1;
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code boolean} primitive arguments
+     * are not equal, and returns the common value otherwise.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @return The common value of the two arguments
+     * @throws E If the two arguments are not equal
+     */
+    public static <E extends Exception> boolean requireEqual(boolean arg1, boolean arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 != arg2) fail(clazz, args);
+        return arg1;
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -556,6 +668,20 @@ public abstract class Verifier {
      */
     public static <E extends Exception> void requireNotEqual(boolean arg1, boolean arg2, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (arg1 == arg2) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code boolean} primitive arguments are equal.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the two arguments are equal
+     */
+    public static <E extends Exception> void requireNotEqual(boolean arg1, boolean arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 == arg2) fail(clazz, args);
     }
 
     /**
@@ -636,6 +762,23 @@ public abstract class Verifier {
         if (arg1 != arg2) fail(clazz, message);
         return arg1;
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code int} primitive arguments
+     * are not equal, and returns the common value otherwise.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @return The common value of the two arguments
+     * @throws E If the two arguments are not equal
+     */
+    public static <E extends Exception> int requireEqual(int arg1, int arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 != arg2) fail(clazz, args);
+        return arg1;
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -699,6 +842,20 @@ public abstract class Verifier {
      */
     public static <E extends Exception> void requireNotEqual(int arg1, int arg2, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (arg1 == arg2) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code int} primitive arguments are equal.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the two arguments are equal
+     */
+    public static <E extends Exception> void requireNotEqual(int arg1, int arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 == arg2) fail(clazz, args);
     }
 
     /**
@@ -779,6 +936,23 @@ public abstract class Verifier {
         if (arg1 != arg2) fail(clazz, message);
         return arg1;
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code long} primitive arguments
+     * are not equal, and returns the common value otherwise.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @return The common value of the two arguments
+     * @throws E If the two arguments are not equal
+     */
+    public static <E extends Exception> long requireEqual(long arg1, long arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 != arg2) fail(clazz, args);
+        return arg1;
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -842,6 +1016,20 @@ public abstract class Verifier {
      */
     public static <E extends Exception> void requireNotEqual(long arg1, long arg2, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (arg1 == arg2) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code long} primitive arguments are equal.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the two arguments are equal
+     */
+    public static <E extends Exception> void requireNotEqual(long arg1, long arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 == arg2) fail(clazz, args);
     }
 
     /**
@@ -922,6 +1110,23 @@ public abstract class Verifier {
         if (arg1 != arg2) fail(clazz, message);
         return arg1;
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code double} primitive arguments
+     * are not equal, and returns the common value otherwise.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @return The common value of the two arguments
+     * @throws E If the two arguments are not equal
+     */
+    public static <E extends Exception> double requireEqual(double arg1, double arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 != arg2) fail(clazz, args);
+        return arg1;
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -985,6 +1190,20 @@ public abstract class Verifier {
      */
     public static <E extends Exception> void requireNotEqual(double arg1, double arg2, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (arg1 == arg2) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code double} primitive arguments are equal.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the two arguments are equal
+     */
+    public static <E extends Exception> void requireNotEqual(double arg1, double arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 == arg2) fail(clazz, args);
     }
 
     /**
@@ -1065,6 +1284,23 @@ public abstract class Verifier {
         if (arg1 != arg2) fail(clazz, message);
         return arg1;
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code float} primitive arguments
+     * are not equal, and returns the common value otherwise.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @return The common value of the two arguments
+     * @throws E If the two arguments are not equal
+     */
+    public static <E extends Exception> float requireEqual(float arg1, float arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 != arg2) fail(clazz, args);
+        return arg1;
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -1128,6 +1364,20 @@ public abstract class Verifier {
      */
     public static <E extends Exception> void requireNotEqual(float arg1, float arg2, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (arg1 == arg2) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two {@code float} primitive arguments are equal.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the two arguments are equal
+     */
+    public static <E extends Exception> void requireNotEqual(float arg1, float arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 == arg2) fail(clazz, args);
     }
 
     /**
@@ -1213,6 +1463,24 @@ public abstract class Verifier {
     public static <E extends Exception> void requireEqual(Object arg1, Object arg2, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (!Objects.equals(arg1, arg2)) fail(clazz, message);
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two object arguments are not equal.
+     * <p>
+     * This verification method uses {@link Objects#equals(Object, Object)}
+     * to check for equality. For memory-based equality (using {@code ==}),
+     * use {@link #requireExactlyEqual(Object, Object, Class, String)} instead.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the two arguments are not equal
+     */
+    public static <E extends Exception> void requireEqual(Object arg1, Object arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (!Objects.equals(arg1, arg2)) fail(clazz, args);
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -1296,6 +1564,24 @@ public abstract class Verifier {
      */
     public static <E extends Exception> void requireNotEqual(Object arg1, Object arg2, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (Objects.equals(arg1, arg2)) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two object arguments are equal.
+     * <p>
+     * This verification method uses {@link Objects#equals(Object, Object)}
+     * to check for equality. For memory-based equality (using {@code ==}),
+     * use {@link #requireNotExactlyEqual(Object, Object, Class, String)} instead.
+     *
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the two arguments are equal
+     */
+    public static <E extends Exception> void requireNotEqual(Object arg1, Object arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (Objects.equals(arg1, arg2)) fail(clazz, args);
     }
 
     /**
@@ -1401,6 +1687,28 @@ public abstract class Verifier {
         if (arg1 != arg2) fail(clazz, message);
         return arg1;
     }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two object arguments are not equal,
+     * and returns the common value otherwise.
+     * <p>
+     * This verification method uses {@code ==} to check for equality.
+     * For object-based equality verification (using {@link Objects#equals(Object, Object)}),
+     * use {@link #requireEqual(Object, Object, Class, String)} instead.
+     *
+     * @param <T>   The type of the object to check
+     * @param <E>   The type of the exception to throw
+     * @param arg1  The first argument to check
+     * @param arg2  The second argument to check
+     * @param clazz The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @return The common value of the two arguments
+     * @throws E If the two arguments are not equal
+     */
+    public static <T, E extends Exception> T requireExactlyEqual(T arg1, T arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 != arg2) fail(clazz, args);
+        return arg1;
+    }
 
     /**
      * Throws an {@link VerificationException} (with no message)
@@ -1484,5 +1792,23 @@ public abstract class Verifier {
      */
     public static <E extends Exception> void requireNotExactlyEqual(Object arg1, Object arg2, @NotNull Class<E> clazz, @NotNull String message) throws E {
         if (arg1 == arg2) fail(clazz, message);
+    }
+    /**
+     * Throws an exception of type {@code E} (with the specified instantiating arguments)
+     * if and only if the two object arguments are equal.
+     * <p>
+     * This verification method uses {@code ==} to check for equality.
+     * For object-based equality verification (using {@link Objects#equals(Object, Object)}),
+     * use {@link #requireNotEqual(Object, Object, Class, String)} instead.
+     *
+     * @param <E>     The type of the exception to throw
+     * @param arg1    The first argument to check
+     * @param arg2    The second argument to check
+     * @param clazz   The {@code Class} object of the exception to throw
+     * @param args  The arguments for instantiating the exception
+     * @throws E If the two arguments are equal
+     */
+    public static <E extends Exception> void requireNotExactlyEqual(Object arg1, Object arg2, @NotNull Class<E> clazz, @NotNull Object... args) throws E {
+        if (arg1 == arg2) fail(clazz, args);
     }
 }

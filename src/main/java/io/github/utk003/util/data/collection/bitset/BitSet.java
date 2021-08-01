@@ -25,10 +25,14 @@ SOFTWARE.
 package io.github.utk003.util.data.collection.bitset;
 
 import io.github.utk003.util.func.Lambda1;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
+@ApiStatus.Experimental
+@RequiresDocumentation
 public interface BitSet<E extends Enum<E>> extends Iterable<BitSet.Bits> {
     int size();
     @NotNull Iterator<Bits> iterator();

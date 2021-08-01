@@ -1,8 +1,9 @@
 package io.github.utk003.util.math.noise;
 
-import io.github.utk003.util.math.interp.LinearStepInterpolation;
-import io.github.utk003.util.math.interp.SmoothStepInterpolation;
-import io.github.utk003.util.math.interp.SmootherStepInterpolation;
+import io.github.utk003.util.math.interp.Interpolatable;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -10,14 +11,15 @@ import java.util.Map;
 import java.util.function.Function;
 
 // https://en.wikipedia.org/wiki/Perlin_noise
-public final class PerlinNoise extends GradientNoise implements Noise {
+@ScheduledForRelease(inVersion = "v3.0.0")
+@RequiresDocumentation
+public final class PerlinNoise extends GradientNoise implements Noise, Interpolatable {
     public PerlinNoise() {
         super();
     }
     public PerlinNoise(long seed) {
         super(seed);
     }
-
     public PerlinNoise(long defaultPeriod, @NotNull long[] periods) {
         super(defaultPeriod, periods);
     }
@@ -25,48 +27,16 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         super(seed, defaultPeriod, periods);
     }
 
-    public enum PerlinInterpolation {
-        LINEAR_STEP {
-            @Override
-            public float interpolate(float e0, float e1, float weight) {
-                return LinearStepInterpolation.interpolate(e0, e1, weight);
-            }
-            @Override
-            public double interpolate(double e0, double e1, double weight) {
-                return LinearStepInterpolation.interpolate(e0, e1, weight);
-            }
-        },
-        SMOOTH_STEP {
-            @Override
-            public float interpolate(float e0, float e1, float weight) {
-                return SmoothStepInterpolation.interpolate(e0, e1, weight);
-            }
-            @Override
-            public double interpolate(double e0, double e1, double weight) {
-                return SmoothStepInterpolation.interpolate(e0, e1, weight);
-            }
-        },
-        SMOOTHER_STEP {
-            @Override
-            public float interpolate(float e0, float e1, float weight) {
-                return SmootherStepInterpolation.interpolate(e0, e1, weight);
-            }
-            @Override
-            public double interpolate(double e0, double e1, double weight) {
-                return SmootherStepInterpolation.interpolate(e0, e1, weight);
-            }
-        };
-
-        public abstract float interpolate(float e0, float e1, float weight);
-        public abstract double interpolate(double e0, double e1, double weight);
-    }
-
-    private @NotNull PerlinInterpolation interpolationType = PerlinInterpolation.SMOOTH_STEP;
-    public @NotNull PerlinInterpolation getInterpolationType() {
+    private @NotNull InterpolationType interpolationType = InterpolationType.DEFAULT;
+    @Override
+    public @NotNull InterpolationType getInterpolationType() {
         return interpolationType;
     }
-    public void setInterpolationType(@NotNull PerlinInterpolation interpolationType) {
+    @Override
+    @Contract("_ -> this")
+    public @NotNull PerlinNoise setInterpolationType(@NotNull InterpolationType interpolationType) {
         this.interpolationType = interpolationType;
+        return this;
     }
 
     protected float interpolate(float e0, float e1, float weight) {
@@ -123,17 +93,11 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         float dx0 = x - x0, dx1 = x - x1,
                 dy0 = y - y0, dy1 = y - y1;
 
-        // hash corners for indices
-        int ind00 = computeGradientIndex(x0, y0),
-                ind01 = computeGradientIndex(x0, y1),
-                ind10 = computeGradientIndex(x1, y0),
-                ind11 = computeGradientIndex(x1, y1);
-
         // get gradients
-        FloatGradient2D g00 = FLOAT_GRADIENTS_2D[ind00],
-                g01 = FLOAT_GRADIENTS_2D[ind01],
-                g10 = FLOAT_GRADIENTS_2D[ind10],
-                g11 = FLOAT_GRADIENTS_2D[ind11];
+        FloatGradient2D g00 = getFloatGradient(x0, y0),
+                g01 = getFloatGradient(x0, y1),
+                g10 = getFloatGradient(x1, y0),
+                g11 = getFloatGradient(x1, y1);
 
         // compute dot products
         float dp00 = dx0 * g00.dx + dy0 * g00.dy,
@@ -163,17 +127,11 @@ public final class PerlinNoise extends GradientNoise implements Noise {
         double dx0 = x - x0, dx1 = x - x1,
                 dy0 = y - y0, dy1 = y - y1;
 
-        // hash corners for indices
-        int ind00 = computeGradientIndex(x0, y0),
-                ind01 = computeGradientIndex(x0, y1),
-                ind10 = computeGradientIndex(x1, y0),
-                ind11 = computeGradientIndex(x1, y1);
-
         // get gradients
-        DoubleGradient2D g00 = DOUBLE_GRADIENTS_2D[ind00],
-                g01 = DOUBLE_GRADIENTS_2D[ind01],
-                g10 = DOUBLE_GRADIENTS_2D[ind10],
-                g11 = DOUBLE_GRADIENTS_2D[ind11];
+        DoubleGradient2D g00 = getDoubleGradient(x0, y0),
+                g01 = getDoubleGradient(x0, y1),
+                g10 = getDoubleGradient(x1, y0),
+                g11 = getDoubleGradient(x1, y1);
 
         // compute dot products
         double dp00 = dx0 * g00.dx + dy0 * g00.dy,
@@ -206,25 +164,15 @@ public final class PerlinNoise extends GradientNoise implements Noise {
                 dy0 = y - y0, dy1 = y - y1,
                 dz0 = z - z0, dz1 = z - z1;
 
-        // hash corners for indices
-        int ind000 = computeGradientIndex(x0, y0, z0),
-                ind001 = computeGradientIndex(x0, y0, z1),
-                ind010 = computeGradientIndex(x0, y1, z0),
-                ind011 = computeGradientIndex(x0, y1, z1),
-                ind100 = computeGradientIndex(x1, y0, z0),
-                ind101 = computeGradientIndex(x1, y0, z1),
-                ind110 = computeGradientIndex(x1, y1, z0),
-                ind111 = computeGradientIndex(x1, y1, z1);
-
         // get gradients
-        FloatGradient3D g000 = FLOAT_GRADIENTS_3D[ind000],
-                g001 = FLOAT_GRADIENTS_3D[ind001],
-                g010 = FLOAT_GRADIENTS_3D[ind010],
-                g011 = FLOAT_GRADIENTS_3D[ind011],
-                g100 = FLOAT_GRADIENTS_3D[ind100],
-                g101 = FLOAT_GRADIENTS_3D[ind101],
-                g110 = FLOAT_GRADIENTS_3D[ind110],
-                g111 = FLOAT_GRADIENTS_3D[ind111];
+        FloatGradient3D g000 = getFloatGradient(x0, y0, z0),
+                g001 = getFloatGradient(x0, y0, z1),
+                g010 = getFloatGradient(x0, y1, z0),
+                g011 = getFloatGradient(x0, y1, z1),
+                g100 = getFloatGradient(x1, y0, z0),
+                g101 = getFloatGradient(x1, y0, z1),
+                g110 = getFloatGradient(x1, y1, z0),
+                g111 = getFloatGradient(x1, y1, z1);
 
         // compute dot products
         float dp000 = dx0 * g000.dx + dy0 * g000.dy + dz0 * g000.dz,
@@ -265,25 +213,15 @@ public final class PerlinNoise extends GradientNoise implements Noise {
                 dy0 = y - y0, dy1 = y - y1,
                 dz0 = z - z0, dz1 = z - z1;
 
-        // hash corners for indices
-        int ind000 = computeGradientIndex(x0, y0, z0),
-                ind001 = computeGradientIndex(x0, y0, z1),
-                ind010 = computeGradientIndex(x0, y1, z0),
-                ind011 = computeGradientIndex(x0, y1, z1),
-                ind100 = computeGradientIndex(x1, y0, z0),
-                ind101 = computeGradientIndex(x1, y0, z1),
-                ind110 = computeGradientIndex(x1, y1, z0),
-                ind111 = computeGradientIndex(x1, y1, z1);
-
         // get gradients
-        DoubleGradient3D g000 = DOUBLE_GRADIENTS_3D[ind000],
-                g001 = DOUBLE_GRADIENTS_3D[ind001],
-                g010 = DOUBLE_GRADIENTS_3D[ind010],
-                g011 = DOUBLE_GRADIENTS_3D[ind011],
-                g100 = DOUBLE_GRADIENTS_3D[ind100],
-                g101 = DOUBLE_GRADIENTS_3D[ind101],
-                g110 = DOUBLE_GRADIENTS_3D[ind110],
-                g111 = DOUBLE_GRADIENTS_3D[ind111];
+        DoubleGradient3D g000 = getDoubleGradient(x0, y0, z0),
+                g001 = getDoubleGradient(x0, y0, z1),
+                g010 = getDoubleGradient(x0, y1, z0),
+                g011 = getDoubleGradient(x0, y1, z1),
+                g100 = getDoubleGradient(x1, y0, z0),
+                g101 = getDoubleGradient(x1, y0, z1),
+                g110 = getDoubleGradient(x1, y1, z0),
+                g111 = getDoubleGradient(x1, y1, z1);
 
         // compute dot products
         double dp000 = dx0 * g000.dx + dy0 * g000.dy + dz0 * g000.dz,
@@ -327,41 +265,23 @@ public final class PerlinNoise extends GradientNoise implements Noise {
                 dz0 = z - z0, dz1 = z - z1,
                 dw0 = w - w0, dw1 = w - w1;
 
-        // hash corners for indices
-        int ind0000 = computeGradientIndex(x0, y0, z0, w0),
-                ind0001 = computeGradientIndex(x0, y0, z0, w1),
-                ind0010 = computeGradientIndex(x0, y0, z1, w0),
-                ind0011 = computeGradientIndex(x0, y0, z1, w1),
-                ind0100 = computeGradientIndex(x0, y1, z0, w0),
-                ind0101 = computeGradientIndex(x0, y1, z0, w1),
-                ind0110 = computeGradientIndex(x0, y1, z1, w0),
-                ind0111 = computeGradientIndex(x0, y1, z1, w1),
-                ind1000 = computeGradientIndex(x1, y0, z0, w0),
-                ind1001 = computeGradientIndex(x1, y0, z0, w1),
-                ind1010 = computeGradientIndex(x1, y0, z1, w0),
-                ind1011 = computeGradientIndex(x1, y0, z1, w1),
-                ind1100 = computeGradientIndex(x1, y1, z0, w0),
-                ind1101 = computeGradientIndex(x1, y1, z0, w1),
-                ind1110 = computeGradientIndex(x1, y1, z1, w0),
-                ind1111 = computeGradientIndex(x1, y1, z1, w1);
-
         // get gradients
-        FloatGradient4D g0000 = FLOAT_GRADIENTS_4D[ind0000],
-                g0001 = FLOAT_GRADIENTS_4D[ind0001],
-                g0010 = FLOAT_GRADIENTS_4D[ind0010],
-                g0011 = FLOAT_GRADIENTS_4D[ind0011],
-                g0100 = FLOAT_GRADIENTS_4D[ind0100],
-                g0101 = FLOAT_GRADIENTS_4D[ind0101],
-                g0110 = FLOAT_GRADIENTS_4D[ind0110],
-                g0111 = FLOAT_GRADIENTS_4D[ind0111],
-                g1000 = FLOAT_GRADIENTS_4D[ind1000],
-                g1001 = FLOAT_GRADIENTS_4D[ind1001],
-                g1010 = FLOAT_GRADIENTS_4D[ind1010],
-                g1011 = FLOAT_GRADIENTS_4D[ind1011],
-                g1100 = FLOAT_GRADIENTS_4D[ind1100],
-                g1101 = FLOAT_GRADIENTS_4D[ind1101],
-                g1110 = FLOAT_GRADIENTS_4D[ind1110],
-                g1111 = FLOAT_GRADIENTS_4D[ind1111];
+        FloatGradient4D g0000 = getFloatGradient(x0, y0, z0, w0),
+                g0001 = getFloatGradient(x0, y0, z0, w1),
+                g0010 = getFloatGradient(x0, y0, z1, w0),
+                g0011 = getFloatGradient(x0, y0, z1, w1),
+                g0100 = getFloatGradient(x0, y1, z0, w0),
+                g0101 = getFloatGradient(x0, y1, z0, w1),
+                g0110 = getFloatGradient(x0, y1, z1, w0),
+                g0111 = getFloatGradient(x0, y1, z1, w1),
+                g1000 = getFloatGradient(x1, y0, z0, w0),
+                g1001 = getFloatGradient(x1, y0, z0, w1),
+                g1010 = getFloatGradient(x1, y0, z1, w0),
+                g1011 = getFloatGradient(x1, y0, z1, w1),
+                g1100 = getFloatGradient(x1, y1, z0, w0),
+                g1101 = getFloatGradient(x1, y1, z0, w1),
+                g1110 = getFloatGradient(x1, y1, z1, w0),
+                g1111 = getFloatGradient(x1, y1, z1, w1);
 
         // compute dot products
         float dp0000 = dx0 * g0000.dx + dy0 * g0000.dy + dz0 * g0000.dz + dw0 * g0000.dw,
@@ -421,41 +341,23 @@ public final class PerlinNoise extends GradientNoise implements Noise {
                 dz0 = z - z0, dz1 = z - z1,
                 dw0 = w - w0, dw1 = w - w1;
 
-        // hash corners for indices
-        int ind0000 = computeGradientIndex(x0, y0, z0, w0),
-                ind0001 = computeGradientIndex(x0, y0, z0, w1),
-                ind0010 = computeGradientIndex(x0, y0, z1, w0),
-                ind0011 = computeGradientIndex(x0, y0, z1, w1),
-                ind0100 = computeGradientIndex(x0, y1, z0, w0),
-                ind0101 = computeGradientIndex(x0, y1, z0, w1),
-                ind0110 = computeGradientIndex(x0, y1, z1, w0),
-                ind0111 = computeGradientIndex(x0, y1, z1, w1),
-                ind1000 = computeGradientIndex(x1, y0, z0, w0),
-                ind1001 = computeGradientIndex(x1, y0, z0, w1),
-                ind1010 = computeGradientIndex(x1, y0, z1, w0),
-                ind1011 = computeGradientIndex(x1, y0, z1, w1),
-                ind1100 = computeGradientIndex(x1, y1, z0, w0),
-                ind1101 = computeGradientIndex(x1, y1, z0, w1),
-                ind1110 = computeGradientIndex(x1, y1, z1, w0),
-                ind1111 = computeGradientIndex(x1, y1, z1, w1);
-
         // get gradients
-        DoubleGradient4D g0000 = DOUBLE_GRADIENTS_4D[ind0000],
-                g0001 = DOUBLE_GRADIENTS_4D[ind0001],
-                g0010 = DOUBLE_GRADIENTS_4D[ind0010],
-                g0011 = DOUBLE_GRADIENTS_4D[ind0011],
-                g0100 = DOUBLE_GRADIENTS_4D[ind0100],
-                g0101 = DOUBLE_GRADIENTS_4D[ind0101],
-                g0110 = DOUBLE_GRADIENTS_4D[ind0110],
-                g0111 = DOUBLE_GRADIENTS_4D[ind0111],
-                g1000 = DOUBLE_GRADIENTS_4D[ind1000],
-                g1001 = DOUBLE_GRADIENTS_4D[ind1001],
-                g1010 = DOUBLE_GRADIENTS_4D[ind1010],
-                g1011 = DOUBLE_GRADIENTS_4D[ind1011],
-                g1100 = DOUBLE_GRADIENTS_4D[ind1100],
-                g1101 = DOUBLE_GRADIENTS_4D[ind1101],
-                g1110 = DOUBLE_GRADIENTS_4D[ind1110],
-                g1111 = DOUBLE_GRADIENTS_4D[ind1111];
+        DoubleGradient4D g0000 = getDoubleGradient(x0, y0, z0, w0),
+                g0001 = getDoubleGradient(x0, y0, z0, w1),
+                g0010 = getDoubleGradient(x0, y0, z1, w0),
+                g0011 = getDoubleGradient(x0, y0, z1, w1),
+                g0100 = getDoubleGradient(x0, y1, z0, w0),
+                g0101 = getDoubleGradient(x0, y1, z0, w1),
+                g0110 = getDoubleGradient(x0, y1, z1, w0),
+                g0111 = getDoubleGradient(x0, y1, z1, w1),
+                g1000 = getDoubleGradient(x1, y0, z0, w0),
+                g1001 = getDoubleGradient(x1, y0, z0, w1),
+                g1010 = getDoubleGradient(x1, y0, z1, w0),
+                g1011 = getDoubleGradient(x1, y0, z1, w1),
+                g1100 = getDoubleGradient(x1, y1, z0, w0),
+                g1101 = getDoubleGradient(x1, y1, z0, w1),
+                g1110 = getDoubleGradient(x1, y1, z1, w0),
+                g1111 = getDoubleGradient(x1, y1, z1, w1);
 
         // compute dot products
         double dp0000 = dx0 * g0000.dx + dy0 * g0000.dy + dz0 * g0000.dz + dw0 * g0000.dw,

@@ -1,11 +1,15 @@
 package io.github.utk003.util.data.collection.multi.map;
 
 import io.github.utk003.util.data.collection.multi.set.MultiSet;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+@ScheduledForRelease(inVersion = "v2.2.0")
+@RequiresDocumentation
 final class UnmodifiableMultiMap<K, V> extends AbstractMultiMap<K, V> implements MultiMap<K, V> {
     private final @NotNull MultiMap<K, V> MULTI_MAP;
     public UnmodifiableMultiMap(@NotNull MultiMap<K, V> wrapped) {

@@ -2,11 +2,15 @@ package io.github.utk003.util.data.collection.multi.map.unique;
 
 import io.github.utk003.util.data.collection.multi.set.AbstractMultiSet;
 import io.github.utk003.util.data.collection.multi.set.MultiSet;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+@ScheduledForRelease(inVersion = "v2.2.0")
+@RequiresDocumentation
 public class SetMapBackedUniqueMappingMultiMap<K, V> extends AbstractUniqueMappingMultiMap<K, V> implements UniqueMappingMultiMap<K, V> {
     private final @NotNull Map<K, Set<V>> SET_MAP;
     private final @NotNull Constructor<K, Set<V>> SET_MAKER;

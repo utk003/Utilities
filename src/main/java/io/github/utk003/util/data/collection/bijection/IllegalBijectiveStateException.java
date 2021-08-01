@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Utkarsh Priyam (<a href="https://github.com/utk003" target="_top">utk003</a>)
  * @version June 29, 2021
- * @see Slice
- * @see Slice#length()
+ * @see Bijection
  * @since 3.0.0
  */
 public class IllegalBijectiveStateException extends IllegalStateException {
@@ -49,6 +48,7 @@ public class IllegalBijectiveStateException extends IllegalStateException {
      * could not be added to a {@link Bijection} due to a
      * collision with a pre-existing pairing in that bijection.
      *
+     * @param pairing The {@link Bijection.Pairing Pairing} that couldn't be added to the {@code Bijection}
      * @return A new {@code IllegalBijectiveStateException} reflecting a pairing collision
      */
     public static @NotNull IllegalBijectiveStateException failedPairingAddition(@NotNull Bijection.Pairing<?, ?> pairing) {

@@ -1,5 +1,10 @@
 package io.github.utk003.util.math;
 
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
+import org.jetbrains.annotations.ApiStatus;
+
+@ApiStatus.Experimental
+@RequiresDocumentation
 public abstract class Pow2 {
     private Pow2() {
     }

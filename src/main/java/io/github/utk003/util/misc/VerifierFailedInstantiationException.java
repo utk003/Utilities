@@ -27,6 +27,8 @@ package io.github.utk003.util.misc;
 import io.github.utk003.util.misc.annotations.ScheduledForRelease;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 /**
  * A custom runtime exception for use by the {@link Verifier} class for failed exception instantiations.
  *
@@ -56,6 +58,17 @@ public class VerifierFailedInstantiationException extends RuntimeException {
      */
     public VerifierFailedInstantiationException(@NotNull Class<?> clazz, @NotNull String message) {
         super(getMessage(clazz) + " " + message);
+    }
+    /**
+     * Constructs a new {@code VerifierFailedInstantiationException} with the
+     * specified un-instantiated exception and specified arguments.
+     *
+     * @param clazz The class type of the un-instantiated exception
+     * @param args  The intended arguments for the exception
+     * @see RuntimeException#RuntimeException(String, Throwable)
+     */
+    public VerifierFailedInstantiationException(@NotNull Class<?> clazz, @NotNull Object... args) {
+        super(getMessage(clazz) + " args: " + Arrays.toString(args));
     }
 
     /**

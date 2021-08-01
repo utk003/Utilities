@@ -2,6 +2,10 @@ package io.github.utk003.util.math.noise;
 
 import io.github.utk003.util.math.complex.ComplexDouble;
 import io.github.utk003.util.math.solve.CubicFormula;
+import io.github.utk003.util.math.solve.CubicSolution;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +17,8 @@ import static io.github.utk003.util.math.Constants.*;
 
 // https://en.wikipedia.org/wiki/Simplex_noise
 // patented until ~ January 8, 2022
+@ScheduledForRelease
+@RequiresDocumentation
 public final class SimplexNoise extends GradientNoise implements Noise {
     public SimplexNoise() {
         super();
@@ -63,8 +69,10 @@ public final class SimplexNoise extends GradientNoise implements Noise {
     public @NotNull SimplexInterpolation getInterpolationType() {
         return interpolationType;
     }
-    public void setInterpolationType(@NotNull SimplexInterpolation interpolationType) {
+    @Contract("_ -> this")
+    public @NotNull SimplexNoise setInterpolationType(@NotNull SimplexInterpolation interpolationType) {
         this.interpolationType = interpolationType;
+        return this;
     }
 
     private float computeNoiseContribution(float dx /*, 1D gradient is always <1> */) {
@@ -330,15 +338,10 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         so2xhh += xf;
         so2yhh += yf;
 
-        // hash corner positions to get gradient indices
-        int i0 = computeGradientIndex(so0xhh, so0yhh),
-                i1 = computeGradientIndex(so1xhh, so1yhh),
-                i2 = computeGradientIndex(so2xhh, so2yhh);
-
         // get gradients
-        FloatGradient2D g0 = FLOAT_GRADIENTS_2D[i0],
-                g1 = FLOAT_GRADIENTS_2D[i1],
-                g2 = FLOAT_GRADIENTS_2D[i2];
+        FloatGradient2D g0 = getFloatGradient(so0xhh, so0yhh),
+                g1 = getFloatGradient(so1xhh, so1yhh),
+                g2 = getFloatGradient(so2xhh, so2yhh);
 
         // convert simplex vertices back to normal coordinate basis
         float so0x, so0y;
@@ -406,15 +409,10 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         so2xhh += xf;
         so2yhh += yf;
 
-        // hash corner positions to get gradient indices
-        int i0 = computeGradientIndex(so0xhh, so0yhh),
-                i1 = computeGradientIndex(so1xhh, so1yhh),
-                i2 = computeGradientIndex(so2xhh, so2yhh);
-
         // get gradients
-        DoubleGradient2D g0 = DOUBLE_GRADIENTS_2D[i0],
-                g1 = DOUBLE_GRADIENTS_2D[i1],
-                g2 = DOUBLE_GRADIENTS_2D[i2];
+        DoubleGradient2D g0 = getDoubleGradient(so0xhh, so0yhh),
+                g1 = getDoubleGradient(so1xhh, so1yhh),
+                g2 = getDoubleGradient(so2xhh, so2yhh);
 
         // convert simplex vertices back to normal coordinate basis
         double so0x, so0y;
@@ -523,17 +521,11 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         so3yhh += yf;
         so3zhh += zf;
 
-        // hash corner positions to get gradient indices
-        int i0 = computeGradientIndex(so0xhh, so0yhh, so0zhh),
-                i1 = computeGradientIndex(so1xhh, so1yhh, so1zhh),
-                i2 = computeGradientIndex(so2xhh, so2yhh, so2zhh),
-                i3 = computeGradientIndex(so3xhh, so3yhh, so3zhh);
-
         // get gradients
-        FloatGradient3D g0 = FLOAT_GRADIENTS_3D[i0],
-                g1 = FLOAT_GRADIENTS_3D[i1],
-                g2 = FLOAT_GRADIENTS_3D[i2],
-                g3 = FLOAT_GRADIENTS_3D[i3];
+        FloatGradient3D g0 = getFloatGradient(so0xhh, so0yhh, so0zhh),
+                g1 = getFloatGradient(so1xhh, so1yhh, so1zhh),
+                g2 = getFloatGradient(so2xhh, so2yhh, so2zhh),
+                g3 = getFloatGradient(so3xhh, so3yhh, so3zhh);
 
         // convert simplex vertices back to normal coordinate basis
         float so0x, so0y, so0z;
@@ -653,17 +645,11 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         so3yhh += yf;
         so3zhh += zf;
 
-        // hash corner positions to get gradient indices
-        int i0 = computeGradientIndex(so0xhh, so0yhh, so0zhh),
-                i1 = computeGradientIndex(so1xhh, so1yhh, so1zhh),
-                i2 = computeGradientIndex(so2xhh, so2yhh, so2zhh),
-                i3 = computeGradientIndex(so3xhh, so3yhh, so3zhh);
-
         // get gradients
-        DoubleGradient3D g0 = DOUBLE_GRADIENTS_3D[i0],
-                g1 = DOUBLE_GRADIENTS_3D[i1],
-                g2 = DOUBLE_GRADIENTS_3D[i2],
-                g3 = DOUBLE_GRADIENTS_3D[i3];
+        DoubleGradient3D g0 = getDoubleGradient(so0xhh, so0yhh, so0zhh),
+                g1 = getDoubleGradient(so1xhh, so1yhh, so1zhh),
+                g2 = getDoubleGradient(so2xhh, so2yhh, so2zhh),
+                g3 = getDoubleGradient(so3xhh, so3yhh, so3zhh);
 
         // convert simplex vertices back to normal coordinate basis
         double so0x, so0y, so0z;
@@ -916,19 +902,12 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         so4zhh += zf;
         so4whh += wf;
 
-        // hash corner positions to get gradient indices
-        int i0 = computeGradientIndex(so0xhh, so0yhh, so0zhh, so0whh),
-                i1 = computeGradientIndex(so1xhh, so1yhh, so1zhh, so1whh),
-                i2 = computeGradientIndex(so2xhh, so2yhh, so2zhh, so2whh),
-                i3 = computeGradientIndex(so3xhh, so3yhh, so3zhh, so3whh),
-                i4 = computeGradientIndex(so4xhh, so4yhh, so4zhh, so4whh);
-
         // get gradients
-        FloatGradient4D g0 = FLOAT_GRADIENTS_4D[i0],
-                g1 = FLOAT_GRADIENTS_4D[i1],
-                g2 = FLOAT_GRADIENTS_4D[i2],
-                g3 = FLOAT_GRADIENTS_4D[i3],
-                g4 = FLOAT_GRADIENTS_4D[i4];
+        FloatGradient4D g0 = getFloatGradient(so0xhh, so0yhh, so0zhh, so0whh),
+                g1 = getFloatGradient(so1xhh, so1yhh, so1zhh, so1whh),
+                g2 = getFloatGradient(so2xhh, so2yhh, so2zhh, so2whh),
+                g3 = getFloatGradient(so3xhh, so3yhh, so3zhh, so3whh),
+                g4 = getFloatGradient(so4xhh, so4yhh, so4zhh, so4whh);
 
         // convert simplex vertices back to normal coordinate basis
         float so0x, so0y, so0z, so0w;
@@ -1194,19 +1173,12 @@ public final class SimplexNoise extends GradientNoise implements Noise {
         so4zhh += zf;
         so4whh += wf;
 
-        // hash corner positions to get gradient indices
-        int i0 = computeGradientIndex(so0xhh, so0yhh, so0zhh, so0whh),
-                i1 = computeGradientIndex(so1xhh, so1yhh, so1zhh, so1whh),
-                i2 = computeGradientIndex(so2xhh, so2yhh, so2zhh, so2whh),
-                i3 = computeGradientIndex(so3xhh, so3yhh, so3zhh, so3whh),
-                i4 = computeGradientIndex(so4xhh, so4yhh, so4zhh, so4whh);
-
         // get gradients
-        DoubleGradient4D g0 = DOUBLE_GRADIENTS_4D[i0],
-                g1 = DOUBLE_GRADIENTS_4D[i1],
-                g2 = DOUBLE_GRADIENTS_4D[i2],
-                g3 = DOUBLE_GRADIENTS_4D[i3],
-                g4 = DOUBLE_GRADIENTS_4D[i4];
+        DoubleGradient4D g0 = getDoubleGradient(so0xhh, so0yhh, so0zhh, so0whh),
+                g1 = getDoubleGradient(so1xhh, so1yhh, so1zhh, so1whh),
+                g2 = getDoubleGradient(so2xhh, so2yhh, so2zhh, so2whh),
+                g3 = getDoubleGradient(so3xhh, so3yhh, so3zhh, so3whh),
+                g4 = getDoubleGradient(so4xhh, so4yhh, so4zhh, so4whh);
 
         // convert simplex vertices back to normal coordinate basis
         double so0x, so0y, so0z, so0w;
@@ -1645,7 +1617,7 @@ public final class SimplexNoise extends GradientNoise implements Noise {
             double c = 63 * h9 / 2 - 140 * h7 * r2 + 120 * h5 * r4;
             double d = 9 * h9 / 8 - 21 * h7 * r2 / 2 + 30 * h5 * r4 - 24 * h3 * r6;
 
-            CubicFormula.CubicSolution<ComplexDouble> roots = CubicFormula.solveCubic(a, b, c, d);
+            CubicSolution<ComplexDouble> roots = CubicFormula.solveCubic(a, b, c, d);
             roots.root1.sqrt().round().real += 0.5;
             roots.root2.sqrt().round().real += 0.5;
             roots.root3.sqrt().round().real += 0.5;

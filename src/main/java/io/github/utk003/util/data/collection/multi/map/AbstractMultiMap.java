@@ -1,9 +1,13 @@
 package io.github.utk003.util.data.collection.multi.map;
 
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+@ScheduledForRelease(inVersion = "v2.2.0")
+@RequiresDocumentation
 public abstract class AbstractMultiMap<K, V> implements MultiMap<K, V> {
     @Override
     public boolean isEmpty() {

@@ -1,10 +1,17 @@
 package io.github.utk003.util.math.unsigned;
 
 import io.github.utk003.util.misc.Verifier;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
+@ApiStatus.Experimental
+@RequiresDocumentation
 abstract class UnsignedNumberConstants {
     private UnsignedNumberConstants() {
     }
@@ -36,5 +43,15 @@ abstract class UnsignedNumberConstants {
         BINARY_STRING_PADDING_ZEROS[0] = "";
         for (int i = 1; i <= 64; i++)
             BINARY_STRING_PADDING_ZEROS[i] = BINARY_STRING_PADDING_ZEROS[i - 1] + "0";
+    }
+
+    private static final @NotNull Map<String, BigInteger> BIG_INTEGER_CACHE = new HashMap<>();
+    static {
+        for (int i = 0; i < 10; i++)
+            BIG_INTEGER_CACHE.put("" + i, BigInteger.valueOf(i));
+    }
+
+    public static synchronized @NotNull BigInteger getBigInteger(@NotNull String num) {
+        return BIG_INTEGER_CACHE.computeIfAbsent(num, BigInteger::new);
     }
 }

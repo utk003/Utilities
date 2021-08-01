@@ -2,12 +2,16 @@ package io.github.utk003.util.data.collection.multi.map.repeated;
 
 import io.github.utk003.util.data.collection.multi.map.MultiMap;
 import io.github.utk003.util.data.collection.multi.set.MultiSet;
+import io.github.utk003.util.misc.annotations.ScheduledForRelease;
+import io.github.utk003.util.misc.annotations.RequiresDocumentation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Set;
 
+@ScheduledForRelease(inVersion = "v2.2.0")
+@RequiresDocumentation
 public interface RepeatedMappingMultiMap<K, V> extends MultiMap<K, V> {
     int count(K key, V value);
 
