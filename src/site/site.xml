@@ -12,8 +12,8 @@
             <sideBarEnabled>false</sideBarEnabled>
             <topBarIcon>
                 <alt>utk003</alt>
-                <src>/images/home.png</src>
-                <href>/index-redirect.html</href>
+                <src>../images/home.png</src>
+                <href>../index-redirect.html</href>
             </topBarIcon>
 
             <breadcrumbDivider>»</breadcrumbDivider>
@@ -30,7 +30,7 @@
     <bannerLeft>
         <name>Utilities</name>
         <src>proj.png</src>
-        <href>./</href>
+        <href>/</href>
     </bannerLeft>
     <!-- Centered by script in <body.footer> -->
 
@@ -40,9 +40,9 @@
         </links>
 
         <breadcrumbs>
-            <item name="utk003" href="/index-redirect.html"/>
-            <item name="Projects" href="/projects.html"/>
-            <item name="Utilities" href="./"/>
+            <item name="utk003" href="../index-redirect.html"/>
+            <item name="Projects" href="../projects.html"/>
+            <item name="Utilities" href="/"/>
         </breadcrumbs>
 
         <menu ref="parent"/>
@@ -52,7 +52,7 @@
         <footer>
             <![CDATA[
                 <span class="copyright-msg" lead="Copyright" year="2020" author="Utkarsh Priyam">All rights reserved.</span>
-                <script src="./scripts/copyright.js"></script>
+                <script src="../scripts/copyright.js"></script>
 
                 <script type="text/javascript">
                     document.getElementById("bannerLeft").parentElement.classList.replace("pull-left", "text-center");
