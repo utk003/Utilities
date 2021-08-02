@@ -14,6 +14,7 @@
                 <alt>utk003</alt>
                 <src>../images/home.png</src>
                 <href>../index-redirect.html</href>
+                <title>Homepage</title>
             </topBarIcon>
 
             <breadcrumbDivider>»</breadcrumbDivider>
@@ -28,7 +29,6 @@
     <version position="right"/>
 
     <bannerLeft>
-        <name>Utilities</name>
         <src>proj.png</src>
         <href>/</href>
     </bannerLeft>
