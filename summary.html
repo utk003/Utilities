@@ -14,66 +14,8 @@
     <link rel="stylesheet" href="./css/print.css" media="print" />
     <script src="./js/apache-maven-fluido-1.9.min.js"></script>
   </head>
-  <body class="topBarEnabled">
-    <header id="topbar" class="navbar navbar-fixed-top ">
-      <div class="navbar-inner">
-            <div class="container" style="width: 90%;">
-              <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </a>
-          <nav class="nav-collapse">
-<a class="brand" href="../index-redirect.html"  title="utk003"><img src="../images/home.png" alt="utk003" />
-</a>
-            <ul class="nav">
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Project Documentation <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-            <li class="dropdown-submenu">
-<a href="project-info.html" title="Project Information">Project Information</a>
-              <ul class="dropdown-menu">
-                  <li><a href="dependencies.html" title="Dependencies">Dependencies</a></li>
-                  <li><a href="dependency-info.html" title="Dependency Information">Dependency Information</a></li>
-                  <li><a href="distribution-management.html" title="Distribution Management">Distribution Management</a></li>
-                  <li><a href="index.html" title="About">About</a></li>
-                  <li><a href="licenses.html" title="Licenses">Licenses</a></li>
-                  <li><a href="plugin-management.html" title="Plugin Management">Plugin Management</a></li>
-                  <li><a href="plugins.html" title="Plugins">Plugins</a></li>
-                  <li><a href="summary.html" title="Summary">Summary</a></li>
-                  <li><a href="team.html" title="Team">Team</a></li>
-              </ul>
-            </li>
-            <li class="dropdown-submenu">
-<a href="project-reports.html" title="Project Reports">Project Reports</a>
-              <ul class="dropdown-menu">
-                  <li><a href="apidocs/index.html" title="JavaDocs">JavaDocs</a></li>
-                  <li><a href="testapidocs/index.html" title="Test JavaDocs">Test JavaDocs</a></li>
-              </ul>
-            </li>
-        </ul>
-      </li>
-            </ul>
-          </nav>
-          <div class="nav-collapse">
-<form id="search-form" action="https://www.google.com/search" method="get"  class="navbar-search pull-right" >
-  <input value="utk003.github.io/Utilities" name="sitesearch" type="hidden"/>
-  <input class="search-query" name="q" id="query" type="text" />
-</form>
-<script>asyncJs( 'https://cse.google.com/brand?form=search-form' )</script>
-            <ul class="nav pull-right">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">External Links <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-    <li><a href="https://github.com/utk003/Utilities/" target="_blank" title="Project GitHub">Project GitHub</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="container">
+  <body class="topBarDisabled">
+    <div class="container-fluid">
       <header>
         <div id="banner">
           <div class="pull-left"><a href="./" id="bannerLeft"><img src="../images/Utilities/proj.png"  alt=""/></a></div>
@@ -88,11 +30,49 @@
       <li class=""><a href="./" title="Utilities">Utilities</a><span class="divider">»</span></li>
     <li class="active ">Project Summary</li>
         <li id="publishDate" class="pull-right"><span class="divider">|</span> Last Published: 2021-08-01</li>
-          <li id="projectVersion" class="pull-right">Version: 3.0.0-SNAPSHOT</li>
+          <li id="projectVersion" class="pull-right"><span class="divider">|</span>Version: 3.0.0-SNAPSHOT</li>
+      <li class="pull-right"><span class="divider">|</span>
+<a href="https://github.com/utk003/Utilities/gh-pages" class="externalLink" title="Site Source (GitHub)">Site Source (GitHub)</a></li>
+      <li class="pull-right"><a href="https://github.com/utk003/Utilities/" class="externalLink" target="_blank" title="Project GitHub Repository">Project GitHub Repository</a></li>
           </ul>
         </div>
       </header>
-        <main id="bodyColumn" >
+      <div class="row-fluid">
+        <header id="leftColumn" class="span2">
+          <nav class="well sidebar-nav">
+  <ul class="nav nav-list">
+   <li class="nav-header">Project Documentation</li>
+    <li><a href="project-info.html" title="Project Information"><span class="icon-chevron-down"></span>Project Information</a>
+     <ul class="nav nav-list">
+      <li><a href="dependencies.html" title="Dependencies"><span class="none"></span>Dependencies</a></li>
+      <li><a href="dependency-info.html" title="Dependency Information"><span class="none"></span>Dependency Information</a></li>
+      <li><a href="distribution-management.html" title="Distribution Management"><span class="none"></span>Distribution Management</a></li>
+      <li><a href="index.html" title="About"><span class="none"></span>About</a></li>
+      <li><a href="licenses.html" title="Licenses"><span class="none"></span>Licenses</a></li>
+      <li><a href="plugin-management.html" title="Plugin Management"><span class="none"></span>Plugin Management</a></li>
+      <li><a href="plugins.html" title="Plugins"><span class="none"></span>Plugins</a></li>
+      <li class="active"><a href="#"><span class="none"></span>Summary</a></li>
+      <li><a href="team.html" title="Team"><span class="none"></span>Team</a></li>
+     </ul></li>
+    <li><a href="project-reports.html" title="Project Reports"><span class="icon-chevron-right"></span>Project Reports</a></li>
+  </ul>
+          </nav>
+          <div class="well sidebar-nav">
+<form id="search-form" action="https://www.google.com/search" method="get" >
+  <input value="utk003.github.io/Utilities" name="sitesearch" type="hidden"/>
+  <input class="search-query" name="q" id="query" type="text" />
+</form>
+<script>asyncJs( 'https://cse.google.com/brand?form=search-form' )</script>
+            <hr />
+            <div id="poweredBy">
+              <div class="clear"></div>
+              <div class="clear"></div>
+              <div class="clear"></div>
+<a href="https://maven.apache.org/" title="Maven" class="builtBy"><img class="builtBy"  alt="Maven" src="images/logos/maven-feather.png"    /></a>
+            </div>
+          </div>
+        </header>
+        <main id="bodyColumn"  class="span10" >
 <section>
 <h2><a name="Project_Summary"></a>Project Summary</h2><a name="Project_Summary"></a><section>
 <h3><a name="Project_Information"></a>Project Information</h3><a name="Project_Information"></a>
@@ -132,11 +112,12 @@
 <td>Java Version</td>
 <td>8</td></tr></table></section></section>
         </main>
+      </div>
     </div>
     <hr/>
     <footer>
-      <div class="container">
-        <div class="row">
+      <div class="container-fluid">
+        <div class="row-fluid">
 <span class="copyright-msg" lead="Copyright" year="2020" author="Utkarsh Priyam">All rights reserved.</span>
                 <script src="/../scripts/copyright.js"></script>
 
@@ -145,8 +126,6 @@
                     document.getElementById("bannerRight").parentElement.classList.replace("pull-right", "text-center");
                 </script>
         </div>
-        <p id="poweredBy" class="pull-right"><a href="https://maven.apache.org/" title="Maven" class="builtBy"><img class="builtBy"  alt="Maven" src="images/logos/maven-feather.png"    /></a>
-</p>
       </div>
     </footer>
   </body>
