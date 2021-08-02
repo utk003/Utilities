@@ -7,15 +7,15 @@
 
     <custom>
         <fluidoSkin>
-            <topBarEnabled>true</topBarEnabled>
-            <topBarContainerStyle>width: 90%;</topBarContainerStyle>
-            <sideBarEnabled>false</sideBarEnabled>
-            <topBarIcon>
-                <alt>utk003</alt>
-                <src>/../images/home.png</src>
-                <href>/../index-redirect.html</href>
-                <title>Homepage</title>
-            </topBarIcon>
+<!--            <topBarEnabled>true</topBarEnabled>-->
+<!--            <topBarContainerStyle>width: 90%;</topBarContainerStyle>-->
+<!--            <sideBarEnabled>false</sideBarEnabled>-->
+<!--            <topBarIcon>-->
+<!--                <alt>utk003</alt>-->
+<!--                <src>/../images/home.png</src>-->
+<!--                <href>/../index-redirect.html</href>-->
+<!--                <title>Homepage</title>-->
+<!--            </topBarIcon>-->
 
             <breadcrumbDivider>»</breadcrumbDivider>
             <googleSearch/>
@@ -28,15 +28,13 @@
     <publishDate position="right"/>
     <version position="right"/>
 
-    <bannerLeft>
-        <src>/../images/Utilities/proj.png</src>
-        <href>/</href>
-    </bannerLeft>
-    <!-- Centered by script in <body.footer> -->
+    <!-- empty banner -->
+    <bannerLeft><name> </name></bannerLeft>
 
     <body>
         <links>
-            <item name="Project GitHub" href="https://github.com/utk003/Utilities/" target="_blank"/>
+            <item name="Project GitHub Repository" href="https://github.com/utk003/Utilities/" target="_blank"/>
+            <item name="Site Source (GitHub)" href="https://github.com/utk003/Utilities/tree/gh-pages"/>
         </links>
 
         <breadcrumbs>
@@ -45,7 +43,14 @@
             <item name="Utilities" href="/"/>
         </breadcrumbs>
 
-        <menu ref="parent"/>
+        <menu name="Quick Links">
+            <item name="About Utilities" href="/index.html"/>
+            <item name="JavaDoc API Documentation" href="/apidocs/overview-summary.html"/>
+<!--            <item name="Installation Guide" href="/installation.html"/>-->
+            <item name="Licensing Information" href="/licenses.html"/>
+        </menu>
+
+<!--        <menu ref="parent"/>-->
         <menu ref="modules"/>
         <menu ref="reports"/>
 
@@ -54,9 +59,34 @@
                 <span class="copyright-msg" lead="Copyright" year="2020" author="Utkarsh Priyam">All rights reserved.</span>
                 <script src="/../scripts/copyright.js"></script>
 
+                <!-- Delete empty banner -->
                 <script type="text/javascript">
-                    document.getElementById("bannerLeft").parentElement.classList.replace("pull-left", "text-center");
-                    document.getElementById("bannerRight").parentElement.classList.replace("pull-right", "text-center");
+                    let banner = document.getElementById("banner");
+                    let header = banner.parentElement;
+                    header.removeChild(banner);
+                </script>
+
+                <!-- Fix active states -->
+                <script type="text/javascript">
+                    let active = document.getElementsByClassName("active");
+                    for (let i = active.length - 1; i >= 0; i--) {
+                        let el = active.item(i);
+                        let parent = el.parentElement;
+
+                        // Breadcrumb active element
+                        if (parent.classList.contains("breadcrumb")) {
+                            if (el.innerHTML === "")
+                                el.innerHTML = "About"
+                        }
+                        // Sidebar active element
+                        else {
+                            let sibling = el;
+                            while (sibling !== null && !sibling.classList.contains("nav-header"))
+                                sibling = sibling.previousElementSibling;
+                            if (sibling !== null && sibling.innerHTML === "Quick Links")
+                                el.classList.remove("active");
+                        }
+                    }
                 </script>
             ]]>
         </footer>
@@ -64,6 +94,6 @@
 
     <poweredBy>
         <logo name="Maven" href="https://maven.apache.org/"
-              img="images/logos/maven-feather.png"/>
+              img="/images/logos/maven-feather.png"/>
     </poweredBy>
 </project>

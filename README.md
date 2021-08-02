@@ -1,12 +1,10 @@
 # Utilities
 A library of utility classes I have created while working on other projects.
 
-This library is for anyone who has run into similar shortcomings with other libraries and/or requires these specific functionalities. [Jump to #Licensing](#Licensing) for licensing information.
-
 ## Quick Links
-* [Project Page](https://utk003.github.io/Utilities/)
-* [Latest Documentation](https://utk003.github.io/Utilities/javadoc/latest.html)
-* [Library Downloads](https://utk003.github.io/Utilities/releases.html)
+* [Project Home Page](https://utk003.github.io/Utilities/)
+* [JavaDoc API Documentation](https://utk003.github.io/Utilities/apidocs/overview-summary.html)
+* [Licensing Information](https://utk003.github.io/Utilities/licenses.html)
 
 ## Library Contents
 This library contains utility classes covering a wide range of use cases.
@@ -48,29 +46,3 @@ The math package `io.github.utk003.util.math` is for alternative, advanced, or o
 ### Miscellaneous
 The miscellaneous package `io.github.utk003.util.misc` is for utilities that don't fall into any of the other categories.
 The most important are the annotations and the verification class.
-
-## Licensing
-This software is publicly available under the MIT License. It can be freely used and modified in commercial and non-commercial applications.
-
-### License Full-Text
-MIT License
-
-Copyright (c) 2020-21 Utkarsh Priyam
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
