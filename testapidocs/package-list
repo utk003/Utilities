@@ -1,0 +1,10 @@
+
+io.github.utk003.util.data.collection.bijection
+io.github.utk003.util.data.collection.bitset
+io.github.utk003.util.data.collection.multi.set
+io.github.utk003.util.data.singleton
+io.github.utk003.util.math.noise
+io.github.utk003.util.math.perm
+io.github.utk003.util.math.solve
+io.github.utk003.util.math.unsigned
+io.github.utk003.util.misc
