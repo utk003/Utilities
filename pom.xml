@@ -15,7 +15,7 @@
 
     <name>Utilities</name>
     <inceptionYear>2020</inceptionYear>
-    <url>https://github.com/utk003/Utilities</url>
+    <url>https://utk003.github.io/Utilities</url>
     <description>A public library of personal utility classes I have created while working on other projects.
     </description>
     <licenses>
@@ -39,6 +39,13 @@
         </developer>
     </developers>
 
+    <distributionManagement>
+        <site>
+            <id>github</id>
+            <url>scm:git:https://github.com/utk003/Utilities.git</url>
+        </site>
+    </distributionManagement>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -52,10 +59,9 @@
                             <![CDATA[
                                 <div class="contentContainer big-links">
                                 <h3>Quick Links:</h3>
-                                <a href="/Utilities/javadoc/latest.html" target="_top">Latest Documentation</a><br/>
-                                <a href="/Utilities" target="_top">Project Homepage</a><br/>
-                                <a href="/" target="_top">Website Homepage</a><br/>
-                                <a href="https://github.com/utk003/Utilities" target="_top">Project Github Repository</a><br/>
+                                <a href="/Utilities" target="_blank">Project Homepage</a><br/>
+                                <a href="/index-redirect.html" target="_blank">Website Homepage</a><br/>
+                                <a href="https://github.com/utk003/Utilities" target="_blank">Project Github Repository</a><br/>
                                 <br/>
                                 Copyright &copy; <span class="year-span">2020</span> Utkarsh Priyam. All rights reserved.
                                 </div>
@@ -140,6 +146,15 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.0.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <scmBranch>gh-pages</scmBranch>
+                    <tryUpdate>true</tryUpdate>
+                </configuration>
             </plugin>
         </plugins>
     </build>

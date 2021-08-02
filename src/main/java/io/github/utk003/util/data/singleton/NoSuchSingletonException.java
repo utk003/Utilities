@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
  */
 public class NoSuchSingletonException extends NoSuchElementException {
     /**
-     * Constructs a <code>NoSuchSingletonException</code> with <tt>null</tt>
+     * Constructs a <code>NoSuchSingletonException</code> with <code>null</code>
      * as its error message string.
      */
     public NoSuchSingletonException() {
@@ -22,8 +22,8 @@ public class NoSuchSingletonException extends NoSuchElementException {
 
     /**
      * Constructs a <code>NoSuchSingletonException</code>, saving a reference
-     * to the error message string <tt>s</tt> for later retrieval by the
-     * <tt>getMessage</tt> method.
+     * to the error message string <code>s</code> for later retrieval by the
+     * <code>getMessage</code> method.
      *
      * @param s The detail message
      */
