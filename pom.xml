@@ -21,7 +21,7 @@
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>https://spdx.org/licenses/MIT.txt</url>
+            <url>https://raw.githubusercontent.com/utk003/Utilities/main/LICENSE</url>
             <distribution>repo</distribution>
 <!--            <comments>License Page: https://spdx.org/licenses/MIT.html</comments>-->
         </license>
@@ -44,6 +44,14 @@
             <id>github</id>
             <url>scm:git:https://github.com/utk003/Utilities.git</url>
         </site>
+<!--        <repository>-->
+<!--            <id>github</id>-->
+<!--            <url>https://github.com/utk003/mvn.git</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>github</id>-->
+<!--            <url>https://github.com/utk003/mvn.git</url>-->
+<!--        </snapshotRepository>-->
     </distributionManagement>
 
     <build>
@@ -59,8 +67,8 @@
                             <![CDATA[
                                 <div class="contentContainer big-links">
                                 <h3>Quick Links:</h3>
-                                <a href="/Utilities" target="_blank">Project Homepage</a><br/>
-                                <a href="/index-redirect.html" target="_blank">Website Homepage</a><br/>
+                                <a href="/Utilities" target="_top">Project Homepage</a><br/>
+                                <a href="/index-redirect.html" target="_top">Website Homepage</a><br/>
                                 <a href="https://github.com/utk003/Utilities" target="_blank">Project Github Repository</a><br/>
                                 <br/>
                                 Copyright &copy; <span class="year-span">2020</span> Utkarsh Priyam. All rights reserved.
@@ -137,6 +145,13 @@
                     </execution>
                 </executions>
             </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-deploy-plugin</artifactId>-->
+<!--                <version>3.0.0-M1</version>-->
+<!--            </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
